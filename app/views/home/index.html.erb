@@ -1,0 +1,9 @@
+<h1 class="text-3xl font-bold mb-4">Bem-vindo ao Tags App!</h1>
+
+<% if authenticated? %>
+  <p>Você está logado como <%= current_user.email_address %> (<%= current_user.role %>).</p>
+  <%= button_to "Sair", session_path, method: :delete, class: "mt-4 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded" %>
+<% else %>
+  <p>Você não está logado.</p>
+  <%= link_to "Fazer login", new_session_path, class: "mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded inline-block" %>
+<% end %>
