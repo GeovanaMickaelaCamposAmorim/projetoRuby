@@ -1,0 +1,110 @@
+<style>
+  /* conforme solicitado: sobrescreve .grid-cols-1 para 3 colunas */
+  .grid-cols-1 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    /* botão rosa — evitando classes arbitrárias do Tailwind que podem não ter sido geradas/purgadas */
+  .btn-pink {
+    background-color: #ed215e;
+    color: #ffffff;
+    transition: background-color .15s ease, transform .15s ease;
+  }
+  .btn-pink:hover {
+    background-color: #d91956;
+    transform: scale(1.02);
+  }
+  .btn-blue {
+    background-color:  #ffffff;
+    transition: background-color .15s ease, transform .15s ease;
+  }
+  .btn-blue:hover {
+    background-color: #9bc0f0ff;
+    transform: scale(1.02);
+  }
+</style>
+
+<div class="container mx-auto mt-12 px-5 flex">
+  <div class="min-h-screen bg-[#efefef] px-10 py-8 w-full">
+    <!-- Cabeçalho -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Controle de Gastos</h1>
+    <button class="px-6 py-3 btn-pink font-semibold rounded-lg shadow">
+        + Registrar Gasto
+      </button>
+    </div>
+
+    <!-- Cards resumo -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <p class="text-gray-600 font-medium">Total de Gastos</p>
+        <p class="text-3xl font-bold text-red-600">R$ 2970.00</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <p class="text-gray-600 font-medium">Gastos Este Mês</p>
+        <p class="text-3xl font-bold text-gray-800">R$ 2970.00</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <p class="text-gray-600 font-medium">Média Mensal</p>
+        <p class="text-3xl font-bold text-gray-800">R$ 2970.00</p>
+      </div>
+    </div>
+
+    <!-- Card branco envolvendo busca e grade -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+      <!-- Campo de busca -->
+      <div class="mb-6">
+        <input
+          type="text"
+          placeholder="Buscar gasto"
+          class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none"
+        />
+      </div>
+
+      <!-- Tabela -->
+      <div class="overflow-hidden">
+        <table class="w-full text-left">
+          <thead class="bg-gray-100 text-gray-700">
+            <tr>
+              <th class="px-6 py-3 font-medium">Data</th>
+              <th class="px-6 py-3 font-medium">Descrição</th>
+              <th class="px-6 py-3 font-medium">Valor</th>
+              <th class="px-6 py-3 font-medium">Usuário</th>
+              <th class="px-6 py-3 font-medium">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-black">
+            <tr>
+              <td class="px-6 py-3">04/01/2025</td>
+              <td class="px-6 py-3">Aluguel da loja</td>
+              <td class="px-6 py-3 text-red-600 font-semibold">R$ 2500.00</td>
+              <td class="px-6 py-3">Laura Gomes</td>
+              <td class="px-6 py-3 flex gap-3">
+                <button class="btn-blue rounded-lg shadow">✏️</button>
+                <button class="text-red-600 hover:text-red-800 transition">🗑️</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-6 py-3">09/01/2025</td>
+              <td class="px-6 py-3">Conta de luz</td>
+              <td class="px-6 py-3 text-red-600 font-semibold">R$ 350.00</td>
+              <td class="px-6 py-3">Laura Gomes</td>
+              <td class="px-6 py-3 flex gap-3">
+                <button class="text-blue-600 hover:text-blue-800 transition">✏️</button>
+                <button class="text-red-600 hover:text-red-800 transition">🗑️</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-6 py-3">11/01/2025</td>
+              <td class="px-6 py-3">Material de limpeza</td>
+              <td class="px-6 py-3 text-red-600 font-semibold">R$ 120.00</td>
+              <td class="px-6 py-3">Marcos Oliveira</td>
+              <td class="px-6 py-3 flex gap-3">
+                <button class="text-blue-600 hover:text-blue-800 transition">✏️</button>
+                <button class="text-red-600 hover:text-red-800 transition">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

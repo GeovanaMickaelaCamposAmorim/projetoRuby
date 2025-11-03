@@ -22,7 +22,13 @@ default: &default
 
 development:
   <<: *default
-  database: tags_development
+  database: tags_development # Mantenha o nome do banco do projeto
+  
+  # Suas configurações corretas:
+  host: localhost
+  port: 5000
+  username: postgres
+  password: "12345678" # É bom colocar senhas entre aspas
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -57,6 +63,12 @@ development:
 test:
   <<: *default
   database: tags_test
+
+  # ADICIONE AS MESMAS CONFIGURAÇÕES AQUI
+  host: localhost
+  port: 5000
+  username: postgres
+  password: "12345678"
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

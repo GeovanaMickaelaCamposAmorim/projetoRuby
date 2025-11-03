@@ -1,0 +1,207 @@
+<% content_for :page_title, "PDV - Ponto de Venda" %>
+<% content_for :page_description, "Registre vendas rapidamente" %>
+
+<div class="grid grid-cols-3 gap-6 h-[calc(100vh-180px)]">
+  <!-- Left: Product Selection -->
+  <div class="col-span-2 space-y-4">
+    <!-- Search -->
+    <div class="bg-white rounded-lg p-4">
+      <div class="relative">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" id="searchProduct" placeholder="Buscar produto por código ou nome..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink text-lg">
+      </div>
+    </div>
+    
+    <!-- Products Grid -->
+    <div class="bg-white rounded-lg p-4 overflow-y-auto" style="height: calc(100% - 80px);">
+      <div class="grid grid-cols-3 gap-4">
+        <% @mercadorias&.each do |mercadoria| %>
+          <button onclick="adicionarItem(<%= mercadoria.id %>, '<%= mercadoria.nome %>', <%= mercadoria.valor_venda %>)" class="bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg p-4 text-left transition">
+            <div class="w-full h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+              <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <p class="font-medium text-tags-black text-sm mb-1"><%= mercadoria.nome %></p>
+            <p class="text-xs text-tags-gray mb-2"><%= mercadoria.codigo %></p>
+            <p class="text-lg font-bold text-tags-pink">R$ <%= number_to_currency(mercadoria.valor_venda, unit: '', delimiter: '.', separator: ',') %></p>
+          </button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Right: Cart -->
+  <div class="bg-white rounded-lg p-6 flex flex-col">
+    <h2 class="text-xl font-bold text-tags-black mb-4">Carrinho</h2>
+    
+    <!-- Cliente -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-tags-gray mb-2">Cliente</label>
+      <select id="clienteSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink">
+        <option value="">Cliente Avulso</option>
+        <% @clientes&.each do |cliente| %>
+          <option value="<%= cliente.id %>"><%= cliente.nome %></option>
+        <% end %>
+      </select>
+    </div>
+    
+    <!-- Items List -->
+    <div class="flex-1 overflow-y-auto mb-4 border-t border-b border-gray-200 py-4">
+      <div id="cartItems" class="space-y-3">
+        <p class="text-center text-tags-gray text-sm py-8">Nenhum item adicionado</p>
+      </div>
+    </div>
+    
+    <!-- Totals -->
+    <div class="space-y-3 mb-4">
+      <div class="flex justify-between text-sm">
+        <span class="text-tags-gray">Subtotal:</span>
+        <span id="subtotal" class="font-medium text-tags-black">R$ 0,00</span>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <label class="text-sm text-tags-gray">Desconto:</label>
+        <input type="text" id="desconto" placeholder="R$ 0,00" class="flex-1 px-3 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-tags-pink" onchange="calcularTotal()">
+      </div>
+      
+      <div class="flex justify-between text-lg font-bold pt-3 border-t border-gray-200">
+        <span class="text-tags-black">Total:</span>
+        <span id="total" class="text-tags-pink">R$ 0,00</span>
+      </div>
+    </div>
+    
+    <!-- Payment Method -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-tags-gray mb-2">Forma de Pagamento</label>
+      <select id="formaPagamento" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink">
+        <option value="pix">PIX</option>
+        <option value="cartao_credito">Cartão de Crédito</option>
+        <option value="cartao_debito">Cartão de Débito</option>
+        <option value="dinheiro">Dinheiro</option>
+        <option value="crediario">Crediário</option>
+      </select>
+    </div>
+    
+    <!-- Actions -->
+    <div class="space-y-2">
+      <button onclick="finalizarVenda()" class="w-full py-3 bg-tags-pink text-white rounded-lg font-medium hover:bg-opacity-90 transition">
+        Finalizar Venda
+      </button>
+      <button onclick="limparCarrinho()" class="w-full py-2 border border-gray-300 text-tags-gray rounded-lg font-medium hover:bg-gray-50 transition">
+        Limpar Carrinho
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let carrinho = [];
+  
+  function adicionarItem(id, nome, preco) {
+    const itemExistente = carrinho.find(item => item.id === id);
+    
+    if (itemExistente) {
+      itemExistente.quantidade++;
+    } else {
+      carrinho.push({ id, nome, preco, quantidade: 1 });
+    }
+    
+    atualizarCarrinho();
+  }
+  
+  function removerItem(id) {
+    carrinho = carrinho.filter(item => item.id !== id);
+    atualizarCarrinho();
+  }
+  
+  function alterarQuantidade(id, delta) {
+    const item = carrinho.find(item => item.id === id);
+    if (item) {
+      item.quantidade += delta;
+      if (item.quantidade <= 0) {
+        removerItem(id);
+      } else {
+        atualizarCarrinho();
+      }
+    }
+  }
+  
+  function atualizarCarrinho() {
+    const cartItemsDiv = document.getElementById('cartItems');
+    
+    if (carrinho.length === 0) {
+      cartItemsDiv.innerHTML = '<p class="text-center text-tags-gray text-sm py-8">Nenhum item adicionado</p>';
+    } else {
+      cartItemsDiv.innerHTML = carrinho.map(item => `
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+          <div class="flex-1">
+            <p class="font-medium text-tags-black text-sm">${item.nome}</p>
+            <p class="text-xs text-tags-gray">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="alterarQuantidade(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center bg-white border border-gray-300 rounded text-tags-gray hover:bg-gray-100">-</button>
+            <span class="w-8 text-center font-medium">${item.quantidade}</span>
+            <button onclick="alterarQuantidade(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center bg-white border border-gray-300 rounded text-tags-gray hover:bg-gray-100">+</button>
+          </div>
+          <button onclick="removerItem(${item.id})" class="text-red-600 hover:text-red-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+      `).join('');
+    }
+    
+    calcularTotal();
+  }
+  
+  function calcularTotal() {
+    const subtotal = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+    const descontoInput = document.getElementById('desconto').value.replace('R$', '').replace('.', '').replace(',', '.').trim();
+    const desconto = parseFloat(descontoInput) || 0;
+    const total = subtotal - desconto;
+    
+    document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+    document.getElementById('total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+  }
+  
+  function limparCarrinho() {
+    if (confirm('Deseja limpar o carrinho?')) {
+      carrinho = [];
+      document.getElementById('desconto').value = '';
+      document.getElementById('clienteSelect').value = '';
+      atualizarCarrinho();
+    }
+  }
+  
+  function finalizarVenda() {
+    if (carrinho.length === 0) {
+      alert('Adicione itens ao carrinho antes de finalizar a venda!');
+      return;
+    }
+    
+    const clienteId = document.getElementById('clienteSelect').value;
+    const formaPagamento = document.getElementById('formaPagamento').value;
+    const descontoInput = document.getElementById('desconto').value.replace('R$', '').replace('.', '').replace(',', '.').trim();
+    const desconto = parseFloat(descontoInput) || 0;
+    
+    const subtotal = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+    const total = subtotal - desconto;
+    
+    // Aqui você faria a requisição para o backend
+    console.log('[v0] Finalizando venda:', {
+      cliente_id: clienteId || null,
+      forma_pagamento: formaPagamento,
+      valor_total: subtotal,
+      desconto: desconto,
+      valor_final: total,
+      itens: carrinho
+    });
+    
+    alert('Venda finalizada com sucesso!');
+    limparCarrinho();
+  }
+</script>

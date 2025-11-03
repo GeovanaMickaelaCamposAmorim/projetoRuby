@@ -1,0 +1,219 @@
+<% content_for :page_title, "Mercadorias" %>
+<% content_for :page_description, "Gerencie o estoque de produtos da sua loja" %>
+
+<div class="space-y-6">
+  <!-- Actions Bar -->
+  <div class="flex items-center justify-between">
+    <div class="flex gap-3">
+      <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-tags-gray hover:bg-gray-50 transition">
+        Todos os produtos
+      </button>
+      <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-tags-gray hover:bg-gray-50 transition">
+        Em estoque
+      </button>
+      <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-tags-gray hover:bg-gray-50 transition">
+        Em falta
+      </button>
+    </div>
+    
+    <button onclick="openModal('modalNovaMercadoria')" class="px-6 py-2 bg-tags-pink text-white rounded-lg font-medium hover:bg-opacity-90 transition">
+      + Nova Mercadoria
+    </button>
+  </div>
+  
+  <!-- Search and Filter -->
+  <div class="bg-white rounded-lg p-4 flex items-center gap-4">
+    <div class="flex-1 relative">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input type="text" placeholder="Buscar mercadoria..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink">
+    </div>
+    
+    <button class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-tags-gray hover:bg-gray-50 transition">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+      </svg>
+      Filtrar
+    </button>
+  </div>
+  
+  <!-- Table -->
+  <div class="bg-white rounded-lg overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">
+            <input type="checkbox" class="rounded border-gray-300">
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Código</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Mercadoria</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Tipo</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Marca</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Estoque</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Valor Venda</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-tags-gray uppercase tracking-wider">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @mercadorias&.each do |mercadoria| %>
+          <tr class="hover:bg-gray-50 transition">
+            <td class="px-6 py-4">
+              <input type="checkbox" class="rounded border-gray-300">
+            </td>
+            <td class="px-6 py-4 text-sm font-medium text-tags-black"><%= mercadoria.codigo %></td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-gray-200 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-tags-black"><%= mercadoria.nome %></p>
+                  <p class="text-xs text-tags-gray"><%= mercadoria.descricao %></p>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-sm text-tags-gray"><%= mercadoria.tipo&.nome %></td>
+            <td class="px-6 py-4 text-sm text-tags-gray"><%= mercadoria.marca&.nome %></td>
+            <td class="px-6 py-4 text-sm text-tags-gray"><%= mercadoria.quantidade_estoque %></td>
+            <td class="px-6 py-4 text-sm font-medium text-tags-black">R$ <%= number_to_currency(mercadoria.valor_venda, unit: '', delimiter: '.', separator: ',') %></td>
+            <td class="px-6 py-4">
+              <% if mercadoria.quantidade_estoque > 0 %>
+                <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Em estoque</span>
+              <% else %>
+                <span class="px-3 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Em falta</span>
+              <% end %>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-2">
+                <button onclick="editarMercadoria(<%= mercadoria.id %>)" class="p-2 text-blue-600 hover:bg-blue-50 rounded transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                  </svg>
+                </button>
+                <%= link_to mercadoria_path(mercadoria), method: :delete, data: { confirm: 'Tem certeza?' }, class: "p-2 text-red-600 hover:bg-red-50 rounded transition" do %>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Nova Mercadoria -->
+<div id="modalNovaMercadoria" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <%= form_with model: Mercadoria.new, local: true, class: "p-6" do |f| %>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-tags-black">Nova Mercadoria</h2>
+        <button type="button" onclick="closeModal('modalNovaMercadoria')" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">Nome da Mercadoria</label>
+          <%= f.text_field :nome, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "Ex: Camiseta Básica" %>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-tags-gray mb-2">Tipo</label>
+            <%= f.select :tipo_id, options_for_select(@tipos&.map { |t| [t.nome, t.id] }), { prompt: "Selecione o tipo" }, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink" %>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-tags-gray mb-2">Marca</label>
+            <%= f.select :marca_id, options_for_select(@marcas&.map { |m| [m.nome, m.id] }), { prompt: "Selecione a marca" }, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink" %>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-tags-gray mb-2">Valor de Compra</label>
+            <%= f.text_field :valor_compra, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "R$ 0,00" %>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-tags-gray mb-2">Valor de Venda</label>
+            <%= f.text_field :valor_venda, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "R$ 0,00" %>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-tags-gray mb-2">Quantidade</label>
+            <%= f.number_field :quantidade_estoque, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "0" %>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">Código da Mercadoria</label>
+          <%= f.text_field :codigo, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "Gerado automaticamente" %>
+        </div>
+        
+        <!-- Grade de Tamanhos e Cores -->
+        <div class="border-t pt-4">
+          <h3 class="text-sm font-medium text-tags-black mb-3">Grade de Tamanhos e Cores</h3>
+          <div class="space-y-3">
+            <div class="grid grid-cols-4 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-tags-gray mb-1">Cor</label>
+                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-tags-pink" placeholder="Ex: Preto">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-tags-gray mb-1">Tamanho</label>
+                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-tags-pink">
+                  <option>P</option>
+                  <option>M</option>
+                  <option>G</option>
+                  <option>GG</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-tags-gray mb-1">Quantidade</label>
+                <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-tags-pink" placeholder="0">
+              </div>
+              <div class="flex items-end">
+                <button type="button" class="w-full px-3 py-2 bg-tags-pink text-white rounded-lg text-sm font-medium hover:bg-opacity-90 transition">
+                  + Adicionar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-end gap-3 mt-6 pt-6 border-t">
+        <button type="button" onclick="closeModal('modalNovaMercadoria')" class="px-6 py-2 border border-gray-300 rounded-lg text-sm font-medium text-tags-gray hover:bg-gray-50 transition">
+          Cancelar
+        </button>
+        <%= f.submit "Salvar", class: "px-6 py-2 bg-tags-black text-white rounded-lg text-sm font-medium hover:bg-opacity-90 transition" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  function openModal(modalId) {
+    document.getElementById(modalId).classList.remove('hidden');
+  }
+  
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+  }
+  
+  function editarMercadoria(id) {
+    // Implementar lógica de edição
+    console.log('Editar mercadoria:', id);
+  }
+</script>

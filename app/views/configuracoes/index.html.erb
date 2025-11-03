@@ -1,0 +1,86 @@
+<% content_for :page_title, "Configurações" %>
+<% content_for :page_description, "Configure as preferências do sistema" %>
+
+<div class="space-y-6">
+  <!-- Perfil da Loja -->
+  <div class="bg-white rounded-lg p-6">
+    <h2 class="text-lg font-bold text-tags-black mb-4">Perfil da Loja</h2>
+    
+    <%= form_with model: @configuracao, url: configuracoes_path, local: true do |f| %>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-tags-gray mb-2">Logo da Loja</label>
+          <div class="flex items-center gap-4">
+            <div class="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
+              <% if @configuracao&.logo.present? %>
+                <%= image_tag @configuracao.logo, class: "w-full h-full object-cover rounded-lg" %>
+              <% else %>
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              <% end %>
+            </div>
+            <%= f.file_field :logo, class: "flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink" %>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">Nome da Loja</label>
+          <%= f.text_field :nome, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "TAGS Store" %>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">CNPJ</label>
+          <%= f.text_field :cnpj, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "00.000.000/0000-00" %>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">Endereço</label>
+          <%= f.text_field :endereco, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "Rua, número, bairro" %>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">Telefone</label>
+          <%= f.text_field :telefone, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "(00) 00000-0000" %>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">Instagram</label>
+          <%= f.text_field :instagram, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "@tagsstore" %>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-tags-gray mb-2">Taxa do Cartão (%)</label>
+          <%= f.text_field :taxa_cartao, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink", placeholder: "2.5" %>
+        </div>
+      </div>
+      
+      <div class="flex justify-end mt-6">
+        <%= f.submit "Salvar Configurações", class: "px-6 py-2 bg-tags-pink text-white rounded-lg font-medium hover:bg-opacity-90 transition" %>
+      </div>
+    <% end %>
+  </div>
+  
+  <!-- Personalização Visual -->
+  <div class="bg-white rounded-lg p-6">
+    <h2 class="text-lg font-bold text-tags-black mb-4">Personalização Visual</h2>
+    
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-tags-gray mb-2">Cor de Fundo do Menu</label>
+        <input type="color" value="#181818" class="w-full h-12 border border-gray-300 rounded-lg cursor-pointer">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-tags-gray mb-2">Cor de Destaque</label>
+        <input type="color" value="#ED215E" class="w-full h-12 border border-gray-300 rounded-lg cursor-pointer">
+      </div>
+    </div>
+    
+    <div class="flex justify-end mt-6">
+      <button class="px-6 py-2 bg-tags-black text-white rounded-lg font-medium hover:bg-opacity-90 transition">
+        Aplicar Cores
+      </button>
+    </div>
+  </div>
+</div>
