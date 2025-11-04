@@ -1,5 +1,6 @@
 class GastosController < ApplicationController
-  before_action :set_gasto, only: [:show, :edit, :update, :destroy]
+  before_action :set_gasto, only: [:edit, :update, :destroy]
+
 
   def index
     @gastos = Gasto.where(contratante_id: current_user.contratante_id)

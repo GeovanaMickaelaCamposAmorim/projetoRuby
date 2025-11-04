@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   resources :pixes
   
   get "up" => "rails/health#show", as: :rails_health_check
-  root "home#index"
+  root "sessions#new"
+  get "home", to: "gastos#index"
+
 
 
   resource :session, only: [:new, :create, :destroy]

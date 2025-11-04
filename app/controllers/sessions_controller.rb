@@ -6,7 +6,10 @@ class SessionsController < ApplicationController
   end
 
 def create
-  user = User.find_by(usu_email: params[:email_address])
+   user = User.find_by(usu_email: params[:usu_email])
+  puts ">>> USER FOUND? #{user.present?}"
+  puts params.inspect
+
 
   if user&.authenticate(params[:password])
     # Cria a sessão do usuário
@@ -25,10 +28,12 @@ def create
     }
 
     # Redireciona para a página inicial
-    redirect_to root_path, notice: "Login realizado com sucesso!"
+     
+   redirect_to gastos_path
   else
     redirect_to new_session_path, alert: "E-mail ou senha incorretos."
   end
+  
 end
 
   def destroy
