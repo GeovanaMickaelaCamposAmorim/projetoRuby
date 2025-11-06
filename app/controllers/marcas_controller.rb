@@ -2,7 +2,7 @@ class MarcasController < ApplicationController
   before_action :set_marca, only: [:show, :edit, :update, :destroy]
 
   def index
-    @marcas = Marca.where(contratante_id: current_user.contratante_id).order(:mar_nome)
+    @marcas = Marca.where(contratante_id: current_user.contratante_id).order(:nome)
   end
 
   def new
@@ -11,7 +11,7 @@ class MarcasController < ApplicationController
 
   def create
     @marca = Marca.new(marca_params)
-    @marca.contratante_id = current_user.contratante_id # Define o contratante do usuário logado
+    @marca.contratante_id = current_user.contratante_id
 
     if @marca.save
       redirect_to marcas_path, notice: 'Marca criada com sucesso!'
@@ -50,6 +50,6 @@ class MarcasController < ApplicationController
   end
 
   def marca_params
-    params.require(:marca).permit(:mar_nome, :mar_sigla)
+    params.require(:marca).permit(:nome, :descricao)
   end
 end
