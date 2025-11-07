@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_05_165143) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_07_114631) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -58,6 +58,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_165143) do
     t.index ["cli_cpf"], name: "index_clientes_on_cli_cpf", unique: true
     t.index ["contratante_id"], name: "index_clientes_on_contratante_id"
     t.index ["user_id"], name: "index_clientes_on_user_id"
+  end
+
+  create_table "configuracaos", force: :cascade do |t|
+    t.string "nome_loja"
+    t.string "cnpj"
+    t.string "telefone"
+    t.string "endereco"
+    t.string "instagram"
+    t.string "cor_fundo_menu"
+    t.string "cor_fonte_menu"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contratantes", force: :cascade do |t|

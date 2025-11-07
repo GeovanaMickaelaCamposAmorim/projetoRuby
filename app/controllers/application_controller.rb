@@ -1,9 +1,10 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_user_from_session
+  before_action :carregar_configuracoes
 
   helper_method :authenticated?, :current_user
 
- def authenticated?
+  def authenticated?
     Current.user.present?
   end
 
@@ -12,6 +13,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def carregar_configuracoes
+    @configuracao_global = Configuracao.first_or_initialize
+  end
 
   def set_current_user_from_session
     # Não tenta carregar sessão para ações públicas

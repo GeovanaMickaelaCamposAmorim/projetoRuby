@@ -1,5 +1,7 @@
 <div class="flex h-screen">
-  <div class="w-64 bg-tags-preto text-tags-branco flex flex-col shadow-xl">
+  <div class="w-64 flex flex-col shadow-xl" 
+     style="background-color: <%= @configuracao_global.cor_fundo_menu.presence || '#181818' %>;" 
+     id="sidebar-menu">
     <div class="flex items-center p-6 h-20">
       <div class="flex items-center justify-center space-x-3 w-full">
         <%= image_tag "logo-menu.png", alt: "Tags logo Menu", class: "w-20 h-auto" %>
@@ -9,75 +11,76 @@
     <nav class="flex-1 overflow-y-auto scrollbar-hide">
       <!-- HOME Section -->
       <div class="py-2">
-        <div class="px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
+             style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
           HOME 
         </div>
         <div class="space-y-1">
           <!-- Dashboard ADM (só para ADM/Gerente) -->
           <% if current_user.admin_usu_tipo? %>
-            <%= link_to "#", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-              <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-              Dashboard
+            <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+              <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+              <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Dashboard</span>
             <% end %>
           <% end %>
 
-          <%= link_to "vendas", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "currency-dollar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Cadastro de Venda
+          <%= link_to "vendas", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "currency-dollar", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Cadastro de Venda</span>
           <% end %>
 
-          <%= link_to "#", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "document-text", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Histórico de Vendas
+          <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "document-text", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Histórico de Vendas</span>
           <% end %>
 
-          <%= link_to "#", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "tag", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Tag
+          <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "tag", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Tag</span>
           <% end %>
 
-          <%= link_to "gastos", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "currency-dollar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Gastos
+          <%= link_to "gastos", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "currency-dollar", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Gastos</span>
           <% end %>
 
-          <%= link_to "#", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "clipboard-document-list", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Ficha-Cliente
+          <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "clipboard-document-list", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Ficha-Cliente</span>
           <% end %>
-
         </div>
       </div>
 
-      <div class="border-t border-gray-700 my-2"></div>
+      <div class="border-t my-2" style="border-color: <%= @configuracao_global.cor_fonte_menu.presence || '#374151' %>; opacity: 0.2;"></div>
 
       <!-- ESTOQUE Section -->
       <div class="py-2">
-        <div class="px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
+             style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
           CONTROLE DE ESTOQUE
         </div>
         
         <!-- ESTOQUE Parent Item -->
         <div class="cursor-pointer">
-          <div class="flex items-center justify-between px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="estoque-submenu">
+          <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="estoque-submenu">
             <div class="flex items-center">
-              <%= heroicon "cube", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-              <span>Estoque</span>
+              <%= heroicon "cube", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+              <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Estoque</span>
             </div>
-            <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
+            <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
           </div>
           
           <!-- ESTOQUE Submenu -->
           <div class="submenu hidden ml-6 mt-1" id="estoque-submenu">
             <div class="space-y-1">
-              <%= link_to "#", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                <%= heroicon "arrow-path", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                Atualização de Estoque
+              <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+                <%= heroicon "arrow-path", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+                <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Atualização de Estoque</span>
               <% end %>
               
-              <%= link_to "#", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                <%= heroicon "plus", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                Cadastro de Mercadoria
+              <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+                <%= heroicon "plus", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+                <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Cadastro de Mercadoria</span>
               <% end %>
             </div>
           </div>
@@ -86,38 +89,39 @@
 
       <!-- ADMIN Section -->
       <% if current_user.admin_usu_tipo? %>
-        <div class="border-t border-gray-700 my-2"></div>
+        <div class="border-t my-2" style="border-color: <%= @configuracao_global.cor_fonte_menu.presence || '#374151' %>; opacity: 0.2;"></div>
         
         <div class="py-2">
-          <div class="px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+          <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
+               style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
             ADMIN
           </div>
           
-          <%= link_to "#", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Relatórios
+          <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Relatórios</span>
           <% end %>
 
           <!-- CADASTROS -->
           <div class="cursor-pointer">
-            <div class="flex items-center justify-between px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="cadastros-submenu">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="cadastros-submenu">
               <div class="flex items-center">
-                <%= heroicon "users", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-                <span>Cadastros</span>
+                <%= heroicon "users", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+                <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Cadastros</span>
               </div>
-              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
+              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
             </div>
             
             <div class="submenu hidden ml-6 mt-1" id="cadastros-submenu">
               <div class="space-y-1">
-                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                  <%= heroicon "user-plus", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                  Funcionários
+                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+                  <%= heroicon "user-plus", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+                  <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Funcionários</span>
                 <% end %>
 
-                <%= link_to "clientes", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                  <%= heroicon "user-group", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                  Clientes
+                <%= link_to "clientes", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+                  <%= heroicon "user-group", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+                  <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Cliente</span>
                 <% end %>
               </div>
             </div>
@@ -125,49 +129,24 @@
 
           <!-- CONFIGURAÇÃO -->
           <div class="cursor-pointer">
-            <div class="flex items-center justify-between px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="config-submenu">
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="config-submenu">
               <div class="flex items-center">
-                <%= heroicon "cog-6-tooth", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-                <span>Configuração</span>
+                <%= heroicon "cog-6-tooth", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+                <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Configurações</span>
               </div>
-              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
+              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
             </div>
             
             <div class="submenu hidden ml-6 mt-1" id="config-submenu">
               <div class="space-y-1">
-                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                  <%= heroicon "building-storefront", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                  Perfil da Loja
+                <%= link_to "configuracoes", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+                  <%= heroicon "building-storefront", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+                  <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Perfil da Loja</span>
                 <% end %>
                 
-                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                  <%= heroicon "credit-card", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                  Config. Taxas do Cartão
-                <% end %>
-              </div>
-            </div>
-          </div>
-
-          <!-- SISTEMA -->
-          <div class="cursor-pointer">
-            <div class="flex items-center justify-between px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="sistema-submenu">
-              <div class="flex items-center">
-                <%= heroicon "cog-6-tooth", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-                <span>Sistema</span>
-              </div>
-              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
-            </div>
-            
-            <div class="submenu hidden ml-6 mt-1" id="sistema-submenu">
-              <div class="space-y-1">
-                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                  <%= heroicon "paint-brush", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                  Background Menu
-                <% end %>
-                
-                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                  <%= heroicon "eye-dropper", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
-                  Cor Fonte
+                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+                  <%= heroicon "credit-card", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+                  <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Config. Taxas do Cartão</span>
                 <% end %>
               </div>
             </div>
@@ -177,31 +156,32 @@
 
       <!-- MASTER Section (só para master) -->
       <% if current_user.master_usu_tipo? %>
-        <div class="border-t border-gray-700 my-2"></div>
+        <div class="border-t my-2" style="border-color: <%= @configuracao_global.cor_fonte_menu.presence || '#374151' %>; opacity: 0.2;"></div>
         
         <div class="py-2">
-          <div class="px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+          <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
+               style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
             MASTER
           </div>
 
-          <%= link_to "#", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "user-group", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Clientes
+          <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "user-group", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Clientes</span>
           <% end %>
 
-          <%= link_to "#", class: "flex items-center px-4 py-2 text-gray-300 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
-            Dashboard
+          <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Dashboard</span>
           <% end %>
         </div>
       <% end %>
     </nav>
 
     <!-- Logout Button -->
-    <div class="p-4 border-t border-gray-700">
-      <%= button_to session_path, method: :delete, class: "flex items-center justify-center w-full px-4 py-2 text-gray-300 hover:bg-red-600 hover:text-white rounded transition-colors" do %>
-        <%= heroicon "arrow-right-on-rectangle", variant: :outline, options: { class: "h-5 w-5 mr-2" } %>
-        Sair
+    <div class="p-4 border-t" style="border-color: <%= @configuracao_global.cor_fonte_menu.presence || '#374151' %>;">
+      <%= button_to session_path, method: :delete, class: "flex items-center justify-center w-full px-4 py-2 hover:bg-red-600 hover:text-white rounded transition-colors" do %>
+        <%= heroicon "arrow-right-on-rectangle", variant: :outline, options: { class: "h-5 w-5 mr-2", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+        <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Sair</span>
       <% end %>
     </div>
   </div>
@@ -272,5 +252,26 @@ function setupSubmenus() {
 <style>
 .rotate-180 {
   transform: rotate(180deg);
+  transition: transform 0.2s ease-in-out;
+}
+
+.no-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent !important;
+}
+
+.no-scrollbar::-webkit-scrollbar-track {
+  background: transparent !important;
 }
 </style>
