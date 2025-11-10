@@ -1,0 +1,50 @@
+<%= form_with model: @gasto, class: "max-w-2xl mx-auto bg-white p-6 rounded-lg shadow" do |form| %>
+  <% if @gasto.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <h4 class="text-red-800 font-medium mb-2">
+        <%= pluralize(@gasto.errors.count, "erro") %> impediram este gasto de ser salvo:
+      </h4>
+      <ul class="text-red-700 list-disc list-inside">
+        <% @gasto.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :gas_data, "Data do Gasto", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.date_field :gas_data, 
+            max: Date.current,
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+            required: true %>
+      <% if @gasto.errors[:gas_data].any? %>
+        <p class="text-red-600 text-sm mt-1"><%= @gasto.errors[:gas_data].first %></p>
+      <% else %>
+        <p class="text-gray-500 text-sm mt-1">A data não pode ser futura</p>
+      <% end %>
+    </div>
+
+    <div>
+      <%= form.label :gas_descricao, "Descrição", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.text_field :gas_descricao, 
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+            required: true %>
+    </div>
+
+    <div>
+      <%= form.label :gas_valor, "Valor", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.number_field :gas_valor, 
+            step: 0.01,
+            min: 0.01,
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+            required: true %>
+    </div>
+  </div>
+
+  <div class="mt-8 flex gap-3">
+    <%= form.submit "Salvar Gasto", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer" %>
+    <%= link_to "Cancelar", gastos_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200" %>
+  </div>
+<% end %>

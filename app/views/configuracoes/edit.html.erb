@@ -1,0 +1,282 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">Configurações da Loja</h1>
+  </div>
+
+  <%= form_with model: @loja, url: loja_path, method: :patch, class: "space-y-8" do |form| %>
+
+    <!-- Seção: Perfil da Loja -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Perfil da Loja</h2>
+      
+      <div class="space-y-6">
+        <!-- Logo da Loja -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Logo da Loja</label>
+          <div class="flex items-center space-x-4">
+            <div class="w-20 h-20 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center logo-preview">
+              <% if @loja.loj_logo.attached? %>
+                <%= image_tag @loja.loj_logo, class: "w-16 h-16 object-contain" %>
+              <% else %>
+                <%= heroicon "arrow-up-tray", variant: :outline, options: { class: "h-6 w-6 text-gray-400" } %>
+              <% end %>
+            </div>
+            
+            <div>
+              <%= form.file_field :loj_logo, class: "hidden", id: "logo-upload" %>
+              <button type="button" onclick="document.getElementById('logo-upload').click()" 
+                      class="px-4 py-2 bg-tags-rosa text-white rounded-lg hover:bg-pink-600 transition-colors">
+                Fazer Upload da Logo
+              </button>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG até 5MB</p>
+            </div>  
+          </div>
+        </div>
+
+        <!-- Nome da Loja -->
+        <div>
+          <%= form.label :loj_nome, "Nome da Loja:", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.text_field :loj_nome, 
+                class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tags-rosa focus:border-transparent",
+                placeholder: "Nome da sua loja",
+                required: true %>
+        </div>
+
+        <!-- CNPJ e Telefone -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= form.label :loj_cnpj, "CNPJ:", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_field :loj_cnpj, 
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tags-rosa focus:border-transparent",
+                  placeholder: "00.000.000/0000-00" %>
+          </div>
+          <div>
+            <%= form.label :loj_telefone, "Telefone:", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_field :loj_telefone, 
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tags-rosa focus:border-transparent",
+                  placeholder: "(00) 00000-0000" %>
+          </div>
+        </div>
+
+        <!-- CEP e Endereço -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= form.label :loj_cep, "CEP:", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_field :loj_cep, 
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tags-rosa focus:border-transparent",
+                  placeholder: "00000-000" %>
+          </div>
+          <div>
+            <%= form.label :loj_endereco, "Endereço:", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_field :loj_endereco, 
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tags-rosa focus:border-transparent",
+                  required: true %>
+          </div>
+        </div>
+
+        <!-- Instagram -->
+        <div>
+          <%= form.label :loj_instagram, "Instagram:", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <div class="flex">
+            <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500">@</span>
+            <%= form.text_field :loj_instagram, 
+                  class: "flex-1 px-3 py-2 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-tags-rosa focus:border-transparent",
+                  placeholder: "seuinstagram" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-300 my-8"></div>
+
+    <!-- Seção: Aparência do Sistema -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Aparência do Sistema</h2>
+      
+      <div class="space-y-6">
+        <!-- Cor de Fundo do Menu -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">Cor de Fundo do Menu</label>
+          
+          <div class="flex items-center space-x-4">
+            <!-- Cores pré-definidas -->
+            <div class="flex space-x-3">
+              <% cores_fundo = ['#181818', '#1f2937', '#374151'] %>
+              <% cores_fundo.each do |cor| %>
+                <label class="cursor-pointer">
+                  <%= form.radio_button :loj_cor_fundo, cor, class: "hidden cor-fundo-radio" %>
+                  <div class="w-10 h-10 rounded-lg border-2 border-transparent hover:border-gray-300 <%= 'border-tags-rosa border-2' if @loja.loj_cor_fundo == cor %>" 
+                       style="background-color: <%= cor %>"
+                       onclick="selecionarCorFundo('<%= cor %>')">
+                  </div>
+                </label>
+              <% end %>
+            </div>
+            
+            <div class="h-8 w-px bg-gray-300"></div>
+            
+            <!-- Cores personalizadas -->
+            <div class="flex items-center space-x-3">
+              <div id="opcoes-fundo-container" class="flex space-x-3"></div>
+              
+              <button type="button" 
+                      onclick="mostrarInputCorPersonalizada('fundo')"
+                      class="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-colors">
+                <%= heroicon "plus", variant: :outline, options: { class: "h-5 w-5 text-gray-400" } %>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Input para cor personalizada -->
+          <div id="cor-personalizada-fundo-container" class="hidden mt-4">
+            <div class="flex items-center space-x-3 bg-gray-50 p-4 rounded-lg">
+              <div class="flex items-center space-x-2">
+                <input type="color" 
+                       id="color-picker-fundo"
+                       value="<%= @loja.loj_cor_fundo.presence || '#181818' %>"
+                       class="w-10 h-10 p-1 rounded-lg border border-gray-300 cursor-pointer"
+                       onchange="atualizarPreviewCorFundo(this.value)">
+                
+                <input type="text" 
+                       id="color-input-fundo"
+                       value="<%= @loja.loj_cor_fundo.presence || '#181818' %>"
+                       placeholder="#181818"
+                       class="px-3 py-2 border border-gray-300 rounded-lg text-sm w-32 focus:ring-2 focus:ring-tags-rosa focus:border-transparent"
+                       onchange="validarEAtualizarPreviewCorFundo(this.value)"
+                       oninput="atualizarColorPicker(this.value, 'color-picker-fundo')">
+                
+                <button type="button" 
+                        onclick="adicionarOpcaoCorPersonalizadaFundo()"
+                        class="px-3 py-2 bg-tags-rosa text-white text-sm rounded-lg hover:bg-pink-600 transition-colors">
+                  Adicionar
+                </button>
+                
+                <button type="button" 
+                        onclick="ocultarInputCorPersonalizada('fundo')"
+                        class="px-3 py-2 bg-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-400 transition-colors">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cor de Fonte do Menu -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">Cor de Fonte do Menu</label>
+          
+          <div class="flex items-center space-x-4">
+            <!-- Cores pré-definidas -->
+            <div class="flex space-x-3">
+              <% cores_fonte = ['#f9fafb', '#e5e7eb', '#d1d5db'] %>
+              <% cores_fonte.each do |cor| %>
+                <label class="cursor-pointer">
+                  <%= form.radio_button :loj_cor_fonte, cor, class: "hidden cor-fonte-radio" %>
+                  <div class="w-10 h-10 rounded-lg border-2 border-transparent hover:border-gray-300 <%= 'border-tags-rosa border-2' if @loja.loj_cor_fonte == cor %>" 
+                       style="background-color: <%= cor %>"
+                       onclick="selecionarCorFonte('<%= cor %>')">
+                  </div>
+                </label>
+              <% end %>
+            </div>
+            
+            <div class="h-8 w-px bg-gray-300"></div>
+            
+            <!-- Cores personalizadas -->
+            <div class="flex items-center space-x-3">
+              <div id="opcoes-fonte-container" class="flex space-x-3"></div>
+              
+              <button type="button" 
+                      onclick="mostrarInputCorPersonalizada('fonte')"
+                      class="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-colors">
+                <%= heroicon "plus", variant: :outline, options: { class: "h-5 w-5 text-gray-400" } %>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Input para cor personalizada -->
+          <div id="cor-personalizada-fonte-container" class="hidden mt-4">
+            <div class="flex items-center space-x-3 bg-gray-50 p-4 rounded-lg">
+              <div class="flex items-center space-x-2">
+                <input type="color" 
+                       id="color-picker-fonte"
+                       value="<%= @loja.loj_cor_fonte.presence || '#f9fafb' %>"
+                       class="w-10 h-10 p-1 rounded-lg border border-gray-300 cursor-pointer"
+                       onchange="atualizarPreviewCorFonte(this.value)">
+                
+                <input type="text" 
+                       id="color-input-fonte"
+                       value="<%= @loja.loj_cor_fonte.presence || '#f9fafb' %>"
+                       placeholder="#f9fafb"
+                       class="px-3 py-2 border border-gray-300 rounded-lg text-sm w-32 focus:ring-2 focus:ring-tags-rosa focus:border-transparent"
+                       onchange="validarEAtualizarPreviewCorFonte(this.value)"
+                       oninput="atualizarColorPicker(this.value, 'color-picker-fonte')">
+                
+                <button type="button" 
+                        onclick="adicionarOpcaoCorPersonalizadaFonte()"
+                        class="px-3 py-2 bg-tags-rosa text-white text-sm rounded-lg hover:bg-pink-600 transition-colors">
+                  Adicionar
+                </button>
+                
+                <button type="button" 
+                        onclick="ocultarInputCorPersonalizada('fonte')"
+                        class="px-3 py-2 bg-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-400 transition-colors">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão Salvar -->
+    <div class="flex justify-end pt-6">
+      <%= form.submit "Salvar Configurações", 
+            class: "px-6 py-3 bg-tags-rosa text-white font-medium rounded-lg hover:bg-pink-600 transition-colors cursor-pointer" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+// JavaScript similar ao anterior, mas atualizando os campos da Loja
+function selecionarCorFundo(cor) {
+  console.log('Selecionando cor fundo:', cor);
+  // Encontra o radio button correspondente e marca ele
+  const radio = document.querySelector(`input[value="${cor}"][name="loja[loj_cor_fundo]"]`);
+  if (radio) radio.checked = true;
+  aplicarCoresPreview();
+}
+
+function selecionarCorFonte(cor) {
+  console.log('Selecionando cor fonte:', cor);
+  // Encontra o radio button correspondente e marca ele
+  const radio = document.querySelector(`input[value="${cor}"][name="loja[loj_cor_fonte]"]`);
+  if (radio) radio.checked = true;
+  aplicarCoresPreview();
+}
+
+// Restante do JavaScript permanece similar...
+// (as funções de cores personalizadas, preview da logo, etc.)
+
+// Preview da logo
+document.getElementById('logo-upload')?.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.querySelector('.logo-preview');
+      if (preview) {
+        preview.innerHTML = `<img src="${e.target.result}" class="w-16 h-16 object-contain" alt="Preview">`;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Carregar quando a página carrega
+document.addEventListener('DOMContentLoaded', function() {
+  carregarCoresPersonalizadas();
+  aplicarCoresPreview();
+});
+</script>

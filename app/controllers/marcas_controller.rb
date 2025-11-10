@@ -20,8 +20,10 @@ class MarcasController < ApplicationController
     end
   end
 
-  def show
-  end
+ def show
+  # Carrega produtos relacionados se quiser mostrar na view
+  @produtos = @marca.produtos if @marca.produtos.any?
+end
 
   def edit
   end

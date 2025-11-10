@@ -52,40 +52,70 @@
       </div>
 
       <div class="border-t my-2" style="border-color: <%= @configuracao_global.cor_fonte_menu.presence || '#374151' %>; opacity: 0.2;"></div>
-
-      <!-- ESTOQUE Section -->
-      <div class="py-2">
-        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
-             style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
-          CONTROLE DE ESTOQUE
-        </div>
-        
-        <!-- ESTOQUE Parent Item -->
-        <div class="cursor-pointer">
-          <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="estoque-submenu">
-            <div class="flex items-center">
-              <%= heroicon "cube", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
-              <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Estoque</span>
-            </div>
-            <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
-          </div>
-          
-          <!-- ESTOQUE Submenu -->
-          <div class="submenu hidden ml-6 mt-1" id="estoque-submenu">
-            <div class="space-y-1">
-              <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                <%= heroicon "arrow-path", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
-                <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Atualização de Estoque</span>
-              <% end %>
-              
-              <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-                <%= heroicon "plus", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
-                <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Cadastro de Mercadoria</span>
-              <% end %>
-            </div>
-          </div>
-        </div>
+<!-- ESTOQUE Section -->
+<div class="py-2">
+  <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
+       style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
+    CONTROLE DE ESTOQUE
+  </div>
+  
+  <!-- ESTOQUE Parent Item -->
+  <div class="cursor-pointer">
+    <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="estoque-submenu">
+      <div class="flex items-center">
+        <%= heroicon "cube", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+        <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Estoque</span>
       </div>
+      <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+    </div>
+    
+    <!-- ESTOQUE Submenu -->
+    <div class="submenu hidden ml-6 mt-1" id="estoque-submenu">
+      <div class="space-y-1">
+        <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+          <%= heroicon "arrow-path", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+          <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Atualização de Estoque</span>
+        <% end %>
+        
+        <%= link_to "produtos", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+          <%= heroicon "plus", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+          <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Cadastro de Mercadoria</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <!-- CONFIGURAÇÕES DE PRODUTO Parent Item -->
+  <div class="cursor-pointer">
+    <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" data-submenu="produto-submenu">
+      <div class="flex items-center">
+        <%= heroicon "cog", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+        <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Configurações de Produto</span>
+      </div>
+      <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+    </div>
+    
+    <!-- CONFIGURAÇÕES DE PRODUTO Submenu -->
+    <div class="submenu hidden ml-6 mt-1" id="produto-submenu">
+      <div class="space-y-1">
+        <%= link_to "marcas", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+          <%= heroicon "tag", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+          <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Cadastro de Marcas</span>
+        <% end %>
+        
+        <%= link_to "tamanhos", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+          <%= heroicon "arrows-pointing-out", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+          <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Cadastro de Tamanhos</span>
+        <% end %>
+
+        <%= link_to "tipos", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+          <%= heroicon "swatch", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
+          <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Cadastro de Tipos</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- ADMIN Section -->
       <% if current_user.admin_usu_tipo? %>
@@ -114,7 +144,7 @@
             
             <div class="submenu hidden ml-6 mt-1" id="cadastros-submenu">
               <div class="space-y-1">
-                <%= link_to "#", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+                <%= link_to "users", class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
                   <%= heroicon "user-plus", variant: :outline, options: { class: "h-4 w-4 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#9CA3AF'}" } %>
                   <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>">Funcionários</span>
                 <% end %>

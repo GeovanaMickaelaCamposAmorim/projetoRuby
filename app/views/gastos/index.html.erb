@@ -1,7 +1,4 @@
 <style>
-  /* conforme solicitado: sobrescreve .grid-cols-1 para 3 colunas */
-  .grid-cols-1 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    /* botão rosa — evitando classes arbitrárias do Tailwind que podem não ter sido geradas/purgadas */
   .btn-pink {
     background-color: #ed215e;
     color: #ffffff;
@@ -12,7 +9,7 @@
     transform: scale(1.02);
   }
   .btn-blue {
-    background-color:  #ffffff;
+    background-color: #ffffff;
     transition: background-color .15s ease, transform .15s ease;
   }
   .btn-blue:hover {
@@ -26,37 +23,39 @@
     <!-- Cabeçalho -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-3xl font-bold text-gray-800">Controle de Gastos</h1>
-    <button class="px-6 py-3 btn-pink font-semibold rounded-lg shadow">
+      <%= link_to new_gasto_path, class: "px-6 py-3 btn-pink font-semibold rounded-lg shadow" do %>
         + Registrar Gasto
-      </button>
+      <% end %>
     </div>
 
     <!-- Cards resumo -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <p class="text-gray-600 font-medium">Total de Gastos</p>
-        <p class="text-3xl font-bold text-red-600">R$ 2970.00</p>
+        <p class="text-3xl font-bold text-red-600"><%= number_to_currency(@gastos.sum(&:gas_valor)) %></p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <p class="text-gray-600 font-medium">Gastos Este Mês</p>
-        <p class="text-3xl font-bold text-gray-800">R$ 2970.00</p>
+        <p class="text-3xl font-bold text-gray-800"><%= number_to_currency(@total_mes) %></p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <p class="text-gray-600 font-medium">Média Mensal</p>
-        <p class="text-3xl font-bold text-gray-800">R$ 2970.00</p>
+        <%
+          # Cálculo simples da média mensal (últimos 6 meses)
+          media_mensal = @gastos.where('gas_data >= ?', 6.months.ago).sum(:gas_valor) / 6.0
+        %>
+        <p class="text-3xl font-bold text-gray-800"><%= number_to_currency(media_mensal) %></p>
       </div>
     </div>
 
     <!-- Card branco envolvendo busca e grade -->
     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
       <!-- Campo de busca -->
-      <div class="mb-6">
-        <input
-          type="text"
-          placeholder="Buscar gasto"
-          class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none"
-        />
-      </div>
+      <%= form_with url: gastos_path, method: :get, local: true, class: "mb-6" do %>
+        <%= text_field_tag :search, params[:search], 
+              placeholder: "Buscar gasto",
+              class: "w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+      <% end %>
 
       <!-- Tabela -->
       <div class="overflow-hidden">
@@ -71,40 +70,28 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 text-black">
-            <tr>
-              <td class="px-6 py-3">04/01/2025</td>
-              <td class="px-6 py-3">Aluguel da loja</td>
-              <td class="px-6 py-3 text-red-600 font-semibold">R$ 2500.00</td>
-              <td class="px-6 py-3">Laura Gomes</td>
-              <td class="px-6 py-3 flex gap-3">
-                <button class="btn-blue rounded-lg shadow">✏️</button>
-                <button class="text-red-600 hover:text-red-800 transition">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3">09/01/2025</td>
-              <td class="px-6 py-3">Conta de luz</td>
-              <td class="px-6 py-3 text-red-600 font-semibold">R$ 350.00</td>
-              <td class="px-6 py-3">Laura Gomes</td>
-              <td class="px-6 py-3 flex gap-3">
-                <button class="text-blue-600 hover:text-blue-800 transition">✏️</button>
-                <button class="text-red-600 hover:text-red-800 transition">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3">11/01/2025</td>
-              <td class="px-6 py-3">Material de limpeza</td>
-              <td class="px-6 py-3 text-red-600 font-semibold">R$ 120.00</td>
-              <td class="px-6 py-3">Marcos Oliveira</td>
-              <td class="px-6 py-3 flex gap-3">
-                <button class="text-blue-600 hover:text-blue-800 transition">✏️</button>
-                <button class="text-red-600 hover:text-red-800 transition">🗑️</button>
-              </td>
-            </tr>
+            <% @gastos.each do |gasto| %>
+              <tr>
+                <td class="px-6 py-3"><%= gasto.gas_data.strftime('%d/%m/%Y') %></td>
+                <td class="px-6 py-3"><%= gasto.gas_descricao %></td>
+                <td class="px-6 py-3 text-red-600 font-semibold"><%= number_to_currency(gasto.gas_valor) %></td>
+                <td class="px-6 py-3"><%= gasto.user.usu_nome %></td>
+                <td class="px-6 py-3 flex gap-3">
+                  <%= link_to edit_gasto_path(gasto), class: "btn-blue rounded-lg shadow px-3 py-1" do %>
+                    ✏️
+                  <% end %>
+                  <%= link_to gasto_path(gasto), 
+                      method: :delete, 
+                      data: { confirm: 'Tem certeza que deseja excluir este gasto?' },
+                      class: "text-red-600 hover:text-red-800 transition px-3 py-1" do %>
+                    🗑️
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
           </tbody>
         </table>
       </div>
     </div>
-
   </div>
 </div>

@@ -2,16 +2,24 @@ class GastosController < ApplicationController
   before_action :set_gasto, only: [:edit, :update, :destroy]
 
 
-  def index
+ def index
     @gastos = Gasto.where(contratante_id: current_user.contratante_id)
                    .includes(:user)
                    .ordenados_por_data
+    
+    # Adicionar busca
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @gastos = @gastos.where("gas_descricao ILIKE :search", search: search_term)
+    end
+    
     @total_mes = Gasto.total_no_periodo(Date.today.beginning_of_month, Date.today.end_of_month, current_user.contratante_id)
   end
 
-  def new
-    @gasto = Gasto.new(gas_data: Time.now)
-  end
+
+ def new
+  @gasto = Gasto.new(gas_data: Date.current)  # Mude para Date.current
+ end
 
   def create
     @gasto = Gasto.new(gasto_params)

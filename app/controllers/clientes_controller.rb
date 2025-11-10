@@ -1,39 +1,35 @@
 class ClientesController < ApplicationController
-  before_action :set_cliente, only: [:show, :edit, :update, :destroy]
+  before_action :set_cliente, only: [:edit, :update, :destroy]
 
-  def index
-    @clientes = Cliente.where(contratante_id: current_user.contratante_id).includes(:user)
+def index
+  @clientes = Cliente.where(contratante_id: current_user.contratante_id)
+  
+  if params[:search].present?
+    search_term = "%#{params[:search]}%"
+    @clientes = @clientes.where(
+      "cli_nome ILIKE :search OR cli_email ILIKE :search OR cli_telefone1 ILIKE :search", 
+      search: search_term
+    )
   end
+    
+ if params[:status].present?
+    @clientes = @clientes.where(status: params[:status])
+  end
+  
+  @clientes = @clientes.order('cli_nome ASC')
+end
 
   def new
-    @cliente = Cliente.new
+  @cliente = Cliente.new(status: 'ativo') 
   end
 
   def create
-    user = User.new(
-      usu_nome: cliente_params[:user_attributes][:usu_nome],
-      usu_email: cliente_params[:user_attributes][:usu_email],
-      usu_telefone: cliente_params[:cli_telefone1],
-      usu_tipo: 'cliente',
-      password: '123456',
-      password_confirmation: '123456',
-      contratante_id: current_user.contratante_id
-    )
+    @cliente = Cliente.new(cliente_params)
+    @cliente.contratante_id = current_user.contratante_id
 
-    if user.save
-      @cliente = Cliente.new(cliente_params.except(:user_attributes))
-      @cliente.user = user
-      @cliente.contratante_id = current_user.contratante_id
-
-      if @cliente.save
-        redirect_to clientes_path, notice: 'Cliente criado com sucesso!'
-      else
-        user.destroy
-        render :new, status: :unprocessable_entity
-      end
+    if @cliente.save
+      redirect_to clientes_path, notice: 'Cliente criado com sucesso!'
     else
-      @cliente = Cliente.new(cliente_params)
-      @cliente.errors.merge!(user.errors)
       render :new, status: :unprocessable_entity
     end
   end
@@ -61,9 +57,9 @@ class ClientesController < ApplicationController
   end
 
   def cliente_params
-    params.require(:cliente).permit(:cli_cpf, :cli_data_nasc, :cli_estado_civil,
-                                   :cli_endereco, :cli_telefone1, :cli_telefone2,
-                                   :cli_email, :cli_observacao,
-                                   user_attributes: [:usu_nome, :usu_email])
+    params.require(:cliente).permit(
+      :cli_nome, :cli_cpf, :cli_data_nasc, :cli_estado_civil, 
+      :cli_endereco, :cli_telefone1, :cli_telefone2, :cli_email, :cli_observacao, :status
+    )
   end
 end

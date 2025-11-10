@@ -16,6 +16,7 @@ class Gasto < ApplicationRecord
   validates :user_id, presence: true
   validates :contratante_id, presence: true
 
+
   # Scopes para consultas comuns
   scope :por_data, ->(data) { where(gas_data: data.beginning_of_day..data.end_of_day) }
   scope :por_periodo, ->(inicio, fim) { where(gas_data: inicio.beginning_of_day..fim.end_of_day) }
@@ -80,11 +81,11 @@ class Gasto < ApplicationRecord
 
   private
 
-  def data_nao_pode_ser_futura
-    if gas_data.present? && gas_data > Time.zone.now
-      errors.add(:gas_data, "não pode ser uma data futura")
-    end
+ def data_nao_pode_ser_futura
+  if gas_data.present? && gas_data > Date.current
+    errors.add(:gas_data, "não pode ser uma data futura")
   end
+ end
 
   def valor_deve_ser_positivo
     if gas_valor.present? && gas_valor <= 0

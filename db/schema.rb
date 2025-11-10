@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_07_114631) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_09_202017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,7 +43,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_07_114631) do
   end
 
   create_table "clientes", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "cli_cpf", null: false
     t.date "cli_data_nasc", null: false
     t.string "cli_estado_civil"
@@ -55,9 +54,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_07_114631) do
     t.bigint "contratante_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cli_nome"
+    t.string "status"
     t.index ["cli_cpf"], name: "index_clientes_on_cli_cpf", unique: true
     t.index ["contratante_id"], name: "index_clientes_on_contratante_id"
-    t.index ["user_id"], name: "index_clientes_on_user_id"
   end
 
   create_table "configuracaos", force: :cascade do |t|
@@ -271,7 +271,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_07_114631) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "clientes", "contratantes"
-  add_foreign_key "clientes", "users"
   add_foreign_key "estoque_movimentacoes", "contratantes"
   add_foreign_key "estoque_movimentacoes", "produtos"
   add_foreign_key "estoque_movimentacoes", "users"
