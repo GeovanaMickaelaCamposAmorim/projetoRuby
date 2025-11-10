@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_user_from_session
   before_action :carregar_configuracoes
+  before_action :require_authentication, unless: :public_action?  # ← ADICIONE ESTA LINHA
 
   helper_method :authenticated?, :current_user
 
@@ -29,16 +30,26 @@ class ApplicationController < ActionController::Base
       else
         # Sessão inválida - limpa o cookie
         cookies.delete(:session_id)
-        redirect_to root_path, alert: "Sessão expirada" unless public_action?
+        Current.user = nil
       end
     else
-      # Não tem sessão - redireciona para login se não for ação pública
-      redirect_to root_path, alert: "Faça login para continuar" unless public_action?
+      # Não tem sessão - apenas define como nil
+      Current.user = nil
     end
   end
 
+  
+  def require_authentication
+  unless authenticated?
+    redirect_to login_path, alert: "Faça login para continuar"  
+    return false
+  end
+end
+
   def public_action?
     # Define quais controllers/ações são públicas (não requerem login)
-    controller_name == 'sessions' && action_name.in?(%w[new create])
+    (controller_name == 'home' && action_name == 'index') ||  # ← AGORA home#index É PÚBLICA
+    (controller_name == 'sessions' && action_name.in?(%w[new create])) ||
+    (controller_name == 'passwords' && action_name.in?(%w[new create edit update]))
   end
 end

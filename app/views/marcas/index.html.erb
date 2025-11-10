@@ -1,9 +1,16 @@
 <div class="container mx-auto px-4 py-8">
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">Marcas</h1>
-    <p class="text-gray-600">Gerencie as marcas dos produtos</p>
+    <div class="flex items-center gap-3">
+      <div class="bg-[#ed215e] p-2 rounded-lg">
+        <%= heroicon "tag", variant: :solid, options: { class: "h-6 w-6", style: "color: white" } %>
+      </div>
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Marcas</h1>
+        <p class="text-gray-600">Gerencie as marcas dos produtos</p>
+      </div>
+    </div>
 
-    <div class="flex justify-between items-center mt-6">
+    <div class="flex justify-end items-center= mt-6">
       <%= link_to new_marca_path, class: "px-6 py-3 bg-[#ed215e] text-white rounded-lg font-medium hover:bg-[#d91956] transition-colors duration-200" do %>
         + Nova Marca
       <% end %>
