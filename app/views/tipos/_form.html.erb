@@ -1,0 +1,37 @@
+<%= form_with model: tipo, class: "max-w-2xl mx-auto bg-white p-6 rounded-lg shadow" do |form| %>
+  <% if tipo.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <h4 class="text-red-800 font-medium mb-2">
+        <%= pluralize(tipo.errors.count, "erro") %> impediram este tipo de ser salvo:
+      </h4>
+      <ul class="text-red-700 list-disc list-inside">
+        <% tipo.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :tip_nome, "Nome do Tipo", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.text_field :tip_nome, 
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+            placeholder: "Ex: Camiseta, Calça, Vestido",
+            required: true %>
+    </div>
+
+    <div>
+      <%= form.label :tip_sigla, "Sigla", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.text_field :tip_sigla, 
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+            placeholder: "Ex: CAM, CAL, VES (opcional)",
+            maxlength: 10 %>
+    </div>
+  </div>
+
+  <div class="mt-8 flex gap-3">
+    <%= form.submit "Salvar Tipo", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer" %>
+    <%= link_to "Cancelar", tipos_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200" %>
+  </div>
+<% end %>

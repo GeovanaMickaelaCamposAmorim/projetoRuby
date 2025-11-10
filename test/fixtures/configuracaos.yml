@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nome_loja: MyString
+  cnpj: MyString
+  telefone: MyString
+  endereco: MyString
+  instagram: MyString
+  cor_fundo_menu: MyString
+  cor_fonte_menu: MyString
+
+two:
+  nome_loja: MyString
+  cnpj: MyString
+  telefone: MyString
+  endereco: MyString
+  instagram: MyString
+  cor_fundo_menu: MyString
+  cor_fonte_menu: MyString

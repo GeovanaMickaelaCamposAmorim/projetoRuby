@@ -20,11 +20,37 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'tags-rosa': '#ED215E',
+              'tags-cinza': '#4E4E4E', 
+              'tags-branco': '#F9FAFB',
+              'tags-preto': '#181818',
+              'tags-cinza-fundo': '#EFEFEF'
+            }
+          }
+        }
+      }
+    </script>
+    
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <% if authenticated? %>
+      <div class="flex h-screen">
+        <%= render "layouts/sidebar" %>
+        <main class="flex-1 px-4 py-8 bg-tags-cinza-fundo overflow-y-auto">
+          <%= yield %>
+        </main>
+      </div>
+    <% else %>
       <%= yield %>
-    </main>
+    <% end %>
   </body>
 </html>

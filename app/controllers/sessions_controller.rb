@@ -1,40 +1,47 @@
 class SessionsController < ApplicationController
-  # REMOVA estas linhas ou COMENTE até implementar a autenticação:
-  # allow_unauthenticated_access only: %i[ new create ]
-  # rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
+  skip_before_action :set_current_user_from_session, only: [:new, :create]
 
   def new
-    redirect_to root_path if authenticated?
+    redirect_to gastos_path if authenticated?
   end
 
-  def create
-    if user = User.authenticate_by(params.permit(:email_address, :password))
-      start_new_session_for(user)
-      redirect_to root_path, notice: "Logged in successfully!"
-    else
-      redirect_to new_session_path, alert: "Try another email address or password."
-    end
+def create
+   user = User.find_by(usu_email: params[:usu_email])
+  puts ">>> USER FOUND? #{user.present?}"
+  puts params.inspect
+
+
+  if user&.authenticate(params[:password])
+    # Cria a sessão do usuário
+    session = user.user_sessions.create!(
+      user_agent: request.user_agent,
+      ip_address: request.remote_ip
+    )
+
+    # Configura o Current e cookies
+    Current.user = user
+    Current.session = session
+    cookies.signed.permanent[:session_id] = {
+      value: session.id,
+      httponly: true,
+      same_site: :lax
+    }
+
+    # Redireciona para a página inicial
+     
+   redirect_to gastos_path
+  else
+    redirect_to new_session_path, alert: "E-mail ou senha incorretos."
   end
+  
+end
 
   def destroy
-    terminate_session
-    redirect_to root_path, notice: "Logged out successfully!"
-  end
-
-  private
-
-  def start_new_session_for(user)
-    user.user_sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
-      Current.user = user      # ← Isso é ESSENCIAL
-      Current.session = session
-      cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :lax }
-    end
-  end
-
-  def terminate_session
     Current.session&.destroy
     cookies.delete(:session_id)
     Current.user = nil
     Current.session = nil
+    
+    redirect_to root_path, notice: "Logged out successfully!"
   end
 end
