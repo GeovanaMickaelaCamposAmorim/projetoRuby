@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_09_202017) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_11_135511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -173,6 +173,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_09_202017) do
     t.bigint "contratante_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "pro_nome"
+    t.text "pro_descricao"
+    t.string "pro_codigo"
     t.index ["contratante_id"], name: "index_produtos_on_contratante_id"
     t.index ["marca_id"], name: "index_produtos_on_marca_id"
     t.index ["tamanho_id"], name: "index_produtos_on_tamanho_id"

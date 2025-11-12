@@ -24,12 +24,12 @@
             <% end %>
           <% end %>
 
-          <%= link_to "vendas", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+          <%= link_to "pdv", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
             <%= heroicon "currency-dollar", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
-            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Cadastro de Venda</span>
+            <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Ponto de Venda</span>
           <% end %>
 
-          <%= link_to "#", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+          <%= link_to "vendas", class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
             <%= heroicon "document-text", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
             <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Histórico de Vendas</span>
           <% end %>

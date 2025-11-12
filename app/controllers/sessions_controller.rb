@@ -29,7 +29,7 @@ def create
 
     # Redireciona para a página inicial
      
-   redirect_to gastos_path
+   redirect_to pdv_path
   else
     redirect_to new_session_path, alert: "E-mail ou senha incorretos."
   end
