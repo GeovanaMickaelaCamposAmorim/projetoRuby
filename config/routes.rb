@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   # Rotas do PDV
   get "pdv", to: "pdv#index"
-  post "pdv/buscar_produto", to: "pdv#buscar_produto"
+  get 'pdv/buscar_produto', to: 'pdv#buscar_produto'
   post "pdv/finalizar_venda", to: "pdv#finalizar_venda"
 
   # Rotas principais

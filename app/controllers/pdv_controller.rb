@@ -2,51 +2,47 @@ class PdvController < ApplicationController
   before_action :carregar_dados
 
   def index
-    @venda = Venda.new(
-      ven_data: Date.current,
-      user_id: current_user.id,
+    @clientes = Cliente.where(
       contratante_id: current_user.contratante_id,
-      ven_valor_total: 0,
-      ven_valor_final: 0,
-      ven_desconto: 0
-    )
+      status: 'ativo'
+    ).order(:cli_nome)
   end
 
   def buscar_produto
     termo = params[:termo].to_s.strip
+    
+    produtos = Produto.where(contratante_id: current_user.contratante_id)
+                     .where("pro_nome ILIKE :termo OR pro_codigo ILIKE :termo", termo: "%#{termo}%")
+                     .limit(10)
 
-    produto = Produto.where(contratante_id: current_user.contratante_id)
-                    .where("nome ILIKE :termo OR codigo ILIKE :termo", termo: "%#{termo}%")
-                    .first
-
-    if produto
-      render json: {
-        success: true,
-        produto: {
-          id: produto.id,
-          nome: produto.nome,
-          codigo: produto.codigo,
-          preco: produto.preco,
-          estoque: produto.estoque
-        }
+    if produtos.any?
+      render json: produtos.map { |p| 
+        { 
+          id: p.id,
+          nome: p.pro_nome,
+          codigo: p.pro_codigo,
+          valor_venda: p.pro_valor_venda.to_f
+        } 
       }
     else
-      render json: { success: false, error: "Produto não encontrado" }
+      render json: []
     end
   end
 
   def finalizar_venda
     ActiveRecord::Base.transaction do
-      subtotal = params[:itens].sum { |item| item[:quantidade].to_i * item[:preco_unitario].to_f }
-      desconto = params[:venda][:ven_desconto].to_f
-      total = subtotal - desconto
+      # Calcular totais
+      subtotal = params[:itens].sum { |item| item[:quantidade].to_i * item[:valor].to_f }
+      desconto = params[:desconto].to_f
+      total = [subtotal - desconto, 0].max
 
+      # Criar venda
       @venda = Venda.new(
-        ven_data: Date.current,
+        ven_data: Time.current,
         user_id: current_user.id,
         contratante_id: current_user.contratante_id,
-        cliente_id: params[:venda][:cliente_id].presence,
-        ven_forma_pagamento: params[:venda][:ven_forma_pagamento],
+        cliente_id: params[:cliente_id].presence,
+        ven_forma_pagamento: params[:forma_pagamento],
         ven_valor_total: subtotal,
         ven_valor_final: total,
         ven_desconto: desconto
@@ -57,9 +53,9 @@ class PdvController < ApplicationController
         params[:itens].each do |item|
           VendaItem.create!(
             venda_id: @venda.id,
-            produto_id: item[:produto_id],
+            produto_id: item[:id],
             vei_quantidade: item[:quantidade],
-            vei_preco_unitario: item[:preco_unitario]
+            vei_preco_unitario: item[:valor]
           )
         end
 
@@ -75,7 +71,7 @@ class PdvController < ApplicationController
   private
 
   def carregar_dados
-    @produtos = Produto.where(contratante_id: current_user.contratante_id).order(:nome)
-    @clientes = Cliente.where(contratante_id: current_user.contratante_id).order(:cli_nome)
+    @produtos = Produto.where(contratante_id: current_user.contratante_id).order(:pro_nome)
+    @clientes = Cliente.where(contratante_id: current_user.contratante_id, status: 'ativo').order(:cli_nome)
   end
 end
