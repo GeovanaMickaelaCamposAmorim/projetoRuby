@@ -1,173 +1,171 @@
 <div class="flex h-screen">
-  <div class="w-64 flex flex-col shadow-xl" 
-     style="background-color: <%= @configuracao_global.cor_fundo_menu.presence || '#181818' %>;" 
-     id="sidebar-menu">
+  <div class="w-64 flex flex-col shadow-xl"
+       style="background-color: <%= @configuracao_global.cor_fundo_menu.presence || '#181818' %>;"
+       id="sidebar-menu">
     <div class="flex items-center p-6 h-20">
       <div class="flex items-center justify-center space-x-3 w-full">
         <%= image_tag "logo-menu.png", alt: "Tags logo Menu", class: "w-20 h-auto" %>
       </div>
     </div>
-
     <nav class="flex-1 overflow-y-auto scrollbar-hide">
-
       <!-- HOME -->
       <div class="py-2">
-        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
+        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider"
              style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
           HOME
         </div>
         <div class="space-y-1">
           <% if current_user.admin_usu_tipo? %>
-            <%= link_to dashboard_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-              <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3", style: "color: #{@configuracao_global.cor_fonte_menu.presence || '#D1D5DB'}" } %>
+            <%= link_to '*', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+              <div class="h-5 w-5 mr-3" style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>"></div>
               <span style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#D1D5DB' %>">Dashboard</span>
             <% end %>
           <% end %>
-
-          <%= link_to pdv_index_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "currency-dollar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+          
+          <%= link_to pdv_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Ponto de Venda</span>
           <% end %>
-
+          
           <%= link_to vendas_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "document-text", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Histórico de Vendas</span>
           <% end %>
-
-          <%= link_to tags_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "tag", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+          
+          <%= link_to '*', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Tag</span>
           <% end %>
-
+          
           <%= link_to gastos_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "currency-dollar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Gastos</span>
           <% end %>
-
-          <%= link_to fichas_clientes_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
-            <%= heroicon "clipboard-document-list", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+          
+          <%= link_to '*', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors mx-2 rounded" do %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Ficha-Cliente</span>
           <% end %>
         </div>
       </div>
-
+      
       <div class="border-t my-2"></div>
-
+      
       <!-- ESTOQUE -->
       <div class="py-2">
-        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider" 
+        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider"
              style="color: <%= @configuracao_global.cor_fonte_menu.presence || '#9CA3AF' %>;">
           CONTROLE DE ESTOQUE
         </div>
-        
+
         <div class="cursor-pointer">
           <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" data-submenu="estoque-submenu">
             <div class="flex items-center">
-              <%= heroicon "cube", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+              <div class="h-5 w-5 mr-3"></div>
               <span>Estoque</span>
             </div>
-            <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
+            <div class="h-4 w-4 transition-transform submenu-arrow"></div>
           </div>
-          
+
           <div class="submenu hidden ml-6 mt-1" id="estoque-submenu">
             <div class="space-y-1">
-              <%= link_to atualizacoes_estoque_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                <%= heroicon "arrow-path", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+              <%= link_to '*', class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
+                <div class="h-4 w-4 mr-3"></div>
                 <span>Atualização de Estoque</span>
               <% end %>
-              
+
               <%= link_to produtos_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                <%= heroicon "plus", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                <div class="h-4 w-4 mr-3"></div>
                 <span>Cadastro de Mercadoria</span>
               <% end %>
             </div>
           </div>
         </div>
-
+        
         <!-- CONFIGURAÇÕES DE PRODUTO -->
         <div class="cursor-pointer">
           <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" data-submenu="produto-submenu">
             <div class="flex items-center">
-              <%= heroicon "cog", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+              <div class="h-5 w-5 mr-3"></div>
               <span>Configurações de Produto</span>
             </div>
-            <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
+            <div class="h-4 w-4 transition-transform submenu-arrow"></div>
           </div>
-          
+
           <div class="submenu hidden ml-6 mt-1" id="produto-submenu">
             <div class="space-y-1">
               <%= link_to marcas_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                <%= heroicon "tag", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                <div class="h-4 w-4 mr-3"></div>
                 <span>Cadastro de Marcas</span>
               <% end %>
-              
+
               <%= link_to tamanhos_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                <%= heroicon "arrows-pointing-out", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                <div class="h-4 w-4 mr-3"></div>
                 <span>Cadastro de Tamanhos</span>
               <% end %>
-
+              
               <%= link_to tipos_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                <%= heroicon "swatch", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                <div class="h-4 w-4 mr-3"></div>
                 <span>Cadastro de Tipos</span>
               <% end %>
             </div>
           </div>
         </div>
       </div>
-
+      
       <!-- ADMIN -->
       <% if current_user.admin_usu_tipo? %>
         <div class="border-t my-2"></div>
         <div class="py-2">
           <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider">ADMIN</div>
-
-          <%= link_to relatorios_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-            <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+          
+          <%= link_to '*', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Relatórios</span>
           <% end %>
-
+          
           <div class="cursor-pointer">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" data-submenu="cadastros-submenu">
               <div class="flex items-center">
-                <%= heroicon "users", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+                <div class="h-5 w-5 mr-3"></div>
                 <span>Cadastros</span>
               </div>
-              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
+              <div class="h-4 w-4 transition-transform submenu-arrow"></div>
             </div>
-
+            
             <div class="submenu hidden ml-6 mt-1" id="cadastros-submenu">
               <div class="space-y-1">
                 <%= link_to users_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                  <%= heroicon "user-plus", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                  <div class="h-4 w-4 mr-3"></div>
                   <span>Funcionários</span>
                 <% end %>
-
+                
                 <%= link_to clientes_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                  <%= heroicon "user-group", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                  <div class="h-4 w-4 mr-3"></div>
                   <span>Cliente</span>
                 <% end %>
               </div>
             </div>
           </div>
-
+          
           <div class="cursor-pointer">
             <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" data-submenu="config-submenu">
               <div class="flex items-center">
-                <%= heroicon "cog-6-tooth", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+                <div class="h-5 w-5 mr-3"></div>
                 <span>Configurações</span>
               </div>
-              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-4 w-4 transition-transform submenu-arrow" } %>
+              <div class="h-4 w-4 transition-transform submenu-arrow"></div>
             </div>
-
+            
             <div class="submenu hidden ml-6 mt-1" id="config-submenu">
               <div class="space-y-1">
                 <%= link_to configuracoes_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                  <%= heroicon "building-storefront", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                  <div class="h-4 w-4 mr-3"></div>
                   <span>Perfil da Loja</span>
                 <% end %>
-
-                <%= link_to taxas_cartao_path, class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-                  <%= heroicon "credit-card", variant: :outline, options: { class: "h-4 w-4 mr-3" } %>
+                
+                <%= link_to '*', class: "flex items-center px-4 py-2 text-sm hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
+                  <div class="h-4 w-4 mr-3"></div>
                   <span>Config. Taxas do Cartão</span>
                 <% end %>
               </div>
@@ -175,32 +173,29 @@
           </div>
         </div>
       <% end %>
-
+      
       <!-- MASTER -->
       <% if current_user.master_usu_tipo? %>
         <div class="border-t my-2"></div>
         <div class="py-2">
           <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider">MASTER</div>
-
+          
           <%= link_to clientes_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-            <%= heroicon "user-group", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Clientes</span>
           <% end %>
-
-          <%= link_to master_dashboard_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
-            <%= heroicon "chart-bar", variant: :outline, options: { class: "h-5 w-5 mr-3" } %>
+          
+          <%= link_to '*', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white mx-2 rounded" do %>
+            <div class="h-5 w-5 mr-3"></div>
             <span>Dashboard</span>
           <% end %>
         </div>
       <% end %>
     </nav>
-
+    
     <!-- LOGOUT -->
-    <div class="p-4 border-t">
-      <%= button_to destroy_user_session_path, method: :delete, class: "flex items-center justify-center w-full px-4 py-2 hover:bg-red-600 hover:text-white rounded transition-colors" do %>
-        <%= heroicon "arrow-right-on-rectangle", variant: :outline, options: { class: "h-5 w-5 mr-2" } %>
-        <span>Sair</span>
-      <% end %>
-    </div>
+<div class="p-4 border-t">
+  <%= button_to "Sair", session_path, method: :delete, class: "flex items-center justify-center w-full px-4 py-2 hover:bg-red-600 hover:text-white rounded transition-colors" %>
+</div>
   </div>
 </div>
