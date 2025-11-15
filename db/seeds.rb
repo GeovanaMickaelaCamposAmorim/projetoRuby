@@ -1,7 +1,7 @@
-# Criação do Contratante
+# Criação do Contratante (mantém sem formatação)
 contratante = Contratante.create!(
   cnt_nome_loja: "Minha Loja Exemplo",
-  cnt_cnpj: "12345678000199",
+  cnt_cnpj: "33683848000108",  # 14 dígitos sem formatação
   cnt_cep: "12345000",
   cnt_telefone: "11999999999",
   cnt_endereco: "Rua Exemplo, 123, São Paulo - SP",
@@ -13,10 +13,10 @@ contratante = Contratante.create!(
 
 puts "✅ Contratante criado: #{contratante.cnt_nome_loja}"
 
-# Criação da Loja ligada ao Contratante
+# Criação da Loja (usa CNPJ formatado)
 loja = Loja.create!(
   loj_nome: "Minha Loja Exemplo",
-  loj_cnpj: "12345678000199",
+  loj_cnpj: "33.683.848/0001-08",  # COM formatação: XX.XXX.XXX/XXXX-XX
   loj_telefone: "11999999999",
   loj_cep: "12345000",
   loj_endereco: "Rua Exemplo, 123, São Paulo - SP",

@@ -1,4 +1,3 @@
-# app/controllers/produtos_controller.rb
 class ProdutosController < ApplicationController
   before_action :set_produto, only: [:edit, :update, :destroy]
   before_action :carregar_dependencias, only: [:index, :new, :edit, :create, :update]
@@ -7,11 +6,6 @@ class ProdutosController < ApplicationController
     @produtos = Produto.where(contratante_id: current_user.contratante_id)
                        .includes(:tipo, :marca, :tamanho)
                        .order(:pro_nome)
-
-    if params[:search].present?
-      termo = "%#{params[:search]}%"
-      @produtos = @produtos.where("pro_nome ILIKE :termo OR pro_codigo ILIKE :termo OR pro_descricao ILIKE :termo", termo: termo)
-    end
   end
 
   def new
@@ -43,22 +37,23 @@ class ProdutosController < ApplicationController
     redirect_to produtos_path, notice: 'Produto excluído com sucesso!'
   end
 
-  # ✅ MÉTODO DE BUSCA USADO PELO PDV
-  def buscar
-    termo = params[:q].to_s.strip
-    produtos = Produto.where(contratante_id: current_user.contratante_id)
-                      .where("pro_nome ILIKE :termo OR pro_codigo ILIKE :termo", termo: "%#{termo}%")
+  def search
+    query = params[:q]
+    
+    if query.present?
+      produtos = Produto.where("pro_nome ILIKE ? OR pro_codigo ILIKE ?", "%#{query}%", "%#{query}%")
+                      .where("pro_quantidade > 0")
+                      .where(contratante_id: current_user.contratante_id)
                       .limit(10)
-
-    render json: produtos.map { |p|
-      {
-        id: p.id,
-        nome: p.pro_nome,
-        codigo: p.pro_codigo,
-        valor_venda: p.pro_valor_venda,
-        estoque: p.pro_quantidade
-      }
-    }
+    else
+      # Quando vazio, mostra alguns produtos disponíveis
+      produtos = Produto.where("pro_quantidade > 0")
+                      .where(contratante_id: current_user.contratante_id)
+                      .order(:pro_nome)
+                      .limit(8)
+    end
+    
+    render json: produtos
   end
 
   private

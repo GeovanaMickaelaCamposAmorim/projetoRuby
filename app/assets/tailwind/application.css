@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+@theme {
+  
+  --color-tags-rosa: #ED215E;
+  --color-tags-cinza: #4E4E4E;
+  --color-tags-branco: #F9FAFB;
+  --color-tags-preto: #181818;
+  --color-tags-cinza-fundo: #EFEFEF;
+}

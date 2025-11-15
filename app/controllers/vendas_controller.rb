@@ -1,10 +1,12 @@
 class VendasController < ApplicationController
-  before_action :set_venda, only: [:show, :edit, :update, :destroy]
+  before_action :set_venda, only: [:edit, :update, :destroy] # :show removido
 
   def index
     @vendas = Venda.where(contratante_id: current_user.contratante_id)
                    .includes(:user, :cliente)
                    .order(ven_data: :desc)
+    
+    calcular_estatisticas
   end
 
   def new
@@ -18,38 +20,67 @@ class VendasController < ApplicationController
   end
 
   def create
-    @venda = Venda.new(venda_params)
-    @venda.user = current_user
-    @venda.contratante_id = current_user.contratante_id
+  @venda = Venda.new(venda_params)
+  @venda.user = current_user
+  @venda.contratante_id = current_user.contratante_id
 
-    if @venda.save
-      redirect_to venda_path(@venda), notice: 'Venda registrada com sucesso!'
-    else
-      carregar_dependencias
-      render :new, status: :unprocessable_entity
-    end
+  if @venda.save
+    redirect_to vendas_path, notice: 'Venda registrada com sucesso!'  # Mudado para vendas_path
+  else
+    carregar_dependencias
+    render :new, status: :unprocessable_entity
   end
+end
 
-  def show
-    @venda_itens = @venda.venda_itens.includes(:produto)
+def update
+  if @venda.update(venda_params)
+    redirect_to vendas_path, notice: 'Venda atualizada com sucesso!' 
+  else
+    carregar_dependencias
+    render :edit, status: :unprocessable_entity
   end
+end
 
   def edit
     carregar_dependencias
   end
 
-  def update
-    if @venda.update(venda_params)
-      redirect_to venda_path(@venda), notice: 'Venda atualizada com sucesso!'
-    else
-      carregar_dependencias
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
   def destroy
     @venda.destroy
     redirect_to vendas_path, notice: 'Venda excluída com sucesso!'
+  end
+
+  def details
+    @venda = Venda.where(contratante_id: current_user.contratante_id)
+                  .includes(:user, :cliente, venda_items: :produto)
+                  .find(params[:id])
+    
+    valor_total = number_to_currency(@venda.ven_valor_total, unit: 'R$ ', delimiter: '.', separator: ',')
+    desconto = number_to_currency(@venda.ven_desconto || 0, unit: 'R$ ', delimiter: '.', separator: ',')
+    valor_final = number_to_currency(@venda.ven_valor_final, unit: 'R$ ', delimiter: '.', separator: ',')
+    
+    render json: {
+      id: @venda.id,
+      numero: @venda.id.to_s.rjust(5, '0'),
+      data: @venda.ven_data.strftime('%d/%m/%Y %H:%M'),
+      cliente: @venda.cliente&.nome || 'Cliente Avulso',
+      vendedor: @venda.user.usu_nome,
+      valor_total: valor_total,
+      desconto: desconto,
+      valor_final: valor_final,
+      forma_pagamento: @venda.ven_forma_pagamento&.capitalize || 'N/A',
+      itens: @venda.venda_items.map do |item|
+        preco_unitario = number_to_currency(item.vei_preco_unitario, unit: 'R$ ', delimiter: '.', separator: ',')
+        subtotal = number_to_currency(item.vei_subtotal, unit: 'R$ ', delimiter: '.', separator: ',')
+        
+        {
+          produto: item.produto.nome,
+          quantidade: item.vei_quantidade,
+          preco_unitario: preco_unitario,
+          subtotal: subtotal
+        }
+      end
+    }
   end
 
   private
@@ -67,5 +98,17 @@ class VendasController < ApplicationController
   def carregar_dependencias
     @clientes = Cliente.where(contratante_id: current_user.contratante_id).includes(:user)
     @produtos = Produto.where(contratante_id: current_user.contratante_id).ativos
+  end
+
+  def calcular_estatisticas
+    hoje = Date.current
+    vendas_scope = Venda.where(contratante_id: current_user.contratante_id)
+    
+    @vendas_hoje = vendas_scope.where(ven_data: hoje.beginning_of_day..hoje.end_of_day)
+                              .sum(:ven_valor_final)
+    @vendas_mes = vendas_scope.where(ven_data: hoje.beginning_of_month..hoje.end_of_month)
+                             .sum(:ven_valor_final)
+    @total_vendas = vendas_scope.count
+    @ticket_medio = @total_vendas > 0 ? @vendas_mes / @total_vendas : 0
   end
 end

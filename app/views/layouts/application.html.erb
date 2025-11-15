@@ -14,9 +14,16 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     
+    
+    <style>
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+      .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      .submenu { transition: all 0.3s ease-in-out; }
+      .submenu-arrow { transition: transform 0.2s ease-in-out; }
+    </style>
   </head>
 
   <body class="h-screen"> 
@@ -30,5 +37,70 @@
     <% else %>
       <%= yield %>
     <% end %>
+
+    <!-- Script do Submenu  -->
+    <script>
+      // Função para inicializar os submenus
+      function initializeSubmenus() {
+        console.log('Inicializando submenus...');
+        
+        document.querySelectorAll('[data-submenu]').forEach(trigger => {
+          // Remove event listeners antigos para evitar duplicação
+          trigger.replaceWith(trigger.cloneNode(true));
+        });
+
+        // Reatacha os event listeners
+        document.querySelectorAll('[data-submenu]').forEach(trigger => {
+          trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const submenuId = this.getAttribute('data-submenu');
+            const submenu = document.getElementById(submenuId);
+            const arrow = this.querySelector('.submenu-arrow');
+            
+            console.log('Clicou no submenu:', submenuId);
+            
+            // Toggle submenu
+            if (submenu.classList.contains('hidden')) {
+              submenu.classList.remove('hidden');
+              if (arrow) arrow.classList.add('rotate-180');
+            } else {
+              submenu.classList.add('hidden');
+              if (arrow) arrow.classList.remove('rotate-180');
+            }
+            
+            // Close other submenus
+            document.querySelectorAll('.submenu').forEach(otherSubmenu => {
+              if (otherSubmenu.id !== submenuId && !otherSubmenu.classList.contains('hidden')) {
+                otherSubmenu.classList.add('hidden');
+                const otherArrow = otherSubmenu.previousElementSibling?.querySelector('.submenu-arrow');
+                if (otherArrow) otherArrow.classList.remove('rotate-180');
+              }
+            });
+          });
+        });
+        
+        // Close submenus when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('[data-submenu]') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.submenu').forEach(submenu => {
+              submenu.classList.add('hidden');
+            });
+            document.querySelectorAll('.submenu-arrow').forEach(arrow => {
+              arrow.classList.remove('rotate-180');
+            });
+          }
+        });
+      }
+
+      // Inicializa quando a página carrega
+      document.addEventListener('DOMContentLoaded', initializeSubmenus);
+      
+      // Inicializa quando o Turbo navega
+      document.addEventListener('turbo:load', initializeSubmenus);
+      document.addEventListener('turbo:render', initializeSubmenus);
+      document.addEventListener('turbo:frame-render', initializeSubmenus);
+    </script>
   </body>
 </html>
