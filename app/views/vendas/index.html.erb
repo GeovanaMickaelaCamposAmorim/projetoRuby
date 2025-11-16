@@ -118,7 +118,7 @@
           <% @vendas.each do |venda| %>
             <tr class="hover:bg-gray-50 transition">
               <td class="px-6 py-4 text-sm font-medium text-tags-black">#<%= venda.id.to_s.rjust(5, '0') %></td>
-              <td class="px-6 py-4 text-sm text-tags-gray"><%= venda.cliente&.nome || 'Cliente Avulso' %></td>
+              <td class="px-6 py-4 text-sm text-tags-gray"><%= venda.cliente&.cli_nome || 'Cliente Avulso' %></td>
               
               <!-- Vendedor -->
               <td class="px-6 py-4 text-sm text-tags-gray">

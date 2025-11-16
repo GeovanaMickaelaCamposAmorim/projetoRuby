@@ -19,7 +19,7 @@
                 <% if @configuracao.logo.attached? %>
                   <%= image_tag @configuracao.logo, class: "w-16 h-16 object-contain" %>
                 <% else %>
-                  <%= heroicon "arrow-up-tray", variant: :outline, options: { class: "h-6 w-6 text-gray-400" } %>
+                  <span class="text-gray-400">Sem Logo</span>    
                 <% end %>
             </div>
             
@@ -109,7 +109,6 @@
               <button type="button" 
                       onclick="mostrarInputCorPersonalizada('fundo')"
                       class="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                <%= heroicon "plus", variant: :outline, options: { class: "h-5 w-5 text-gray-400" } %>
               </button>
             </div>
           </div>

@@ -22,19 +22,23 @@
   <div class="min-h-screen bg-[#efefef] px-10 py-8 w-full">
     <!-- Cabeçalho -->
     <div class="p-4 flex-shrink-0">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="bg-[#ed215e] p-2 rounded-lg">
-           <div class="h-6 w-6 bg-white rounded"></div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-[#ed215e] p-2 rounded-lg">
+            <div class="h-6 w-6 bg-white rounded"></div>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Controle de Gastos</h1>
+            <p class="text-gray-600">Gerencie e monitore seus gastos</p>
+          </div>
         </div>
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900">Controle de Gastos</h1>
-          <p class="text-gray-600">Gerencie e monitore seus gastos</p>
-        </div>
+        
+        <!-- Botão corrigido para ir para new_gasto_path -->
+        <%= link_to new_gasto_path, class: "px-6 py-3 btn-pink font-semibold rounded-lg shadow no-underline" do %>
+          + Registrar Gasto
+        <% end %>
       </div>
-      
     </div>
-  </div>
 
     <!-- Cards resumo -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
@@ -58,11 +62,69 @@
 
     <!-- Card branco envolvendo busca e grade -->
     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
-      <!-- Campo de busca -->
+      <!-- Formulário de Filtros -->
       <%= form_with url: gastos_path, method: :get, local: true, class: "mb-6" do %>
-        <%= text_field_tag :search, params[:search], 
-              placeholder: "Buscar gasto",
-              class: "w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <!-- Filtro por Descrição -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+            <%= text_field_tag :search, params[:search], 
+                  placeholder: "Buscar por descrição",
+                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+          </div>
+          
+          <!-- Filtro por Mês (independente) -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mês</label>
+            <%= select_tag :mes, 
+                  options_for_select([
+                    ['Todos os meses', ''],
+                    ['Janeiro', 1],
+                    ['Fevereiro', 2],
+                    ['Março', 3],
+                    ['Abril', 4],
+                    ['Maio', 5],
+                    ['Junho', 6],
+                    ['Julho', 7],
+                    ['Agosto', 8],
+                    ['Setembro', 9],
+                    ['Outubro', 10],
+                    ['Novembro', 11],
+                    ['Dezembro', 12]
+                  ], params[:mes]), 
+                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+          </div>
+          
+          <!-- Filtro por Ano (independente) -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ano</label>
+            <%= select_tag :ano, 
+                  options_for_select(
+                    [['Todos os anos', '']] + 
+                    (2020..Date.today.year).to_a.reverse.map { |ano| [ano, ano] },
+                    params[:ano]
+                  ), 
+                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+          </div>
+          
+          <!-- Filtro por Usuário -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+            <%= select_tag :usuario_id, 
+                  options_for_select(
+                    [['Todos os usuários', 'todos']] + 
+                    @usuarios.map { |usuario| [usuario.usu_nome, usuario.id] },
+                    params[:usuario_id] || 'todos'
+                  ), 
+                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+          </div>
+        </div>
+        
+        <!-- Botões de ação dos filtros -->
+        <div class="flex gap-2">
+          <%= submit_tag "Filtrar", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" %>
+          <%= link_to "Limpar Filtros", gastos_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" %>
+        </div>
       <% end %>
 
       <!-- Tabela -->
@@ -85,15 +147,11 @@
                 <td class="px-6 py-3 text-red-600 font-semibold"><%= number_to_currency(gasto.gas_valor) %></td>
                 <td class="px-6 py-3"><%= gasto.user.usu_nome %></td>
                 <td class="px-6 py-3 flex gap-3">
-                  <%= link_to edit_gasto_path(gasto), class: "btn-blue rounded-lg shadow px-3 py-1" do %>
-                    ✏️
-                  <% end %>
-                  <%= link_to gasto_path(gasto), 
+                  <%= link_to "Editar", edit_gasto_path(gasto), class: 'text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200' %>
+                  <%= link_to "Excluir", gasto_path(gasto), 
                       method: :delete, 
                       data: { confirm: 'Tem certeza que deseja excluir este gasto?' },
-                      class: "text-red-600 hover:text-red-800 transition px-3 py-1" do %>
-                    🗑️
-                  <% end %>
+                      class: 'text-red-600 hover:text-red-900 font-medium text-sm px-3 py-1 border border-red-600 rounded hover:bg-red-50 transition-colors duration-200' %>
                 </td>
               </tr>
             <% end %>

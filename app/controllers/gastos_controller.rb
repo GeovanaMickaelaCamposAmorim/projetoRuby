@@ -2,16 +2,35 @@ class GastosController < ApplicationController
   before_action :set_gasto, only: [:edit, :update, :destroy]
 
 
- def index
+def index
     @gastos = Gasto.where(contratante_id: current_user.contratante_id)
                    .includes(:user)
                    .ordenados_por_data
     
-    # Adicionar busca
+    # Filtro por descrição
     if params[:search].present?
       search_term = "%#{params[:search]}%"
       @gastos = @gastos.where("gas_descricao ILIKE :search", search: search_term)
     end
+    
+    # Filtro por mês (independente do ano)
+    if params[:mes].present?
+      @gastos = @gastos.where("EXTRACT(MONTH FROM gas_data) = ?", params[:mes])
+    end
+    
+    # Filtro por ano (independente do mês)
+    if params[:ano].present?
+      @gastos = @gastos.where("EXTRACT(YEAR FROM gas_data) = ?", params[:ano])
+    end
+    
+    # Filtro por usuário
+    if params[:usuario_id].present? && params[:usuario_id] != 'todos'
+      @gastos = @gastos.where(user_id: params[:usuario_id])
+    end
+    
+    # Usuários disponíveis para filtro
+      @usuarios = User.where(contratante_id: current_user.contratante_id).order(:usu_nome)
+    
     
     @total_mes = Gasto.total_no_periodo(Date.today.beginning_of_month, Date.today.end_of_month, current_user.contratante_id)
   end
