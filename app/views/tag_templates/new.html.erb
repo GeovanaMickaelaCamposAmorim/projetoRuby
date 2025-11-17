@@ -1,0 +1,716 @@
+<% content_for :page_title, "Gerar Etiqueta" %>
+<% content_for :page_description, "Crie etiquetas personalizadas para anexar às peças" %>
+<% content_for :page_icon do %>
+  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+  </svg>
+<% end %>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    
+    <!-- Coluna 1: Preview da Etiqueta -->
+    <div class="bg-white rounded-lg shadow border border-gray-200">
+      <div class="p-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Preview da Etiqueta</h3>
+      </div>
+      
+      <div class="p-6 flex items-center justify-center">
+        <div class="w-72 h-100 relative border-2 border-gray-300 rounded-lg overflow-hidden bg-tags-branco shadow-lg" id="label-container" data-label-container>
+          
+          <!-- Parte de cima da etiqueta -->
+          <div class="h-25 bg-[#4E4E4E] relative" data-label-top>
+            <!-- Furinho da etiqueta -->
+            <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rounded-full border-2 border-[#4E4E4E]" data-label-hole></div>
+          </div>
+          
+          <!-- Logo centralizada entre as partes -->
+          <div class="absolute top-15 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-white rounded-full border-4 border-[#4E4E4E] z-10 flex items-center justify-center" data-logo-border>
+            <!-- Logo será carregada do perfil da loja -->
+            <span class="text-xs text-gray-500">Logo</span>
+          </div>
+          
+          <!-- Parte de baixo da etiqueta -->
+         <div class="h-70 bg-[#faf7f4] relative">
+          <!-- Padrão sutil de textura -->
+          <div class="absolute inset-0 bg-gradient-to-br from-white/80 to-gray-50/30"></div>
+          
+          <!-- Conteúdo da etiqueta -->
+          <div class="relative z-10 p-3 h-full flex flex-col">
+            <!-- Conteúdo principal centralizado -->
+            <div class="flex-1 flex flex-col justify-center mb-2">
+              <div class="text-center space-y-2">
+                <!-- Nome principal - AUMENTADO -->
+                <div class="">
+                  <h3 class="font-bold text-gray-800 text-lg leading-tight" id="preview-product-name">
+                    Calcinha de Renda
+                  </h3>
+                </div>
+                
+                <!-- Marca, Tamanho e Cor - AUMENTADO -->
+                <div class="">
+                  <p class="text-gray-700 text-sm font-medium leading-tight" id="preview-product-details">
+                    <span id="preview-brand">Marca</span> - 
+                    <span id="preview-size">P</span> / 
+                    <span id="preview-color">Vermelha</span>
+                  </p>
+                </div>
+                
+                <!-- Código (menor e mais claro) - AUMENTADO -->
+                <div class="">
+                  <p class="text-gray-600 text-sm font-medium leading-tight" id="preview-product-code">
+                    CAL-SHEIN-VER-P-001
+                  </p>
+                </div>
+                
+                <!-- Preço - AUMENTADO -->
+                <div class="">
+                  <p class="text-gray-800 font-bold text-xl leading-tight" id="preview-product-price">
+                    R$ 35,00
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Rodapé com contatos - AGORA NA PARTE DE BAIXO -->
+            <div class="mt-auto">
+              <div class="text-center space-y-1">
+                <!-- Telefone - AUMENTADO -->
+                <div class="">
+                  <p class="text-gray-700 text-sm font-bold leading-tight" id="preview-phone">
+                    (75) 91234-5678
+                  </p>
+                </div>
+                <!-- Redes Sociais - AUMENTADO -->
+                <div class="">
+                  <div class="flex justify-center space-x-3">
+                    <span class="text-gray-700 text-sm font-bold leading-tight" id="preview-instagram">@instagram</span>
+                    <span class="text-gray-700 text-sm font-bold leading-tight" id="preview-facebook">@facebook</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna 2: Formulário -->
+    <div class="bg-white rounded-lg shadow border border-gray-200">
+      <div class="p-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Configurações</h3>
+      </div>
+      
+      <div class="p-6">
+        <%= form_with(model: @tag_template, url: gerar_etiqueta_path, local: true, id: 'label-form', class: "space-y-4") do |form| %>
+          
+          <!-- Seleção do Produto -->
+          <div>
+            <h4 class="text-base font-semibold text-gray-900 mb-3">Selecionar Produto</h4>
+            
+            <div class="space-y-3">
+              <div>
+                <%= label_tag :product_id, "Produto em Estoque", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <% 
+                  produtos_options = if @produtos.present?
+                    [['Selecione um produto', '']] + @produtos.map { |p| 
+                      ["#{p.pro_nome} - #{p.marca&.nome} - #{p.tamanho&.tam_nome} / #{p.pro_cor}", p.id, 
+                      data: { 
+                        name: p.pro_nome,
+                        brand: p.marca&.nome,
+                        size: p.tamanho&.tam_nome,
+                        color: p.pro_cor,
+                        code: p.pro_codigo,
+                        price: p.pro_valor_venda
+                      }] 
+                    }
+                  else
+                    [['Selecione um produto', ''], ['Nenhum produto cadastrado', '', disabled: true]]
+                  end
+                %>
+                <%= select_tag :product_id, 
+                      options_for_select(produtos_options, params[:product_id]),
+                      class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm",
+                      id: "product-select" %>
+                
+                <% if @produtos.blank? %>
+                  <p class="text-xs text-red-600 mt-1">
+                    Não há produtos cadastrados. 
+                    <%= link_to "Cadastre produtos primeiro", produtos_path, class: "underline" %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Informações de Contato -->
+          <div>
+            <h4 class="text-base font-semibold text-gray-900 mb-3">Informações de Contato</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <%= label_tag :phone, "Telefone", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= text_field_tag :phone, params[:phone] || "(75) 91234-5678", 
+                      placeholder: "(75) 91234-5678",
+                      class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm",
+                      id: "contact-phone" %>
+              </div>
+
+              <div>
+                <%= label_tag :instagram, "Instagram", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= text_field_tag :instagram, params[:instagram] || "@instagram", 
+                      placeholder: "@instagram",
+                      class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm",
+                      id: "contact-instagram" %>
+              </div>
+
+              <div>
+                <%= label_tag :facebook, "Facebook", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= text_field_tag :facebook, params[:facebook] || "@facebook", 
+                      placeholder: "@facebook",
+                      class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm",
+                      id: "contact-facebook" %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Configuração da Tag -->
+          <div>
+            <h4 class="text-base font-semibold text-gray-900 mb-3">Configuração da Etiqueta</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="flex flex-col">
+                <%= form.label :color, "Cor da etiqueta", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <div class="flex items-center gap-2">
+                  <%= form.color_field :color, value: @tag_template.color || "#4E4E4E", 
+                        class: "w-12 h-12 border-2 border-gray-300 rounded-lg cursor-pointer",
+                        id: "label-color-picker" %>
+                  <%= form.text_field :color, value: @tag_template.color || "#4E4E4E", 
+                        class: "w-32 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm font-mono",
+                        id: "label-color" %>
+                </div>
+              </div>
+
+              <div class="flex flex-col">
+                <%= form.label :quantity, "Quantidade", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= form.number_field :quantity, min: 1, max: 100, value: 1,
+                      class: "w-32 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm",
+                      id: "quantity-field" %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botões -->
+          <div class="pt-6 border-t border-gray-200">
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button type="button" id="cancel-button" 
+                      class="sm:flex-1 px-6 py-3 border border-gray-300 text-gray-700 bg-white rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-sm text-center">
+                Cancelar
+              </button>
+              
+              <button type="button" id="preview-button" 
+                      class="sm:flex-1 px-6 py-3 bg-[#ed215e] text-white rounded-lg font-bold hover:bg-[#d91956] focus:outline-none focus:ring-2 focus:ring-[#ed215e] transition-colors text-sm">
+                Gerar Etiquetas
+              </button>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal que será mostrado quando clicar em Gerar Etiquetas -->
+<div id="preview-modal" class="fixed inset-0 overflow-y-auto h-full w-full z-50 hidden">
+  <!-- Overlay com blur e transparência elegante -->
+  <div class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+  
+  <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 shadow-2xl rounded-2xl bg-white max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95">
+    <!-- Header do Modal -->
+    <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+      <h3 class="text-xl font-bold text-gray-900">Prévia das Etiquetas - Folha Ofício</h3>
+      <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Preview individual ampliado -->
+    <div class="mb-6">
+      <h4 class="text-lg font-semibold text-gray-700 mb-4">Preview Individual</h4>
+      <div class="flex justify-center">
+        <div class="w-72 h-96 relative border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg bg-white">
+          <!-- Parte de cima da etiqueta -->
+          <div class="h-25 relative" id="modal-label-top">
+            <!-- Furinho da etiqueta -->
+            <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rounded-full border-2" id="modal-label-hole"></div>
+          </div>
+          
+          <!-- Logo centralizada -->
+          <div class="absolute top-15 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-white rounded-full border-4 z-10 flex items-center justify-center shadow-lg" id="modal-logo-border">
+            <span class="text-xs text-gray-500">Logo</span>
+          </div>
+          
+          <!-- Parte de baixo da etiqueta -->
+          <div class="h-70 bg-[#faf7f4] relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-white/80 to-gray-50/30"></div>
+            
+            <!-- Conteúdo da etiqueta -->
+            <div class="relative z-10 p-3 h-full flex flex-col">
+              <div class="flex-1 flex flex-col justify-center mb-2">
+                <div class="text-center space-y-2">
+                  <h3 class="font-bold text-gray-800 text-lg leading-tight" id="modal-product-name">
+                    Calcinha de Renda
+                  </h3>
+                  
+                  <p class="text-gray-700 text-sm font-medium leading-tight" id="modal-product-details">
+                    <span id="modal-brand">Marca</span> - 
+                    <span id="modal-size">P</span> / 
+                    <span id="modal-color">Vermelha</span>
+                  </p>
+                  
+                  <p class="text-gray-600 text-sm font-medium leading-tight" id="modal-product-code">
+                    CAL-SHEIN-VER-P-001
+                  </p>
+                  
+                  <p class="text-gray-800 font-bold text-xl leading-tight" id="modal-product-price">
+                    R$ 35,00
+                  </p>
+                </div>
+              </div>
+              
+              <div class="mt-auto">
+                <div class="text-center space-y-1">
+                  <p class="text-gray-700 text-sm font-bold leading-tight" id="modal-phone">
+                    (75) 91234-5678
+                  </p>
+                  <div class="flex justify-center space-x-3">
+                    <span class="text-gray-700 text-sm font-bold leading-tight" id="modal-instagram">@instagram</span>
+                    <span class="text-gray-700 text-sm font-bold leading-tight" id="modal-facebook">@facebook</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações da Geração -->
+    <div class="mb-6 bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border border-gray-200">
+      <h4 class="text-lg font-semibold text-gray-700 mb-4">Informações da Geração</h4>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+        <div class="text-center">
+          <span class="font-medium text-gray-600 block mb-1">Quantidade total</span>
+          <p class="text-gray-900 font-bold text-lg" id="modal-quantity">1 etiqueta(s)</p>
+        </div>
+        <div class="text-center">
+          <span class="font-medium text-gray-600 block mb-1">Páginas</span>
+          <p class="text-gray-900 font-bold text-lg" id="modal-pages">1 página(s)</p>
+        </div>
+        <div class="text-center">
+          <span class="font-medium text-gray-600 block mb-1">Cor</span>
+          <p class="text-gray-900 font-bold text-lg" id="modal-color-text">#4E4E4E</p>
+        </div>
+        <div class="text-center">
+          <span class="font-medium text-gray-600 block mb-1">Layout</span>
+          <p class="text-gray-900 font-bold text-lg">2x4 (8/página)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões do Modal -->
+    <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200">
+      <button id="modal-cancel" class="px-8 py-3 border border-gray-300 text-gray-700 bg-white rounded-xl font-medium hover:bg-gray-50 transition-all duration-200 hover:shadow-sm">
+        Cancelar
+      </button>
+      
+      <button id="save-pdf-btn" 
+              data-turbo="false"
+              class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/>
+        </svg>
+        Salvar PDF
+      </button>
+      
+      <button id="print-btn" 
+              data-turbo="false"
+              class="px-8 py-3 bg-gradient-to-r from-[#ed215e] to-[#d91956] text-white rounded-xl font-medium hover:from-[#d91956] hover:to-[#c2174e] transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+        </svg>
+        Imprimir
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================
+// GERADOR DE ETIQUETAS - VERSÃO DEFINITIVA
+// =============================================
+
+// Controle global de estado
+const TagGenerator = {
+  initialized: false,
+  clickInProgress: false,
+  
+  init() {
+    if (this.initialized) {
+      console.log('🔄 TagGenerator já inicializado');
+      return;
+    }
+    
+    console.log('🚀 INICIANDO GERADOR DE ETIQUETAS');
+    this.initialized = true;
+    
+    this.setupGlobalListeners();
+    this.setupFormListeners();
+  },
+  
+  setupGlobalListeners() {
+    console.log('🔧 Configurando listeners globais...');
+    
+    // Usar arrow functions para manter o contexto do 'this'
+    document.addEventListener('click', (e) => this.handleGlobalClick(e));
+    
+    // Fechar modal com ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.closeModal();
+    });
+  },
+  
+  setupFormListeners() {
+    // Sincronizar color picker
+    const colorPicker = document.getElementById('label-color-picker');
+    const colorInput = document.getElementById('label-color');
+    
+    if (colorPicker && colorInput) {
+      colorPicker.addEventListener('input', (e) => {
+        colorInput.value = e.target.value;
+        this.updateLabelColor(e.target.value);
+      });
+      
+      colorInput.addEventListener('input', (e) => {
+        colorPicker.value = e.target.value;
+        this.updateLabelColor(e.target.value);
+      });
+    }
+    
+    // Seleção de produto
+    const productSelect = document.getElementById('product-select');
+    if (productSelect) {
+      productSelect.addEventListener('change', (e) => {
+        this.updateProductFromSelect(e.target);
+      });
+    }
+    
+    // Contatos em tempo real
+    ['contact-phone', 'contact-instagram', 'contact-facebook'].forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('input', (e) => {
+          const previewId = id.replace('contact-', 'preview-');
+          const previewElement = document.getElementById(previewId);
+          if (previewElement) previewElement.textContent = e.target.value;
+        });
+      }
+    });
+    
+    // Botão cancelar
+    const cancelButton = document.getElementById('cancel-button');
+    if (cancelButton) {
+      cancelButton.addEventListener('click', () => this.clearForm());
+    }
+    
+    // Botão gerar etiquetas
+    const previewButton = document.getElementById('preview-button');
+    if (previewButton) {
+      previewButton.addEventListener('click', () => this.showPreviewModal());
+    }
+  },
+  
+  handleGlobalClick(e) {
+    // Prevenir múltiplos clicks
+    if (this.clickInProgress) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    
+    // Salvar PDF
+    if (e.target.closest('#save-pdf-btn')) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleSavePdf();
+    }
+    
+    // Imprimir
+    if (e.target.closest('#print-btn')) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handlePrint();
+    }
+    
+    // Fechar modal
+    if (e.target.closest('#close-modal') || e.target.closest('#modal-cancel')) {
+      e.preventDefault();
+      this.closeModal();
+    }
+    
+    // Fechar modal no overlay
+    if (e.target.id === 'preview-modal') {
+      this.closeModal();
+    }
+  },
+  
+  handleSavePdf() {
+    this.clickInProgress = true;
+    console.log('💾 SALVANDO PDF...');
+    
+    const formData = this.collectFormData();
+    const params = new URLSearchParams(formData).toString();
+    
+    // URL com parâmetro para forçar download
+    const downloadUrl = `/etiquetas/baixar_pdf?${params}&turbo=false&format=pdf`;
+    
+    console.log('📤 Enviando para:', downloadUrl);
+    
+    // MÉTODO QUE FUNCIONA - Criar link com data-turbo="false"
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.setAttribute('data-turbo', 'false');
+    link.setAttribute('download', 'etiquetas.pdf');
+    link.target = '_blank';
+    link.style.display = 'none';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    setTimeout(() => { this.clickInProgress = false; }, 2000);
+  },
+
+  handlePrint() {
+  this.clickInProgress = true;
+  console.log('🖨️ IMPRIMINDO...');
+  
+  // TESTE COM DADOS FIXOS
+  const testData = {
+    product_name: "TESTE PRODUTO FIXO",
+    brand: "TESTE MARCA",
+    size: "TESTE M", 
+    color: "TESTE AZUL",
+    code: "TESTE-123",
+    price: "R$ 99,99",
+    phone: "(11) 99999-9999",
+    instagram: "@teste",
+    facebook: "@teste",
+    label_color: "#FF0000",
+    quantity: 1
+  };
+  
+  console.log('🧪 TESTANDO COM DADOS FIXOS:', testData);
+  
+  // URL com .pdf no final para forçar o formato
+  const params = new URLSearchParams(testData).toString();
+  const printUrl = `/etiquetas/imprimir.pdf?${params}&turbo=false`;
+  
+  console.log('📤 Enviando para:', printUrl);
+  
+  // Método SIMPLES - abrir diretamente em nova aba
+  window.open(printUrl, '_blank', 'noopener,noreferrer');
+  
+  setTimeout(() => { this.clickInProgress = false; }, 2000);
+},
+  
+  collectFormData() {
+  
+  const data = {
+    product_name: document.getElementById('modal-product-name')?.textContent?.trim() || 'Produto',
+    brand: document.getElementById('modal-brand')?.textContent?.trim() || 'Marca',
+    size: document.getElementById('modal-size')?.textContent?.trim() || 'Tamanho',
+    color: document.getElementById('modal-color')?.textContent?.trim() || 'Cor',
+    code: document.getElementById('modal-product-code')?.textContent?.trim() || 'COD-001',
+    price: document.getElementById('modal-product-price')?.textContent?.trim() || 'R$ 0,00',
+    phone: document.getElementById('modal-phone')?.textContent?.trim() || '(75) 91234-5678',
+    instagram: document.getElementById('modal-instagram')?.textContent?.trim() || '@instagram',
+    facebook: document.getElementById('modal-facebook')?.textContent?.trim() || '@facebook',
+    label_color: document.getElementById('label-color')?.value || '#4E4E4E',
+    quantity: document.getElementById('quantity-field')?.value || 1
+  };
+  
+  console.log('📊 Dados coletados PARA PDF:', data);
+  
+  
+  Object.entries(data).forEach(([key, value]) => {
+    console.log(`  ${key}: ${value}`);
+  });
+  
+  return data;
+},
+  
+  updateLabelColor(color) {
+    const elements = {
+      top: document.querySelector('[data-label-top]'),
+      hole: document.querySelector('[data-label-hole]'),
+      logo: document.querySelector('[data-logo-border]'),
+      container: document.querySelector('[data-label-container]')
+    };
+    
+    Object.values(elements).forEach(el => {
+      if (el) {
+        if (el === elements.hole || el === elements.logo) {
+          el.style.borderColor = color;
+        } else {
+          el.style.backgroundColor = color;
+        }
+      }
+    });
+  },
+  
+  updateProductFromSelect(select) {
+    const selectedOption = select.options[select.selectedIndex];
+    if (!selectedOption.value) return;
+    
+    const data = {
+      name: selectedOption.getAttribute('data-name'),
+      brand: selectedOption.getAttribute('data-brand'),
+      size: selectedOption.getAttribute('data-size'),
+      color: selectedOption.getAttribute('data-color'),
+      code: selectedOption.getAttribute('data-code'),
+      price: selectedOption.getAttribute('data-price')
+    };
+    
+    console.log('🛒 Produto selecionado:', data);
+    
+    // Atualizar preview
+    if (data.name) document.getElementById('preview-product-name').textContent = data.name;
+    if (data.brand) document.getElementById('preview-brand').textContent = data.brand;
+    if (data.size) document.getElementById('preview-size').textContent = data.size;
+    if (data.color) document.getElementById('preview-color').textContent = data.color;
+    if (data.code) document.getElementById('preview-product-code').textContent = data.code;
+    
+    if (data.price) {
+      const formattedPrice = 'R$ ' + parseFloat(data.price).toFixed(2).replace('.', ',');
+      document.getElementById('preview-product-price').textContent = formattedPrice;
+    }
+  },
+  
+  showPreviewModal() {
+    console.log('👁️ Mostrando modal de preview...');
+    
+    const currentColor = document.getElementById('label-color')?.value || '#4E4E4E';
+    const quantity = parseInt(document.getElementById('quantity-field')?.value) || 1;
+    const pages = Math.ceil(quantity / 8);
+    
+    // Atualizar dados no modal
+    const updates = {
+      'modal-product-name': 'preview-product-name',
+      'modal-brand': 'preview-brand',
+      'modal-size': 'preview-size', 
+      'modal-color': 'preview-color',
+      'modal-product-code': 'preview-product-code',
+      'modal-product-price': 'preview-product-price',
+      'modal-phone': 'preview-phone',
+      'modal-instagram': 'preview-instagram',
+      'modal-facebook': 'preview-facebook'
+    };
+    
+    Object.entries(updates).forEach(([modalId, previewId]) => {
+      const previewElement = document.getElementById(previewId);
+      const modalElement = document.getElementById(modalId);
+      if (previewElement && modalElement) {
+        modalElement.textContent = previewElement.textContent;
+      }
+    });
+    
+    // Atualizar informações
+    document.getElementById('modal-quantity').textContent = `${quantity} etiqueta(s)`;
+    document.getElementById('modal-pages').textContent = `${pages} página(s)`;
+    document.getElementById('modal-color-text').textContent = currentColor;
+    
+    // Atualizar cores
+    document.getElementById('modal-label-top').style.backgroundColor = currentColor;
+    document.getElementById('modal-label-hole').style.borderColor = currentColor;
+    document.getElementById('modal-logo-border').style.borderColor = currentColor;
+    
+    // Mostrar modal
+    document.getElementById('preview-modal').classList.remove('hidden');
+  },
+  
+  closeModal() {
+    document.getElementById('preview-modal').classList.add('hidden');
+  },
+  
+  clearForm() {
+    console.log('🧹 Limpando formulário...');
+    
+    // Resetar seleção de produto
+    const productSelect = document.getElementById('product-select');
+    if (productSelect) productSelect.selectedIndex = 0;
+    
+    // Resetar valores padrão
+    const defaults = {
+      'preview-product-name': 'Calcinha de Renda',
+      'preview-brand': 'Marca',
+      'preview-size': 'P',
+      'preview-color': 'Vermelha', 
+      'preview-product-code': 'CAL-SHEIN-VER-P-001',
+      'preview-product-price': 'R$ 35,00',
+      'preview-phone': '(75) 91234-5678',
+      'preview-instagram': '@instagram',
+      'preview-facebook': '@facebook',
+      'contact-phone': '(75) 91234-5678',
+      'contact-instagram': '@instagram',
+      'contact-facebook': '@facebook',
+      'label-color': '#4E4E4E',
+      'label-color-picker': '#4E4E4E',
+      'quantity-field': '1'
+    };
+    
+    Object.entries(defaults).forEach(([id, value]) => {
+      const element = document.getElementById(id);
+      if (element) {
+        if (element.type === 'text' || element.type === 'color' || element.type === 'number') {
+          element.value = value;
+        } else {
+          element.textContent = value;
+        }
+      }
+    });
+    
+    this.updateLabelColor('#4E4E4E');
+    alert('✅ Campos limpos!');
+  }
+};
+
+// =============================================
+// INICIALIZAÇÃO
+// =============================================
+
+// Inicializar quando a página carregar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => TagGenerator.init());
+} else {
+  TagGenerator.init();
+}
+
+// Reinicializar com Turbo (se estiver usando)
+document.addEventListener('turbo:load', () => {
+  console.log('🔄 Turbo detectado, reinicializando...');
+  TagGenerator.initialized = false;
+  setTimeout(() => TagGenerator.init(), 100);
+});
+
+// Forçar inicialização após um tempo (fallback)
+setTimeout(() => {
+  if (!TagGenerator.initialized) {
+    console.log('⏰ Fallback: inicializando...');
+    TagGenerator.init();
+  }
+}, 500);
+</script>

@@ -48,3 +48,30 @@ admin = User.create!(
 
 puts "✅ Usuário Admin criado: #{admin.usu_email}"
 puts "💡 Use email: admin@tags.com | senha: senha123 para login"
+
+
+puts "🌱 Executando seeds para etiquetas..."
+
+# LabelConfig - apenas se não existir
+begin
+  label_config = LabelConfig.find_or_create_by!(name: "Configuração Padrão") do |config|
+    config.color = "#4E4E4E"
+    config.is_default = true
+  end
+  puts "✅ LabelConfig criado: #{label_config.name}"
+rescue ActiveRecord::RecordNotUnique
+  puts "⚠️  LabelConfig já existe"
+end
+
+# TagTemplate - apenas se não existir  
+begin
+  tag_template = TagTemplate.find_or_create_by!(name: "Etiqueta Exemplo") do |template|
+    template.color = "#4E4E4E"
+    template.store_name = "Minha Loja"
+  end
+  puts "✅ TagTemplate criado: #{tag_template.name}"
+rescue ActiveRecord::RecordNotUnique
+  puts "⚠️  TagTemplate já existe"
+end
+
+puts "🎉 Seeds de etiquetas concluídos!"

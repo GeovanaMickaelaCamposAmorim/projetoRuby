@@ -1,40 +1,12 @@
-<style>
-  .btn-pink {
-    background-color: #ed215e;
-    color: #ffffff;
-    transition: background-color .15s ease, transform .15s ease;
-  }
-  .btn-pink:hover {
-    background-color: #d91956;
-    transform: scale(1.02);
-  }
-  .btn-blue {
-    background-color: #ffffff;
-    transition: background-color .15s ease, transform .15s ease;
-  }
-  .btn-blue:hover {
-    background-color: #9bc0f0ff;
-    transform: scale(1.02);
-  }
-</style>
+<% content_for :page_title, "Controle de Gastos" %>
+<% content_for :page_description, "Gerencie e monitore seus gastos" %>
+<% content_for :page_icon do %>
+  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+  </svg>
+<% end %>
 
-<div class="container mx-auto px-5 flex">
-  <div class="min-h-screen bg-[#efefef] px-10 py-8 w-full">
-    <!-- Cabeçalho -->
-    <div class="p-4 flex-shrink-0">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="bg-[#ed215e] p-2 rounded-lg">
-           <div class="h-6 w-6 bg-white rounded"></div>
-        </div>
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900">Controle de Gastos</h1>
-          <p class="text-gray-600">Gerencie e monitore seus gastos</p>
-        </div>
-      </div>
-      
-    </div>
-  </div>
+<div class="container mx-auto flex flex-col">
 
     <!-- Cards resumo -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">

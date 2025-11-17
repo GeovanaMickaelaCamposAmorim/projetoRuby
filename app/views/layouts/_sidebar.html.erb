@@ -6,7 +6,7 @@
       </div>
     </div>
     
-    <nav class="flex-1 overflow-y-auto scrollbar-hide px-2">
+    <nav class="flex-1 overflow-y-auto scrollbar-hide px-2 mt-4">
       <!-- HOME -->
       <div class="py-2">
         <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider text-tags-branco">
@@ -30,9 +30,9 @@
             <span>Histórico de Vendas</span>
           <% end %>
           
-          <%= link_to '#', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
+          <%= link_to gerar_etiqueta_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
             <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-            <span>Tag</span>
+            <span>Gerar Etiqueta</span>
           <% end %>
           
           <%= link_to gastos_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
