@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Etiquetas - <%= Time.current.strftime('%d/%m/%Y %H:%M') %></title>
+    <style>
+      
+      * { 
+        margin: 0; 
+        padding: 0; 
+        box-sizing: border-box;
+      }
+      
+      body { 
+        margin: 0; 
+        padding: 10px; 
+        font-family: 'Arial', 'Helvetica', sans-serif;
+        background: white;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      @media print {
+        body { 
+          margin: 0; 
+          padding: 0;
+        }
+        .no-print { 
+          display: none !important; 
+        }
+        .page-break { 
+          page-break-after: always; 
+        }
+        .etiqueta { 
+          page-break-inside: avoid; 
+        }
+      }
+
+      @media screen {
+        .print-only { 
+          display: none !important; 
+        }
+      }
+
+      .container {
+        max-width: 210mm; /* A4 width */
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #333;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+        border-top: 2px solid #333;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <!-- Header apenas para visualização -->
+    <div class="header no-print " style="background: #f9fafb; border-bottom: 1px solid #d1d5db;">
+      <h1>Etiquetas para Impressão</h1>
+      <p style="margin-bottom: 10px;">Gerado em: <%= Time.current.strftime('%d/%m/%Y às %H:%M') %></p>
+      <button onclick="window.print()" class="no-print" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+         Imprimir
+      </button>
+      <button onclick="window.close()" class="no-print" style="padding: 10px 20px; color: black; border: 2px solid #6c757d; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+         Fechar
+      </button>
+    </div>
+
+    <!-- Conteúdo das etiquetas -->
+    <div class="container">
+      <%= yield %>
+    </div>
+
+    <!-- Footer apenas para visualização -->
+    <div class="footer no-print">
+      <p>Dica: Use "Imprimir como PDF" para salvar como arquivo PDF</p>
+    </div>
+
+    <!-- Auto-print se for para impressão -->
+    <% if @auto_print %>
+      <script>
+        window.onload = function() {
+          setTimeout(function() {
+            window.print();
+          }, 500);
+        };
+
+        
+        window.onafterprint = function() {
+          setTimeout(function() {
+            // window.close(); // Descomente se quiser fechar automaticamente
+          }, 1000);
+        };
+      </script>
+    <% end %>
+  </body>
+</html>

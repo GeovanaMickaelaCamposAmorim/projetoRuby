@@ -6,8 +6,8 @@
   </svg>
 <% end %>
 
-<div class="container mx-auto px-4 py-8">
-  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+<div class="h-fit-content flex flex-col py-4">
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
     
     <!-- Coluna 1: Preview da Etiqueta -->
     <div class="bg-white rounded-lg shadow border border-gray-200">
@@ -15,7 +15,7 @@
         <h3 class="text-lg font-semibold text-gray-900">Preview da Etiqueta</h3>
       </div>
       
-      <div class="p-6 flex items-center justify-center">
+      <div class="p-4 flex items-center justify-center">
         <div class="w-72 h-100 relative border-2 border-gray-300 rounded-lg overflow-hidden bg-tags-branco shadow-lg" id="label-container" data-label-container>
           
           <!-- Parte de cima da etiqueta -->
@@ -31,23 +31,23 @@
           </div>
           
           <!-- Parte de baixo da etiqueta -->
-         <div class="h-70 bg-[#faf7f4] relative">
+         <div class="h-75 bg-[#faf7f4] relative">
           <!-- Padrão sutil de textura -->
-          <div class="absolute inset-0 bg-gradient-to-br from-white/80 to-gray-50/30"></div>
+          <div class="absolute inset-0 bg-linear-to-br from-white/80 to-gray-50/30"></div>
           
           <!-- Conteúdo da etiqueta -->
           <div class="relative z-10 p-3 h-full flex flex-col">
             <!-- Conteúdo principal centralizado -->
             <div class="flex-1 flex flex-col justify-center mb-2">
               <div class="text-center space-y-2">
-                <!-- Nome principal - AUMENTADO -->
+                <!-- Nome principal -->
                 <div class="">
-                  <h3 class="font-bold text-gray-800 text-lg leading-tight" id="preview-product-name">
-                    Calcinha de Renda
+                  <h3 class="font-bold text-gray-800 text-lg leading-tight uppercase" id="preview-product-name">
+                    Nome do Produto
                   </h3>
                 </div>
                 
-                <!-- Marca, Tamanho e Cor - AUMENTADO -->
+                <!-- Marca, Tamanho e Cor -->
                 <div class="">
                   <p class="text-gray-700 text-sm font-medium leading-tight" id="preview-product-details">
                     <span id="preview-brand">Marca</span> - 
@@ -56,14 +56,14 @@
                   </p>
                 </div>
                 
-                <!-- Código (menor e mais claro) - AUMENTADO -->
+                <!-- Código (menor e mais claro) -->
                 <div class="">
                   <p class="text-gray-600 text-sm font-medium leading-tight" id="preview-product-code">
                     CAL-SHEIN-VER-P-001
                   </p>
                 </div>
                 
-                <!-- Preço - AUMENTADO -->
+                <!-- Preço -->
                 <div class="">
                   <p class="text-gray-800 font-bold text-xl leading-tight" id="preview-product-price">
                     R$ 35,00
@@ -72,20 +72,20 @@
               </div>
             </div>
             
-            <!-- Rodapé com contatos - AGORA NA PARTE DE BAIXO -->
+            <!-- Rodapé com contatos -->
             <div class="mt-auto">
               <div class="text-center space-y-1">
-                <!-- Telefone - AUMENTADO -->
+                <!-- Telefone -->
                 <div class="">
                   <p class="text-gray-700 text-sm font-bold leading-tight" id="preview-phone">
                     (75) 91234-5678
                   </p>
                 </div>
-                <!-- Redes Sociais - AUMENTADO -->
+                <!-- Redes Sociais -->
                 <div class="">
                   <div class="flex justify-center space-x-3">
                     <span class="text-gray-700 text-sm font-bold leading-tight" id="preview-instagram">@instagram</span>
-                    <span class="text-gray-700 text-sm font-bold leading-tight" id="preview-facebook">@facebook</span>
+
                   </div>
                 </div>
               </div>
@@ -102,7 +102,7 @@
         <h3 class="text-lg font-semibold text-gray-900">Configurações</h3>
       </div>
       
-      <div class="p-6">
+      <div class="p-4">
         <%= form_with(model: @tag_template, url: gerar_etiqueta_path, local: true, id: 'label-form', class: "space-y-4") do |form| %>
           
           <!-- Seleção do Produto -->
@@ -148,7 +148,7 @@
           <div>
             <h4 class="text-base font-semibold text-gray-900 mb-3">Informações de Contato</h4>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div>
                 <%= label_tag :phone, "Telefone", class: "block text-sm font-medium text-gray-700 mb-1" %>
                 <%= text_field_tag :phone, params[:phone] || "(75) 91234-5678", 
@@ -165,13 +165,6 @@
                       id: "contact-instagram" %>
               </div>
 
-              <div>
-                <%= label_tag :facebook, "Facebook", class: "block text-sm font-medium text-gray-700 mb-1" %>
-                <%= text_field_tag :facebook, params[:facebook] || "@facebook", 
-                      placeholder: "@facebook",
-                      class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm",
-                      id: "contact-facebook" %>
-              </div>
             </div>
           </div>
 
@@ -210,7 +203,7 @@
               </button>
               
               <button type="button" id="preview-button" 
-                      class="sm:flex-1 px-6 py-3 bg-[#ed215e] text-white rounded-lg font-bold hover:bg-[#d91956] focus:outline-none focus:ring-2 focus:ring-[#ed215e] transition-colors text-sm">
+                      class="sm:flex-1 px-6 py-3 bg-tags-rosa text-white rounded-lg font-bold hover:bg-tags-rosa-dark focus:outline-none focus:ring-2 focus:ring-rosa-tags transition-colors text-sm">
                 Gerar Etiquetas
               </button>
             </div>
@@ -221,15 +214,15 @@
   </div>
 </div>
 
-<!-- Modal que será mostrado quando clicar em Gerar Etiquetas -->
+<!-- Modal -->
 <div id="preview-modal" class="fixed inset-0 overflow-y-auto h-full w-full z-50 hidden">
-  <!-- Overlay com blur e transparência elegante -->
+  <
   <div class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
   
   <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 shadow-2xl rounded-2xl bg-white max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95">
     <!-- Header do Modal -->
     <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
-      <h3 class="text-xl font-bold text-gray-900">Prévia das Etiquetas - Folha Ofício</h3>
+      <h3 class="text-xl font-bold text-gray-900">Preview da Etiqueta</h3>
       <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -237,9 +230,9 @@
       </button>
     </div>
 
-    <!-- Preview individual ampliado -->
+    <!-- Preview etiqueta -->
     <div class="mb-6">
-      <h4 class="text-lg font-semibold text-gray-700 mb-4">Preview Individual</h4>
+  
       <div class="flex justify-center">
         <div class="w-72 h-96 relative border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg bg-white">
           <!-- Parte de cima da etiqueta -->
@@ -255,7 +248,7 @@
           
           <!-- Parte de baixo da etiqueta -->
           <div class="h-70 bg-[#faf7f4] relative">
-            <div class="absolute inset-0 bg-gradient-to-br from-white/80 to-gray-50/30"></div>
+            <div class="absolute inset-0 bg-linear-to-br from-white/80 to-gray-50/30"></div>
             
             <!-- Conteúdo da etiqueta -->
             <div class="relative z-10 p-3 h-full flex flex-col">
@@ -288,7 +281,6 @@
                   </p>
                   <div class="flex justify-center space-x-3">
                     <span class="text-gray-700 text-sm font-bold leading-tight" id="modal-instagram">@instagram</span>
-                    <span class="text-gray-700 text-sm font-bold leading-tight" id="modal-facebook">@facebook</span>
                   </div>
                 </div>
               </div>
@@ -299,59 +291,49 @@
     </div>
 
     <!-- Informações da Geração -->
-    <div class="mb-6 bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border border-gray-200">
-      <h4 class="text-lg font-semibold text-gray-700 mb-4">Informações da Geração</h4>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+    <div class="mb-2 bg-linear-to-r from-gray-50 to-gray-100 p-2 rounded-xl border border-gray-200">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Informações da Geração</h4>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
         <div class="text-center">
           <span class="font-medium text-gray-600 block mb-1">Quantidade total</span>
-          <p class="text-gray-900 font-bold text-lg" id="modal-quantity">1 etiqueta(s)</p>
+          <p class="text-gray-900 font-bold text-m" id="modal-quantity">1 etiqueta(s)</p>
         </div>
         <div class="text-center">
           <span class="font-medium text-gray-600 block mb-1">Páginas</span>
-          <p class="text-gray-900 font-bold text-lg" id="modal-pages">1 página(s)</p>
+          <p class="text-gray-900 font-bold text-m" id="modal-pages">1 página(s)</p>
         </div>
         <div class="text-center">
           <span class="font-medium text-gray-600 block mb-1">Cor</span>
-          <p class="text-gray-900 font-bold text-lg" id="modal-color-text">#4E4E4E</p>
+          <p class="text-gray-900 font-bold text-m" id="modal-color-text">#4E4E4E</p>
         </div>
         <div class="text-center">
           <span class="font-medium text-gray-600 block mb-1">Layout</span>
-          <p class="text-gray-900 font-bold text-lg">2x4 (8/página)</p>
+          <p class="text-gray-900 font-bold text-m">3x3 (9/página)</p>
         </div>
       </div>
     </div>
 
     <!-- Botões do Modal -->
-    <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200">
+    <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-4 border-t border-gray-200">
       <button id="modal-cancel" class="px-8 py-3 border border-gray-300 text-gray-700 bg-white rounded-xl font-medium hover:bg-gray-50 transition-all duration-200 hover:shadow-sm">
         Cancelar
       </button>
       
       <button id="save-pdf-btn" 
               data-turbo="false"
-              class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2">
+              class="px-8 py-3 bg-tags-rosa text-white rounded-xl font-medium hover:bg-tags-rosa-dark transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/>
-        </svg>
-        Salvar PDF
-      </button>
-      
-      <button id="print-btn" 
-              data-turbo="false"
-              class="px-8 py-3 bg-gradient-to-r from-[#ed215e] to-[#d91956] text-white rounded-xl font-medium hover:from-[#d91956] hover:to-[#c2174e] transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
         </svg>
         Imprimir
       </button>
     </div>
+
   </div>
 </div>
 
 <script>
-// =============================================
-// GERADOR DE ETIQUETAS - VERSÃO DEFINITIVA
-// =============================================
+
 
 // Controle global de estado
 const TagGenerator = {
@@ -469,63 +451,37 @@ const TagGenerator = {
   
   handleSavePdf() {
     this.clickInProgress = true;
-    console.log('💾 SALVANDO PDF...');
+    console.log('💾 SALVANDO HTML...');
     
     const formData = this.collectFormData();
-    const params = new URLSearchParams(formData).toString();
     
-    // URL com parâmetro para forçar download
-    const downloadUrl = `/etiquetas/baixar_pdf?${params}&turbo=false&format=pdf`;
+    // Vai para HTML
+    const downloadUrl = `/etiquetas/baixar_pdf?${new URLSearchParams(formData)}`;
     
-    console.log('📤 Enviando para:', downloadUrl);
+    console.log('📤 Enviando para HTML:', downloadUrl);
     
-    // MÉTODO QUE FUNCIONA - Criar link com data-turbo="false"
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.setAttribute('data-turbo', 'false');
-    link.setAttribute('download', 'etiquetas.pdf');
-    link.target = '_blank';
-    link.style.display = 'none';
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Abre em nova aba para visualização/impressão
+    window.open(downloadUrl, '_blank', 'width=1200,height=800');
     
     setTimeout(() => { this.clickInProgress = false; }, 2000);
   },
 
   handlePrint() {
-  this.clickInProgress = true;
-  console.log('🖨️ IMPRIMINDO...');
-  
-  // TESTE COM DADOS FIXOS
-  const testData = {
-    product_name: "TESTE PRODUTO FIXO",
-    brand: "TESTE MARCA",
-    size: "TESTE M", 
-    color: "TESTE AZUL",
-    code: "TESTE-123",
-    price: "R$ 99,99",
-    phone: "(11) 99999-9999",
-    instagram: "@teste",
-    facebook: "@teste",
-    label_color: "#FF0000",
-    quantity: 1
-  };
-  
-  console.log('🧪 TESTANDO COM DADOS FIXOS:', testData);
-  
-  // URL com .pdf no final para forçar o formato
-  const params = new URLSearchParams(testData).toString();
-  const printUrl = `/etiquetas/imprimir.pdf?${params}&turbo=false`;
-  
-  console.log('📤 Enviando para:', printUrl);
-  
-  // Método SIMPLES - abrir diretamente em nova aba
-  window.open(printUrl, '_blank', 'noopener,noreferrer');
-  
-  setTimeout(() => { this.clickInProgress = false; }, 2000);
-},
+    this.clickInProgress = true;
+    console.log('🖨️ IMPRIMINDIREto...');
+    
+    const formData = this.collectFormData();
+    
+    // URL para impressão direta
+    const printUrl = `/etiquetas/imprimir?${new URLSearchParams(formData)}`;
+    
+    console.log('📤 Enviando para impressão direta:', printUrl);
+    
+    // Abre em nova aba com auto-print
+    window.open(printUrl, '_blank', 'width=800,height=600');
+    
+    setTimeout(() => { this.clickInProgress = false; }, 2000);
+  },
   
   collectFormData() {
   

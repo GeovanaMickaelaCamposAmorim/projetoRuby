@@ -32,7 +32,7 @@
         
         <div class="flex-1 flex flex-col min-h-0 bg-tags-cinza-fundo">
           
-          <!-- Header Superior MAIS FINO -->
+          <!-- Header Superior -->
           <div class="px-4 pt-4 pb-4">
             <div class="bg-white rounded-lg shadow-sm p-4">
               <div class="flex items-center justify-between">
@@ -48,7 +48,7 @@
                 <div class="flex items-center gap-3">
                   <div class="text-right">
                     <div class="font-medium text-gray-900 text-sm">
-                      <%= current_contratante&.cnt_nome_responsavel || current_user.usu_email %>
+                      <%= current_user.usu_nome || current_user.usu_email %>
                     </div>
                     <div class="text-xs text-gray-500 capitalize">
                       <%= current_user.usu_tipo %>
@@ -56,7 +56,7 @@
                   </div>
                   <div class="w-7 h-7 bg-tags-rosa rounded-full flex items-center justify-center">
                     <span class="text-white text-xs font-medium">
-                      <%= current_contratante&.cnt_nome_responsavel&.first&.upcase || current_user.usu_email.first.upcase %>
+                      <%= current_user.usu_nome&.first&.upcase || current_user.usu_email.first.upcase %>
                     </span>
                   </div>
                 </div>
@@ -64,11 +64,11 @@
             </div>
           </div>
 
-          <!-- Conteúdo Principal OTIMIZADO -->
+          <!-- Conteúdo Principal -->
           <main class="flex-1 min-h-0 overflow-hidden px-4 pb-4">
             <div class="h-full flex flex-col">
 
-              <!-- Header da Página MAIS COMPACTO -->
+              <!-- Header -->
               <div class="px-4 mt-2">
                 <div class="flex items-center gap-2">
                   <div class="bg-tags-rosa p-1.5 rounded-lg">
@@ -91,7 +91,7 @@
                 </div>
               </div>
 
-              <!-- Conteúdo da Página COM ALTURA DINÂMICA -->
+              <!-- Conteúdo da Página -->
               <div class="flex-1 min-h-0 overflow-auto">
                 <div class="p-4">
                   <%= yield %>

@@ -1,8 +1,14 @@
+<% content_for :page_title, "Configurações" %>
+<% content_for :page_description, "Configurações do sistema e da loja" %>
+<% content_for :page_icon do %>
+  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+  </svg>
+<% end %>
+
+
 <div class="max-w-4xl mx-auto p-6">
 
-  <div class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900">Configurações</h1>
-  </div>
 
   <%= form_with model: @configuracao, url: configuracoes_path, method: :patch, class: "space-y-8" do |form| %>
 
@@ -18,8 +24,6 @@
             <div class="w-20 h-20 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center logo-preview">
                 <% if @configuracao.logo.attached? %>
                   <%= image_tag @configuracao.logo, class: "w-16 h-16 object-contain" %>
-                <% else %>
-                  <%= heroicon "arrow-up-tray", variant: :outline, options: { class: "h-6 w-6 text-gray-400" } %>
                 <% end %>
             </div>
             
@@ -109,12 +113,12 @@
               <button type="button" 
                       onclick="mostrarInputCorPersonalizada('fundo')"
                       class="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                <%= heroicon "plus", variant: :outline, options: { class: "h-5 w-5 text-gray-400" } %>
+                <span class="text-gray-500 text-xl">+</span>
               </button>
             </div>
           </div>
           
-          <!-- Input para cor personalizada (inicialmente escondido) -->
+          <!-- Input para cor personalizada  -->
           <div id="cor-personalizada-fundo-container" class="hidden mt-4">
             <div class="flex items-center space-x-3 bg-gray-50 p-4 rounded-lg">
               <div class="flex items-center space-x-2">
@@ -184,8 +188,8 @@
               <!-- Botão + para adicionar cor personalizada -->
               <button type="button" 
                       onclick="mostrarInputCorPersonalizada('fonte')"
-                      class="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                <%= heroicon "plus", variant: :outline, options: { class: "h-5 w-5 text-gray-400" } %>
+                       class="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-colors">
+                <span class="text-gray-500 text-xl">+</span>
               </button>
             </div>
           </div>
@@ -229,14 +233,6 @@
       </div>
     </div>
 
-    <!-- Debug temporário -->
-    <%# <div class="bg-yellow-100 p-4 rounded mb-4">
-      <h3 class="font-bold">Debug:</h3>
-      <p>Cor Fundo: <%= @configuracao.cor_fundo_menu %></p>
-      <%# <p>Cor Fonte: <%= @configuracao.cor_fonte_menu %></p>
-      <%# <p>Configuração ID: <%= @configuracao.id %></p>
-    <%# </div> %>
-
     <div class="flex justify-end pt-6">
       <%= form.submit "Salvar Configurações", 
             class: "px-6 py-3 bg-tags-rosa text-white font-medium rounded-lg hover:bg-pink-600 transition-colors cursor-pointer" %>
@@ -245,24 +241,51 @@
 </div>
 
 <script>
-// Salvar cores personalizadas no localStorage
+
+// Remover cores duplicadas do localStorage
+function removerCoresDuplicadas() {
+  const coresFundo = JSON.parse(localStorage.getItem('cores_personalizadas_fundo') || '[]');
+  const coresFonte = JSON.parse(localStorage.getItem('cores_personalizadas_fonte') || '[]');
+  
+  // Remover duplicatas
+  const coresFundoUnicas = [...new Set(coresFundo)];
+  const coresFonteUnicas = [...new Set(coresFonte)];
+  
+  // Salvar de volta
+  localStorage.setItem('cores_personalizadas_fundo', JSON.stringify(coresFundoUnicas));
+  localStorage.setItem('cores_personalizadas_fonte', JSON.stringify(coresFonteUnicas));
+}
+
+// Salvar cores personalizadas no localStorage - SEM DUPLICATAS
 function salvarCoresPersonalizadas() {
   const coresFundo = Array.from(document.querySelectorAll('.cor-fundo-radio-personalizado'))
     .map(radio => radio.value);
   const coresFonte = Array.from(document.querySelectorAll('.cor-fonte-radio-personalizado'))
     .map(radio => radio.value);
   
-  localStorage.setItem('cores_personalizadas_fundo', JSON.stringify(coresFundo));
-  localStorage.setItem('cores_personalizadas_fonte', JSON.stringify(coresFonte));
+  // Remover duplicatas antes de salvar
+  const coresFundoUnicas = [...new Set(coresFundo)];
+  const coresFonteUnicas = [...new Set(coresFonte)];
+  
+  localStorage.setItem('cores_personalizadas_fundo', JSON.stringify(coresFundoUnicas));
+  localStorage.setItem('cores_personalizadas_fonte', JSON.stringify(coresFonteUnicas));
 }
 
-// Carregar cores personalizadas do localStorage
+// Carregar cores personalizadas do localStorage - SEM DUPLICATAS
 function carregarCoresPersonalizadas() {
   const coresFundo = JSON.parse(localStorage.getItem('cores_personalizadas_fundo') || '[]');
   const coresFonte = JSON.parse(localStorage.getItem('cores_personalizadas_fonte') || '[]');
   
-  coresFundo.forEach(cor => criarOpcaoCorFundo(cor));
-  coresFonte.forEach(cor => criarOpcaoCorFonte(cor));
+  // LIMPAR containers antes de adicionar
+  document.getElementById('opcoes-fundo-container').innerHTML = '';
+  document.getElementById('opcoes-fonte-container').innerHTML = '';
+  
+  // Adicionar cores únicas
+  const coresFundoUnicas = [...new Set(coresFundo)];
+  const coresFonteUnicas = [...new Set(coresFonte)];
+  
+  coresFundoUnicas.forEach(cor => criarOpcaoCorFundo(cor));
+  coresFonteUnicas.forEach(cor => criarOpcaoCorFonte(cor));
 }
 
 // Funções para criar as opções de cor
@@ -440,14 +463,17 @@ document.getElementById('logo-upload')?.addEventListener('change', function(e) {
   }
 });
 
+
 // Carregar cores quando a página carrega
 document.addEventListener('DOMContentLoaded', function() {
+  removerCoresDuplicadas(); // REMOVE DUPLICATAS PRIMEIRO
   carregarCoresPersonalizadas();
   aplicarCoresPreview();
 });
 
 // Também funciona com Turbo
 document.addEventListener('turbo:load', function() {
+  removerCoresDuplicadas(); // REMOVE DUPLICATAS PRIMEIRO
   carregarCoresPersonalizadas();
   aplicarCoresPreview();
 });
