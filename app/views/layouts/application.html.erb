@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Tags" %></title>
+    <title><%= content_for?(:page_title) ? yield(:page_title) : "TAGS" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -17,7 +17,6 @@
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     
-    
     <style>
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
@@ -30,15 +29,83 @@
     <% if authenticated? %>
       <div class="flex h-screen overflow-hidden"> 
         <%= render "layouts/sidebar" %>
-        <main class="flex-1 flex flex-col min-h-0 overflow-auto bg-tags-cinza-fundo p-6"> 
-          <%= yield %>
-        </main>
+        
+        <div class="flex-1 flex flex-col min-h-0 bg-tags-cinza-fundo">
+          
+          <!-- Header Superior -->
+          <div class="px-4 pt-4 pb-4">
+            <div class="bg-white rounded-lg shadow-sm p-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div>
+                    <div class="font-bold text-xl text-gray-900">
+                      <%= current_contratante&.cnt_nome_loja || "Minha Loja" %>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Usuário e Cargo (Direita) -->
+                <div class="flex items-center gap-3">
+                  <div class="text-right">
+                    <div class="font-medium text-gray-900 text-sm">
+                      <%= current_user.usu_nome || current_user.usu_email %>
+                    </div>
+                    <div class="text-xs text-gray-500 capitalize">
+                      <%= current_user.usu_tipo %>
+                    </div>
+                  </div>
+                  <div class="w-7 h-7 bg-tags-rosa rounded-full flex items-center justify-center">
+                    <span class="text-white text-xs font-medium">
+                      <%= current_user.usu_nome&.first&.upcase || current_user.usu_email.first.upcase %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conteúdo Principal -->
+          <main class="flex-1 min-h-0 overflow-hidden px-4 pb-4">
+            <div class="h-full flex flex-col">
+
+              <!-- Header -->
+              <div class="px-4 mt-2">
+                <div class="flex items-center gap-2">
+                  <div class="bg-tags-rosa p-1.5 rounded-lg">
+                    <% if content_for?(:page_icon) %>
+                      <%= yield(:page_icon) %>
+                    <% else %>
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <%# ... %>
+                      </svg>
+                    <% end %>
+                  </div>
+                  <div>
+                    <h1 class="text-xl font-bold text-gray-900">
+                      <%= content_for?(:page_title) ? yield(:page_title) : "TAGS" %>
+                    </h1>
+                    <p class="text-gray-600 text-sm">
+                      <%= content_for?(:page_description) ? yield(:page_description) : "Sistema de Gestão" %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Conteúdo da Página -->
+              <div class="flex-1 min-h-0 overflow-auto">
+                <div class="p-4">
+                  <%= yield %>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
       </div>
     <% else %>
       <%= yield %>
     <% end %>
 
-    <!-- Script do Submenu  -->
+    <!-- Script do Submenu -->
     <script>
       // Função para inicializar os submenus
       function initializeSubmenus() {

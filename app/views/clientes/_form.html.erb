@@ -1,4 +1,4 @@
-<%= form_with model: @cliente, class: "max-w-4xl mx-auto" do |form| %>
+<%= form_with model: @cliente, class: "max-w-4xl mx-auto p-6 " do |form| %>
   <% if @cliente.errors.any? %>
     <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
       <h4 class="text-red-800 font-medium mb-2">
@@ -70,8 +70,8 @@
           class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
     </div>
 
-  <div class="mt-8 flex gap-3">
-    <%= form.submit "Salvar Cliente", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer" %>
+  <div class="mt-8 flex gap-3 justify-end">
+    <%= form.submit "Salvar Cliente", class: "bg-tags-rosa hover:bg-tags-rosa-dark text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer" %>
     <%= link_to "Cancelar", clientes_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200" %>
   </div>
 <% end %>

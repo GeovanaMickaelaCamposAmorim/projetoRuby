@@ -253,6 +253,11 @@ export default class extends Controller {
       return
     }
 
+     // Anchieta passou aqui
+    const finalizarBtn = document.getElementById("finalizar-btn");
+    finalizarBtn.disabled = true;
+    finalizarBtn.innerHTML = "Vendendo...";
+
     const clienteSelect = document.getElementById('cliente_id')
     const formaPagamentoSelect = document.getElementById('forma_pagamento')
     

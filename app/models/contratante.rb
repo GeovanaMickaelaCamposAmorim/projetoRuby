@@ -1,8 +1,6 @@
 class Contratante < ApplicationRecord
   # Relações
-  has_one :loja, dependent: :destroy       # Quando o contratante for deletado, a loja também é deletada
-  has_many :users, dependent: :destroy     # Todos os usuários ligados ao contratante
-  has_many :marcas, dependent: :destroy
+  has_one :loja, dependent: :destroy       
   has_many :gastos, dependent: :destroy
 
   # Validações obrigatórias

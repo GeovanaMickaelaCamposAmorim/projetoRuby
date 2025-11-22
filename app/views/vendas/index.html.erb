@@ -1,22 +1,12 @@
 <% content_for :page_title, "Histórico de Vendas" %>
 <% content_for :page_description, "Visualize e gerencie todas as vendas realizadas" %>
+<% content_for :page_icon do %>
+  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+  </svg>
+<% end %>
 
 <div class="space-y-6">
-  <div class="p-4 flex-shrink-0">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="bg-[#ed215e] p-2 rounded-lg">
-          <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-          </svg>
-        </div>
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900">Histórico de Vendas</h1>
-          <p class="text-gray-600">Visualize e gerencie todas as vendas realizadas</p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-4 gap-4">

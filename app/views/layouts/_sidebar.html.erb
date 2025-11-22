@@ -1,80 +1,78 @@
 <div class="flex h-screen">
-  <div class="w-64 flex flex-col shadow-xl bg-tags-preto" id="sidebar-menu">
-    <div class="flex items-center p-6 h-20">
-      <div class="flex items-center justify-center space-x-3 w-full">
-        <%= image_tag "logo-menu.png", alt: "Tags logo Menu", class: "w-20 h-auto" %>
+  <div class="w-70 flex flex-col shadow-xl bg-tags-preto" id="sidebar-menu">
+    <!-- Logo -->
+    <div class="flex items-center p-4 h-20">
+      <div class="flex items-center justify-center w-full">
+        <%= image_tag "logo-menu.png", alt: "Tags logo Menu", class: "w-16 h-auto" %>
       </div>
     </div>
     
-    <nav class="flex-1 overflow-y-auto scrollbar-hide px-2">
+    <nav class="flex-1 overflow-y-auto scrollbar-hide px-2 mt-2">
       <!-- HOME -->
-      <div class="py-2">
-        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider text-tags-branco">
+      <div class="py-1">
+        <div class="px-3 py-1 text-[12px] font-medium uppercase tracking-wider text-tags-branco/50">
           HOME
         </div>
-        <div class="space-y-1">
-          <% if current_user.admin_usu_tipo? %>
-            <%= link_to '#', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
-              <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+        <div class="space-y-0.5">
+          <% if current_user.admin? %>
+            <%= link_to '#', class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90" do %>
+              <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
               <span>Dashboard</span>
             <% end %>
           <% end %>
           
-          <%= link_to pdv_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
-            <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-            <span>Ponto de Venda</span>
+          <%= link_to pdv_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90" do %>
+            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+            <span>PDV</span>
           <% end %>
           
-          <%= link_to vendas_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
-            <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+          <%= link_to vendas_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90" do %>
+            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
             <span>Histórico de Vendas</span>
           <% end %>
           
-          <%= link_to '#', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
-            <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-            <span>Tag</span>
+          <%= link_to gerar_etiqueta_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90" do %>
+            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+            <span>Etiquetas</span>
           <% end %>
           
-          <%= link_to gastos_path, class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
-            <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+          <%= link_to gastos_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90" do %>
+            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
             <span>Gastos</span>
-          <% end %>
-          
-          <%= link_to '#', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco" do %>
-            <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-            <span>Ficha-Cliente</span>
           <% end %>
         </div>
       </div>
       
-      <div class="border-t border-tags-cinza my-1"></div>
+      <div class="border-t border-tags-cinza/30 my-1"></div>
       
       <!-- ESTOQUE -->
-      <div class="py-2">
-        <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider text-tags-branco">
-          CONTROLE DE ESTOQUE
+      <div class="py-1">
+        <div class="px-3 py-1 text-[12px] font-medium uppercase tracking-wider text-tags-branco/50">
+          ESTOQUE
         </div>
 
         <!-- SUBMENU ESTOQUE -->
         <div class="cursor-pointer">
-          <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white rounded text-tags-branco" data-submenu="estoque-submenu">
+          <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90" data-submenu="estoque-submenu">
             <div class="flex items-center">
-              <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+              <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
               <span>Estoque</span>
             </div>
-            <div class="h-4 w-4 transition-transform submenu-arrow text-tags-branco"></div>
+            <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
           </div>
 
-          <div class="submenu hidden ml-4 mt-1" id="estoque-submenu">
-            <div class="space-y-1 border-l border-tags-cinza ml-3 pl-2">
-              <%= link_to '#', class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-                <span>Atualização de Estoque</span>
+          <div class="submenu hidden ml-3 mt-0.5" id="estoque-submenu">
+            <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
+              <%= link_to '#', class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span>Atualizar Estoque</span>
               <% end %>
 
-              <%= link_to produtos_path, class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-                <span>Cadastro de Mercadoria</span>
+              <%= link_to produtos_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span>Mercadorias</span>
               <% end %>
             </div>
           </div>
@@ -82,29 +80,31 @@
         
         <!-- SUBMENU CONFIGURAÇÕES DE PRODUTO -->
         <div class="cursor-pointer">
-          <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white rounded text-tags-branco" data-submenu="produto-submenu">
+          <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90" data-submenu="produto-submenu">
             <div class="flex items-center">
-              <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-              <span>Configurações de Produto</span>
+              <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+              <span>Produtos</span>
             </div>
-            <div class="h-4 w-4 transition-transform submenu-arrow text-tags-branco"></div>
+            <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
           </div>
 
-          <div class="submenu hidden ml-4 mt-1" id="produto-submenu">
-            <div class="space-y-1 border-l border-tags-cinza ml-3 pl-2">
-              <%= link_to marcas_path, class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-                <span>Cadastro de Marcas</span>
+          <div class="submenu hidden ml-3 mt-0.5" id="produto-submenu">
+            <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
+              <%= link_to marcas_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span>Marcas</span>
               <% end %>
 
-              <%= link_to tamanhos_path, class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-                <span>Cadastro de Tamanhos</span>
+              <%= link_to tamanhos_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span>Tamanhos</span>
               <% end %>
               
-              <%= link_to tipos_path, class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-                <span>Cadastro de Tipos</span>
+              <%= link_to tipos_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span>Tipos</span>
               <% end %>
             </div>
           </div>
@@ -112,36 +112,33 @@
       </div>
       
       <!-- ADMIN -->
-      <% if current_user.admin_usu_tipo? %>
-        <div class="border-t border-tags-cinza my-1"></div>
-        <div class="py-2">
-          <div class="px-4 py-2 text-xs font-medium uppercase tracking-wider text-tags-branco">ADMIN</div>
-          
-          <%= link_to '#', class: "flex items-center px-4 py-2 hover:bg-tags-rosa hover:text-white rounded text-tags-branco" do %>
-            <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-            <span>Relatórios</span>
-          <% end %>
+      <% if current_user.admin? %>
+        <div class="border-t border-tags-cinza/30 my-1"></div>
+        <div class="py-1">
+          <div class="px-3 py-1 text-[12px] font-medium uppercase tracking-wider text-tags-branco/50">ADMIN</div>
           
           <!-- SUBMENU CADASTROS -->
           <div class="cursor-pointer">
-            <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white rounded text-tags-branco" data-submenu="cadastros-submenu">
+            <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90" data-submenu="cadastros-submenu">
               <div class="flex items-center">
-                <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
                 <span>Cadastros</span>
               </div>
-              <div class="h-4 w-4 transition-transform submenu-arrow text-tags-branco"></div>
+              <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
             </div>
             
-            <div class="submenu hidden ml-4 mt-1" id="cadastros-submenu">
-              <div class="space-y-1 border-l border-tags-cinza ml-3 pl-2">
-                <%= link_to users_path, class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                  <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+            <div class="submenu hidden ml-3 mt-0.5" id="cadastros-submenu">
+              <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
+                <%= link_to users_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
                   <span>Funcionários</span>
                 <% end %>
                 
-                <%= link_to clientes_path, class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                  <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-                  <span>Cliente</span>
+                <%= link_to clientes_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                  <span>Clientes</span>
                 <% end %>
               </div>
             </div>
@@ -149,35 +146,56 @@
           
           <!-- SUBMENU CONFIGURAÇÕES -->
           <div class="cursor-pointer">
-            <div class="flex items-center justify-between px-4 py-2 hover:bg-tags-rosa hover:text-white rounded text-tags-branco" data-submenu="config-submenu">
+            <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90" data-submenu="config-submenu">
               <div class="flex items-center">
-                <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
                 <span>Configurações</span>
               </div>
-              <div class="h-4 w-4 transition-transform submenu-arrow text-tags-branco"></div>
+              <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
             </div>
             
-            <div class="submenu hidden ml-4 mt-1" id="config-submenu">
-              <div class="space-y-1 border-l border-tags-cinza ml-3 pl-2">
-                <%= link_to configuracoes_path, class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                  <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
+            <div class="submenu hidden ml-3 mt-0.5" id="config-submenu">
+              <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
+                <%= link_to configuracoes_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
                   <span>Perfil da Loja</span>
                 <% end %>
                 
-                <%= link_to '#', class: "flex items-center px-3 py-2 text-sm text-tags-branco hover:bg-tags-rosa hover:text-white rounded" do %>
-                  <div class="h-2 w-2 bg-tags-branco rounded-full mr-3"></div>
-                  <span>Config. Taxas do Cartão</span>
+                <%= link_to '#', class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded" do %>
+                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                  <span>Taxas Cartão</span>
                 <% end %>
               </div>
             </div>
           </div>
         </div>
       <% end %>
+
+
+
+      <!-- MASTER -->
+      <% if current_user.master? %>
+
+            <div class="border-t border-tags-cinza/30 my-1"></div>
+
+            <div class="py-1">
+              <div class="px-3 py-1 text-[12px] font-medium uppercase tracking-wider text-tags-branco/50">
+                MASTER
+              </div>
+
+            <%= link_to '#', class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90" do %>
+              <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+              <span>Contratante</span>
+            <% end %>
+      <% end %>
+
     </nav>
     
     <!-- LOGOUT -->
-    <div class="p-4 border-t border-tags-branco">
-      <%= button_to "Sair", session_path, method: :delete, class: "flex items-center justify-center w-full px-4 py-2 hover:bg-red-600 hover:text-white rounded transition-colors text-tags-branco" %>
+    <div class="p-3 border-t border-tags-branco/20">
+      <%= button_to "Sair", session_path, method: :delete, class: "flex items-center justify-center w-full px-3 py-1.5 text-xl hover:bg-red-600/60 hover:text-white rounded transition-colors text-tags-branco/90" %>
     </div>
   </div>
 </div>

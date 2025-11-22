@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_11_135511) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_15_214025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -124,6 +124,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_135511) do
     t.index ["user_id"], name: "index_gastos_on_user_id"
   end
 
+  create_table "label_configs", force: :cascade do |t|
+    t.string "name"
+    t.string "color", default: "#4E4E4E"
+    t.boolean "is_default", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "lojas", force: :cascade do |t|
     t.string "loj_nome", null: false
     t.string "loj_cnpj", null: false
@@ -189,6 +197,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_135511) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "tag_templates", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.string "store_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "label_config_id"
+    t.index ["label_config_id"], name: "index_tag_templates_on_label_config_id"
   end
 
   create_table "tamanhos", force: :cascade do |t|
@@ -285,6 +303,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_135511) do
   add_foreign_key "produtos", "marcas"
   add_foreign_key "produtos", "tamanhos"
   add_foreign_key "produtos", "tipos"
+  add_foreign_key "tag_templates", "label_configs"
   add_foreign_key "tamanhos", "contratantes"
   add_foreign_key "taxa_cartoes", "contratantes"
   add_foreign_key "tipos", "contratantes"

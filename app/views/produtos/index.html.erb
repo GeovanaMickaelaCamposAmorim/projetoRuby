@@ -1,20 +1,14 @@
-<div class="h-full flex flex-col">
-  <!-- Cabeçalho Fixo -->
-  <div class="flex-shrink-0  p-6 pb-4 ">
-    <div class="flex items-center gap-3 mb-2">
-      <div class="bg-[#ed215e] p-2 rounded-lg">
-        
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-        </svg>
-      </div>
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">Produtos</h1>
-        <p class="text-gray-600">Gerencie o estoque de produtos da sua loja</p>
-      </div>
-    </div>
+<% content_for :page_title, "Controle de Produtos" %>
+<% content_for :page_description, "Gerencie e monitore o estoque de produtos da sua loja" %>
+<% content_for :page_icon do %>
+  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+  </svg>
+<% end %>
 
-    <div class="flex justify-end items-center mt-4">
+<div class="container mx-auto">
+  <div class="mb-8">
+    <div class="flex justify-end items-center mt-6">
       <%= link_to new_produto_path, class: "px-6 py-3 bg-[#ed215e] text-white rounded-lg font-medium hover:bg-[#d91956] transition-colors duration-200 flex items-center gap-2" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -24,118 +18,157 @@
     </div>
   </div>
 
-  <!-- Conteúdo Principal COM SCROLL -->
-  <div class="flex-1 flex flex-col min-h-0 p-6"> 
-    
-    <!-- Filtros -->
-    <div class="bg-white rounded-lg p-4 mb-4 flex-shrink-0">
-      <%= form_with url: produtos_path, method: :get, local: true, class: "space-y-4" do %>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <%= text_field_tag :search, params[:search], 
-                  placeholder: "Buscar produto...",
-                  class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-          </div>
-          
-          <div>
-            <%= select_tag :tipo_id, 
-                  options_for_select([['Todos os tipos', '']] + @tipos.map { |t| [t.tip_nome, t.id] }, params[:tipo_id]),
-                  class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-          </div>
-          
-          <div>
-            <%= select_tag :marca_id, 
-                  options_for_select([['Todas as marcas', '']] + @marcas.map { |m| [m.nome, m.id] }, params[:marca_id]),
-                  class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-          </div>
-          
-          <div>
-            <%= select_tag :estoque, 
-                  options_for_select([
-                    ['Todos os produtos', ''],
-                    ['Em estoque', 'em_estoque'],
-                    ['Em falta', 'em_falta']
-                  ], params[:estoque]),
-                  class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-          </div>
+  <!-- Filtros -->
+  <div class="bg-white rounded-lg p-6 mb-6">
+    <%= form_with url: produtos_path, method: :get, local: true, class: "space-y-4" do %>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <%= text_field_tag :search, params[:search], 
+                placeholder: "Buscar produto...",
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent" %>
         </div>
         
-        <div class="flex justify-between items-center">
-
-          <div class="text-sm text-gray-500">
-            <%= @produtos.size %> produto(s) encontrado(s)
-          </div>
-          
-          <div class="flex gap-2">
-            <%= submit_tag "Filtrar", class: "px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200" %>
-            <%= link_to "Limpar", produtos_path, class: "px-4 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors duration-200" %>
-          </div>
-          
+        <div>
+          <%= select_tag :tipo_id, 
+                options_for_select([['Todos os tipos', '']] + @tipos.map { |t| [t.tip_nome, t.id] }, params[:tipo_id]),
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent" %>
         </div>
-      <% end %>
-    </div>
+        
+        <div>
+          <%= select_tag :marca_id, 
+                options_for_select([['Todas as marcas', '']] + @marcas.map { |m| [m.nome, m.id] }, params[:marca_id]),
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent" %>
+        </div>
+        
+        <div>
+          <%= select_tag :estoque, 
+                options_for_select([
+                  ['Todos os produtos', ''],
+                  ['Em estoque', 'em_estoque'],
+                  ['Em falta', 'em_falta']
+                ], params[:estoque]),
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent" %>
+        </div>
+      </div>
+      
+      <div class="flex justify-between items-center">
+        <div class="text-sm text-gray-500">
+          <%= @produtos.size %> produto(s) encontrado(s)
+        </div>
+        
+        <div class="flex gap-2">
+          <%= submit_tag "Filtrar", class: "px-4 py-2 bg-[#ed215e] text-white rounded-lg font-medium hover:bg-[#d91956] transition-colors duration-200" %>
+          <%= link_to "Limpar", produtos_path, class: "px-4 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors duration-200" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 
-    <!-- Área da Tabela COM SCROLL CORRETO -->
-    <div class="flex-1 bg-white rounded-lg shadow min-h-0 overflow-auto"> <!-- MUDEI: overflow-hidden para overflow-auto -->
-      <% if @produtos.any? %>
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50 sticky top-0 z-10">
+  <% if @produtos.any? %>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full divide-y divide-gray-200 text-sm">
+          <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produto</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marca</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tamanho</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cor</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estoque</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor Venda</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Código</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[180px]">Produto</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell">Tipo</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap hidden xl:table-cell">Marca</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap hidden 2xl:table-cell">Tam.</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap hidden 2xl:table-cell">Cor</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Estoque</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Valor</th>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap hidden md:table-cell">Status</th>
+              <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Ações</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <% @produtos.each do |produto| %>
               <tr class="hover:bg-gray-50 transition-colors duration-150">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= produto.pro_codigo %></td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <td class="px-3 py-3 whitespace-nowrap font-medium text-gray-900">
+                  <span class="font-mono text-xs"><%= produto.pro_codigo %></span>
+                </td>
+                <td class="px-3 py-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                       </svg>
                     </div>
-                    <div class="min-w-0">
-                      <p class="text-sm font-medium text-gray-900 truncate"><%= produto.pro_nome %></p>
-                      <p class="text-xs text-gray-500 truncate"><%= produto.pro_descricao %></p>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-medium text-gray-900 truncate" title="<%= produto.pro_nome %>">
+                        <%= produto.pro_nome %>
+                      </p>
+                      <div class="flex flex-wrap gap-1 mt-0.5">
+                        <span class="text-xs text-gray-500 lg:hidden"><%= produto.tipo&.tip_nome %></span>
+                        <span class="text-xs text-gray-500 xl:hidden"><%= produto.marca&.nome %></span>
+                      </div>
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= produto.tipo&.tip_nome %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= produto.marca&.nome %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= produto.tamanho&.tam_nome %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= produto.pro_cor %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= produto.pro_quantidade %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= number_to_currency(produto.pro_valor_venda) %></td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <% if produto.pro_quantidade > 0 %>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Em estoque</span>
-                  <% else %>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Em falta</span>
-                  <% end %>
+                <td class="px-3 py-3 whitespace-nowrap text-gray-900 hidden lg:table-cell">
+                  <span class="text-xs"><%= produto.tipo&.tip_nome %></span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <div class="flex justify-center space-x-2">
-                    <%= link_to "Editar", edit_produto_path(produto), class: "text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200" %>
-                    <%= link_to "Excluir", produto_path(produto), method: :delete, data: { confirm: 'Tem certeza?' }, class: "text-red-600 hover:text-red-900 font-medium text-sm px-3 py-1 border border-red-600 rounded hover:bg-red-50 transition-colors duration-200" %>
+                <td class="px-3 py-3 whitespace-nowrap text-gray-900 hidden xl:table-cell">
+                  <span class="text-xs"><%= produto.marca&.nome %></span>
+                </td>
+                <td class="px-3 py-3 whitespace-nowrap text-gray-900 hidden 2xl:table-cell">
+                  <span class="text-xs"><%= produto.tamanho&.tam_nome %></span>
+                </td>
+                <td class="px-3 py-3 whitespace-nowrap text-gray-900 hidden 2xl:table-cell">
+                  <div class="flex items-center gap-1" title="<%= produto.pro_cor %>">
+                    <div class="w-2 h-2 rounded-full border border-gray-300" style="background-color: <%= produto.pro_cor.present? ? produto.pro_cor : '#ccc' %>"></div>
+                    <span class="text-xs truncate max-w-[60px]"><%= produto.pro_cor %></span>
                   </div>
                 </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+                <td class="px-3 py-3 whitespace-nowrap font-medium">
+                  <span class="text-xs <%= produto.pro_quantidade > 0 ? 'text-green-600' : 'text-red-600' %>">
+                    <%= produto.pro_quantidade %>
+                  </span>
+                </td>
+                <td class="px-3 py-3 whitespace-nowrap font-medium text-gray-900">
+                  <span class="text-xs"><%= number_to_currency(produto.pro_valor_venda) %></span>
+                </td>
+                <td class="px-3 py-3 whitespace-nowrap hidden md:table-cell">
+                  <% if produto.pro_quantidade > 0 %>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      Estoque
+                    </span>
+                  <% else %>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      Falta
+                    </span>
+                  <% end %>
+                </td>
+                <td class="px-3 py-3 whitespace-nowrap text-center">
+                  <div class="flex justify-center space-x-1">
+                    <%= link_to edit_produto_path(produto), 
+                          class: "text-blue-600 hover:text-blue-900 text-xs px-2 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200",
+                          title: "Editar" do %>
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                          </svg>
+                        <% end %>
+                        <%= link_to produto_path(produto), 
+                          method: :delete, 
+                          data: { confirm: 'Tem certeza?' },
+                          class: "text-red-600 hover:text-red-900 text-xs px-2 py-1 border border-red-600 rounded hover:bg-red-50 transition-colors duration-200",
+                          title: "Excluir" do %>
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                          </svg>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
       <% else %>
-        <div class="h-full flex items-center justify-center p-8">
-          <div class="text-center">
+        <div class="bg-white rounded-lg shadow p-8 text-center">
+          <div class="max-w-md mx-auto">
             <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
             </svg>
@@ -151,5 +184,3 @@
         </div>
       <% end %>
     </div>
-  </div>
-</div>
