@@ -6,17 +6,22 @@
   </svg>
 <% end %>
 
-
-<div class="container mx-auto ">
+<div class="container mx-auto">
   <div class="mb-2">
-
-    <div class="flex justify-end items-center mt-6">
-      <%= link_to new_tipo_path, class: "px-6 py-3 bg-[#ed215e] text-white rounded-lg font-medium hover:bg-[#d91956] transition-colors duration-200" do %>
-        + Novo Tipo
-      <% end %>
+    <div class="flex justify-end items-center">
+      <!-- Botão Novo Tipo - Agora com modal -->
+      <button onclick="abrirTipoModal('<%= new_tipo_path %>')" 
+              class="px-6 py-3 bg-tags-rosa text-white rounded-lg font-medium hover:bg-tags-rosa-dark transition-colors duration-200 flex items-center gap-2 cursor-pointer">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Novo Tipo
+      </button>
     </div>
   </div>
 
+  <hr class="border-t border-gray-300 my-4">
+  
   <% if @tipos.any? %>
     <div class="bg-white rounded-lg shadow overflow-hidden">
       <div class="overflow-x-auto">
@@ -39,10 +44,13 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
                   <div class="flex justify-center space-x-2">
-                    <%= link_to edit_tipo_path(tipo), 
-                                class: "text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200" do %>
+                    <!-- Botão Editar - Agora com modal -->
+                    <button onclick="abrirTipoModal('<%= edit_tipo_path(tipo) %>')" 
+                            class="text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
                       Editar
-                    <% end %>
+                    </button>
+                    
+                    <!-- Botão Excluir -->
                     <%= link_to tipo_path(tipo), 
                                 method: :delete, 
                                 data: { confirm: 'Tem certeza que deseja excluir este tipo?' },
@@ -65,10 +73,361 @@
         </svg>
         <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum tipo cadastrado</h3>
         <p class="text-gray-500 mb-4">Comece cadastrando os tipos dos seus produtos.</p>
-        <%= link_to new_tipo_path, class: "px-6 py-2 bg-[#ed215e] text-white rounded-lg font-medium hover:bg-[#d91956] transition-colors duration-200" do %>
-          + Novo Tipo
-        <% end %>
+        <!-- Botão do estado vazio também com modal -->
+        <button onclick="abrirTipoModal('<%= new_tipo_path %>')" 
+                class="px-6 py-2 bg-[#ed215e] text-white rounded-lg font-medium hover:bg-[#d91956] transition-colors duration-200 inline-flex items-center gap-2 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Novo Tipo
+        </button>
       </div>
     </div>
   <% end %>
 </div>
+
+<!-- Modal para Tipos -->
+<dialog id="tipoModal" class="modal-base">
+  <div class="modal-container">
+    <!-- Header -->
+    <div class="modal-header no-print">
+      <h3 class="modal-title" id="tipoModalTitle">Carregando...</h3>
+      <button type="button" onclick="fecharModal('tipoModal')" class="modal-close-btn" title="Fechar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content-container">
+      <div id="tipoFormContent" class="modal-content">
+        <div class="flex justify-center items-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
+          <span class="ml-2 text-gray-600">Carregando...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer - VAZIO -->
+    <div class="modal-footer no-print">
+      <!-- Sem botões - já temos Cancelar nos formulários -->
+    </div>
+  </div>
+</dialog>
+
+<style>
+/* Modal Base Styles - MESMO CSS dos produtos */
+.modal-base {
+  border: none;
+  padding: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  max-width: 500px; /* Um pouco menor pois o formulário de tipos é simples */
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.modal-base[open] {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-container {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #181818;
+  margin: 0;
+}
+
+.modal-close-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.modal-content-container {
+  max-height: calc(90vh - 120px);
+  overflow-y: auto;
+  padding: 0 1.5rem;
+}
+
+.modal-content {
+  padding: 1.5rem 0;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+  position: sticky;
+  bottom: 0;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+</style>
+
+<script>
+// ================================
+// FUNÇÕES GLOBAIS DE MODAL - MESMO DOS PRODUTOS
+// ================================
+
+// Função para abrir qualquer modal
+function abrirModal(modalId) {
+  console.log('🎯 Abrindo modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.showModal();
+    modal.classList.add('modal-open');
+    
+    // Adicionar evento para fechar com ESC
+    modal.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        fecharModal(modalId);
+      }
+    });
+    
+    // Adicionar backdrop click
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        fecharModal(modalId);
+      }
+    });
+  } else {
+    console.error('❌ Modal não encontrado:', modalId);
+  }
+}
+
+// Função para fechar qualquer modal
+function fecharModal(modalId) {
+  console.log('🎯 Fechando modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.close();
+    modal.classList.remove('modal-open');
+  }
+}
+
+// Fechar modal com Cancelar (função global)
+function cancelarModal() {
+  console.log('🎯 Cancelando modal...');
+  // Fecha qualquer modal aberto
+  const modals = document.querySelectorAll('dialog[open]');
+  modals.forEach(modal => {
+    modal.close();
+    modal.classList.remove('modal-open');
+  });
+}
+
+// Event Listeners para todos os modais <dialog>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 Funções de modal carregadas!');
+  
+  document.querySelectorAll('dialog').forEach(modal => {
+    modal.addEventListener('cancel', function() {
+      this.close();
+    });
+    
+    modal.addEventListener('click', function(event) {
+      if (event.target === this) {
+        this.close();
+      }
+    });
+  });
+  
+  // Adicionar event listeners para todos os botões de fechar
+  document.querySelectorAll('[onclick*="fecharModal"], [onclick*="cancelarModal"]').forEach(btn => {
+    console.log('✅ Botão de fechar encontrado:', btn);
+  });
+});
+
+// Tornar funções globais
+window.abrirModal = abrirModal;
+window.fecharModal = fecharModal;
+window.cancelarModal = cancelarModal;
+
+console.log('✅ Funções globais de modal definidas!');
+</script>
+
+<script>
+// Função para abrir modal de tipos - COM DEBUG DETALHADO
+async function abrirTipoModal(url) {
+  try {
+    console.log('🔍🔍🔍 INICIANDO abrirTipoModal para:', url);
+    
+    // Mostrar loading
+    document.getElementById('tipoFormContent').innerHTML = `
+      <div class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
+        <span class="ml-2 text-gray-600">Carregando...</span>
+      </div>
+    `;
+
+    // Abrir modal
+    console.log('🎯 Tentando abrir modal...');
+    if (typeof abrirModal === 'function') {
+      console.log('✅ abrirModal encontrada, chamando...');
+      abrirModal('tipoModal');
+    } else {
+      console.error('❌ abrirModal não está definida!');
+      const modal = document.getElementById('tipoModal');
+      if (modal) {
+        console.log('✅ Modal encontrado, abrindo diretamente');
+        modal.showModal();
+      } else {
+        console.error('❌ Modal não encontrado no DOM');
+      }
+    }
+
+    // Buscar o formulário
+    console.log('📡 Fazendo fetch para:', url);
+    const response = await fetch(url);
+    console.log('📡 Response status:', response.status);
+    console.log('📡 Response ok:', response.ok);
+    
+    const html = await response.text();
+    console.log('📡 HTML recebido, tamanho:', html.length, 'caracteres');
+    console.log('📡 Primeiros 500 caracteres:', html.substring(0, 500));
+    
+    // Extrair apenas o conteúdo do formulário
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    console.log('📡 Documento parseado');
+    
+    const formContent = doc.querySelector('form');
+    console.log('📡 Form encontrado:', formContent ? 'SIM' : 'NÃO');
+    
+    if (formContent) {
+      console.log('✅ Formulário encontrado, inserindo no modal...');
+      document.getElementById('tipoFormContent').innerHTML = formContent.outerHTML;
+      
+      // Atualizar o título do modal
+      const modalTitle = document.getElementById('tipoModalTitle');
+      if (modalTitle) {
+        const isNew = url.includes('new');
+        modalTitle.textContent = isNew ? 'Novo Tipo' : 'Editar Tipo';
+        console.log('📝 Título do modal atualizado para:', modalTitle.textContent);
+      }
+    } else {
+      console.error('❌ Formulário NÃO encontrado no HTML');
+      // Vamos mostrar o HTML completo para debug
+      document.getElementById('tipoFormContent').innerHTML = `
+        <div class="text-center py-8">
+          <div class="text-red-600 font-medium mb-4">Erro ao carregar formulário</div>
+          <div class="text-xs text-gray-500 text-left bg-gray-100 p-4 rounded max-h-40 overflow-auto">
+            <strong>Debug HTML:</strong><br>
+            ${html.substring(0, 1000)}...
+          </div>
+        </div>
+      `;
+    }
+    
+    console.log('✅✅✅ abrirTipoModal FINALIZADO com sucesso');
+    
+  } catch (error) {
+    console.error('❌❌❌ ERRO em abrirTipoModal:', error);
+    document.getElementById('tipoFormContent').innerHTML = `
+      <div class="text-center py-8 text-red-600">
+        <p class="font-medium">Erro ao carregar</p>
+        <p class="text-sm text-gray-500 mt-2">${error.message}</p>
+      </div>
+    `;
+  }
+}
+
+// Função para lidar com submit do formulário de tipos
+function handleTipoSubmit(event) {
+  event.preventDefault();
+  console.log('📤 Submetendo formulário de tipo...');
+  
+  const form = event.target;
+  const formData = new FormData(form);
+  
+  fetch(form.action, {
+    method: form.method,
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'text/html'
+    }
+  })
+  .then(response => {
+    console.log('📤 Response do submit:', response.status);
+    if (response.ok) {
+      // Fechar modal e recarregar a página
+      console.log('✅ Submit bem-sucedido, fechando modal...');
+      fecharModal('tipoModal');
+      window.location.reload();
+    } else {
+      // Mostrar erros de validação
+      console.log('⚠️ Submit com erros de validação');
+      return response.text().then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const errorForm = doc.querySelector('form');
+        if (errorForm) {
+          document.getElementById('tipoFormContent').innerHTML = errorForm.outerHTML;
+        }
+      });
+    }
+  })
+  .catch(error => {
+    console.error('❌ Erro no submit:', error);
+    alert('Erro ao salvar tipo');
+  });
+}
+
+// Adicionar event listener para forms dinâmicos de tipos
+document.addEventListener('submit', function(event) {
+  if (event.target.closest('#tipoFormContent')) {
+    handleTipoSubmit(event);
+  }
+});
+
+console.log('✅ Script de tipos carregado!');
+</script>

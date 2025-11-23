@@ -18,6 +18,31 @@
     <%= javascript_importmap_tags %>
     
     <style>
+
+      /* Animações modal */
+      .backdrop-blur-sm {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      
+      /* Transições suaves */
+      .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+      }
+      
+      /* Efeito de elevação sutil */
+      .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      
+      /* Hover effects modernos */
+      .hover\:shadow-md:hover {
+        box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.3);
+      }
+
+      /* Scrollbar hide */
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       .submenu { transition: all 0.3s ease-in-out; }
@@ -25,6 +50,7 @@
     </style>
   </head>
 
+  
   <body class="h-screen"> 
     <% if authenticated? %>
       <div class="flex h-screen overflow-hidden"> 
@@ -88,6 +114,8 @@
                       <%= content_for?(:page_description) ? yield(:page_description) : "Sistema de Gestão" %>
                     </p>
                   </div>
+                  
+
                 </div>
               </div>
 
@@ -137,28 +165,9 @@
               if (arrow) arrow.classList.remove('rotate-180');
             }
             
-            // Close other submenus
-            document.querySelectorAll('.submenu').forEach(otherSubmenu => {
-              if (otherSubmenu.id !== submenuId && !otherSubmenu.classList.contains('hidden')) {
-                otherSubmenu.classList.add('hidden');
-                const otherArrow = otherSubmenu.previousElementSibling?.querySelector('.submenu-arrow');
-                if (otherArrow) otherArrow.classList.remove('rotate-180');
-              }
-            });
           });
         });
-        
-        // Close submenus when clicking outside
-        document.addEventListener('click', function(e) {
-          if (!e.target.closest('[data-submenu]') && !e.target.closest('.submenu')) {
-            document.querySelectorAll('.submenu').forEach(submenu => {
-              submenu.classList.add('hidden');
-            });
-            document.querySelectorAll('.submenu-arrow').forEach(arrow => {
-              arrow.classList.remove('rotate-180');
-            });
-          }
-        });
+
       }
 
       // Inicializa quando a página carrega
@@ -169,5 +178,8 @@
       document.addEventListener('turbo:render', initializeSubmenus);
       document.addEventListener('turbo:frame-render', initializeSubmenus);
     </script>
+
+    <%= turbo_frame_tag "modal" %>
+
   </body>
 </html>

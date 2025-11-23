@@ -1,5 +1,5 @@
 class TiposController < ApplicationController
-  before_action :set_tipo, only: [:show, :edit, :update, :destroy]
+  before_action :set_tipo, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @tipos = Tipo.where(contratante_id: current_user.contratante_id).order(:tip_nome)
@@ -7,16 +7,17 @@ class TiposController < ApplicationController
 
   def new
     @tipo = Tipo.new
+    render layout: false  # ← APENAS ISSO, SEM CONDIÇÕES
   end
 
   def create
     @tipo = Tipo.new(tipo_params)
-    @tipo.contratante_id = current_user.contratante_id # Define o contratante do usuário logado
+    @tipo.contratante_id = current_user.contratante_id
 
     if @tipo.save
-      redirect_to tipos_path, notice: 'Tipo criado com sucesso!'
+      redirect_to tipos_path, notice: "Tipo criado com sucesso!"
     else
-      render :new, status: :unprocessable_entity
+      render :new, layout: false, status: :unprocessable_entity  # ← APENAS ISSO
     end
   end
 
@@ -24,22 +25,23 @@ class TiposController < ApplicationController
   end
 
   def edit
+    render layout: false  # ← APENAS ISSO, SEM CONDIÇÕES
   end
 
   def update
     if @tipo.update(tipo_params)
-      redirect_to tipos_path, notice: 'Tipo atualizado com sucesso!'
+      redirect_to tipos_path, notice: "Tipo atualizado com sucesso!"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, layout: false, status: :unprocessable_entity  # ← APENAS ISSO
     end
   end
 
   def destroy
     if @tipo.produtos.any?
-      redirect_to tipos_path, alert: 'Não é possível excluir o tipo pois existem produtos vinculados.'
+      redirect_to tipos_path, alert: "Não é possível excluir o tipo pois existem produtos vinculados."
     else
       @tipo.destroy
-      redirect_to tipos_path, notice: 'Tipo excluído com sucesso!'
+      redirect_to tipos_path, notice: "Tipo excluído com sucesso!"
     end
   end
 

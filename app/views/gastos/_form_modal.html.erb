@@ -1,0 +1,32 @@
+<dialog id="<%= modal_id %>" class="modal-base">
+  <div class="modal-container">
+    <!-- Header -->
+    <div class="modal-header no-print">
+      <h3 class="modal-title"><%= title %></h3>
+      <button onclick="fecharModal('<%= modal_id %>')" class="modal-close-btn">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content-container">
+      <div id="<%= content_id %>" class="modal-content">
+        <%= yield %>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer no-print">
+      <button onclick="fecharModal('<%= modal_id %>')" class="btn-secondary">
+        Fechar
+      </button>
+      <% if printable %>
+        <button onclick="imprimirModal('<%= modal_id %>')" class="btn-primary">
+          Imprimir
+        </button>
+      <% end %>
+    </div>
+  </div>
+</dialog>

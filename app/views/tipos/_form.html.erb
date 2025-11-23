@@ -1,4 +1,4 @@
-<%= form_with model: tipo, class: "max-w-2xl mx-auto p-6 " do |form| %>
+<%= form_with model: tipo, data: { remote: false } do |form| %>
   <% if tipo.errors.any? %>
     <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
       <h4 class="text-red-800 font-medium mb-2">
@@ -31,7 +31,13 @@
   </div>
 
   <div class="mt-8 flex gap-3 justify-end">
-    <%= form.submit "Salvar Tipo", class: "bg-tags-rosa hover:bg-tags-rosa-dark text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer" %>
-    <%= link_to "Cancelar", tipos_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200" %>
+    <%= form.submit tipo.persisted? ? "Atualizar Tipo" : "Salvar Tipo", 
+          class: "bg-tags-rosa hover:bg-tags-rosa-dark text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer" %>
+    
+    <!-- Botão Cancelar AGORA FECHA O MODAL quando usado no modal -->
+    <button type="button" onclick="if (typeof fecharModal === 'function') { fecharModal('tipoModal'); } else { window.location.href = '<%= tipos_path %>'; }" 
+            class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer">
+      Cancelar
+    </button>
   </div>
 <% end %>
