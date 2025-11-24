@@ -1,19 +1,13 @@
 <div class="flex h-screen">
   <div class="w-70 flex flex-col shadow-xl bg-tags-preto" id="sidebar-menu">
     <!-- Logo -->
-    <div class="flex items-center p-4 h-20">
+    <div class="flex items-center p-4 h-22">
       <div class="flex items-center justify-center w-full">
-        <%= image_tag "logo-menu.png", alt: "Tags logo Menu", class: "w-16 h-auto" %>
+        <%= image_tag "logo-menu.png", alt: "Tags logo Menu", class: "w-20 h-auto" %>
       </div>
     </div>
     
     <nav class="flex-1 overflow-y-auto scrollbar-hide px-2 mt-2">
-      <!-- Debug Helper (remova depois) -->
-      <div class="hidden text-xs text-red-400">
-        Debug: Controller: <span id="debug-controller"><%= controller_name %></span> | 
-        Action: <span id="debug-action"><%= action_name %></span> |
-        Path: <span id="debug-path"><%= request.path %></span>
-      </div>
       
       <!-- HOME -->
       <div class="py-1">
@@ -23,28 +17,28 @@
         <div class="space-y-0.5">
           <% if current_user.admin? %>
             <%= link_to '#', class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if controller_name == 'dashboard' || request.path.include?('dashboard')}" do %>
-              <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+              <span class="material-symbols-outlined text-xl mr-3">stacked_bar_chart</span>
               <span>Dashboard</span>
             <% end %>
           <% end %>
           
           <%= link_to pdv_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if controller_name == 'pdv' || request.path.include?('pdv')}" do %>
-            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+            <span class="material-symbols-outlined text-xl mr-3">point_of_sale</span>
             <span>PDV</span>
           <% end %>
           
           <%= link_to vendas_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if controller_name == 'vendas' || request.path.include?('vendas')}" do %>
-            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+            <span class="material-symbols-outlined text-xl mr-3">receipt_long</span>
             <span>Histórico de Vendas</span>
           <% end %>
           
           <%= link_to gerar_etiqueta_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if controller_name == 'etiquetas' || request.path.include?('etiqueta') || request.path.include?('etiquetas')}" do %>
-            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+            <span class="material-symbols-outlined text-xl mr-3">sell</span>
             <span>Etiquetas</span>
           <% end %>
           
           <%= link_to gastos_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if controller_name == 'gastos' || request.path.include?('gastos')}" do %>
-            <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+            <span class="material-symbols-outlined text-xl mr-3">checkbook</span>
             <span>Gastos</span>
           <% end %>
         </div>
@@ -71,7 +65,7 @@
           %>
           <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if estoque_controller_ativo || estoque_path_ativo}" data-submenu="estoque-submenu">
             <div class="flex items-center">
-              <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+              <span class="material-symbols-outlined text-xl mr-3">inventory_2</span>
               <span>Estoque</span>
             </div>
             <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70 #{'rotate-180' if estoque_submenu_ativo}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,12 +76,12 @@
           <div class="submenu ml-3 mt-0.5 <%= 'hidden' unless estoque_submenu_ativo %>" id="estoque-submenu">
             <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
               <%= link_to '#', class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'atualizar_estoque' || request.path.include?('atualizar-estoque')}" do %>
-                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span class="material-symbols-outlined text-xl mr-3">inventory</span>
                 <span>Atualizar Estoque</span>
               <% end %>
 
-              <%= link_to produtos_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if produtos_controllers.include?(controller_name) || request.path.include?('produtos')}" do %>
-                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+              <%= link_to produtos_path, class: "flex items-center px-2 py-1 text-[18px] text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if produtos_controllers.include?(controller_name) || request.path.include?('produtos')}" do %>
+                <span class="material-symbols-outlined text-xs mr-3">shelves</span>
                 <span>Controle de Produtos</span>
               <% end %>
             </div>
@@ -107,8 +101,8 @@
           %>
           <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if produto_controllers_ativos || produto_paths_ativos}" data-submenu="produto-submenu">
             <div class="flex items-center">
-              <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
-              <span>Produtos</span>
+              <span class="material-symbols-outlined text-xs mr-3">category</span>
+              <span>Categorias</span>
             </div>
             <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70 #{'rotate-180' if produto_submenu_ativo}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -118,17 +112,17 @@
           <div class="submenu ml-3 mt-0.5 <%= 'hidden' unless produto_submenu_ativo %>" id="produto-submenu">
             <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
               <%= link_to marcas_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'marcas' || request.path.include?('marcas')}" do %>
-                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span class="material-symbols-outlined text-xs mr-3">brand_family</span>
                 <span>Marcas</span>
               <% end %>
 
               <%= link_to tamanhos_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'tamanhos' || request.path.include?('tamanhos')}" do %>
-                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span class="material-symbols-outlined text-xs mr-3">checkroom</span>
                 <span>Tamanhos</span>
               <% end %>
               
               <%= link_to tipos_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'tipos' || request.path.include?('tipos')}" do %>
-                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span class="material-symbols-outlined text-xs mr-3">bookmark_stacks</span>
                 <span>Tipos</span>
               <% end %>
             </div>
@@ -155,7 +149,7 @@
             %>
             <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if cadastros_controllers_ativos || cadastros_paths_ativos}" data-submenu="cadastros-submenu">
               <div class="flex items-center">
-                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span class="material-symbols-outlined text-xs mr-3">person_text</span>
                 <span>Cadastros</span>
               </div>
               <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70 #{'rotate-180' if cadastros_submenu_ativo}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,12 +160,12 @@
             <div class="submenu ml-3 mt-0.5 <%= 'hidden' unless cadastros_submenu_ativo %>" id="cadastros-submenu">
               <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
                 <%= link_to users_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'users' || request.path.include?('users')}" do %>
-                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                  <span class="material-symbols-outlined text-xs mr-3">id_card</span>
                   <span>Funcionários</span>
                 <% end %>
                 
                 <%= link_to clientes_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'clientes' || request.path.include?('clientes')}" do %>
-                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                  <span class="material-symbols-outlined text-xs mr-3">person_add</span>
                   <span>Clientes</span>
                 <% end %>
               </div>
@@ -191,7 +185,7 @@
             %>
             <div class="flex items-center justify-between px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if config_controller_ativo || config_path_ativo}" data-submenu="config-submenu">
               <div class="flex items-center">
-                <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                <span class="material-symbols-outlined text-xs mr-3">manufacturing</span>
                 <span>Configurações</span>
               </div>
               <svg class="h-3 w-3 transition-transform submenu-arrow text-tags-branco/70 #{'rotate-180' if config_submenu_ativo}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,12 +196,12 @@
             <div class="submenu ml-3 mt-0.5 <%= 'hidden' unless config_submenu_ativo %>" id="config-submenu">
               <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
                 <%= link_to configuracoes_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'configuracoes' || request.path.include?('configuracoes')}" do %>
-                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                  <span class="material-symbols-outlined text-xs mr-3">store</span>
                   <span>Perfil da Loja</span>
                 <% end %>
                 
                 <%= link_to '#', class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'taxas' || request.path.include?('taxas')}" do %>
-                  <div class="h-1.5 w-1.5 bg-tags-branco rounded-full mr-2"></div>
+                  <span class="material-symbols-outlined text-xs mr-3">credit_card_gear</span>
                   <span>Taxas Cartão</span>
                 <% end %>
               </div>

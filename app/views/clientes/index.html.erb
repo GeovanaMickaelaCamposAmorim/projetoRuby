@@ -1,9 +1,7 @@
 <% content_for :page_title, "Clientes" %>
 <% content_for :page_description, "Gerencie os clientes do sistema" %>
 <% content_for :page_icon do %>
-  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-  </svg>
+  <span class="material-symbols-outlined text-xs">person_add</span>
 <% end %>
 
 <div class="container mx-auto">
@@ -182,9 +180,6 @@
 </dialog>
 
 <style>
-/* ================================
-   MODAL BASE STYLES - CENTRALIZADO
-   ================================ */
 
 /* Modal Base Styles */
 .modal-base {
@@ -195,7 +190,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 95%;
-  max-width: 800px; /* Tamanho adequado para formulário de clientes */
+  max-width: 800px; 
   max-height: 90vh;
   border-radius: 12px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -291,9 +286,6 @@
   }
 }
 
-/* ================================
-   ESTILOS ESPECÍFICOS PARA CLIENTES
-   ================================ */
 
 /* Ajustes para inputs e labels */
 .modal-content input,
@@ -333,7 +325,7 @@
   width: 100%;
 }
 
-/* Garantir que o grid funcione corretamente */
+
 .modal-content .grid {
   width: 100%;
 }
@@ -355,7 +347,7 @@
   }
 }
 
-/* Garantir que o conteúdo ocupe toda a largura */
+
 .modal-content > * {
   width: 100%;
 }
@@ -369,7 +361,7 @@
   background-color: #db2777;
 }
 
-/* Melhorar a aparência dos campos de texto */
+
 .modal-content input::placeholder,
 .modal-content textarea::placeholder {
   color: #9ca3af;
@@ -397,7 +389,7 @@
   margin-top: 1.5rem;
 }
 
-/* CORREÇÃO DOS BOTÕES - REMOVER LARGURA FORÇADA */
+/* CORREÇÃO DOS BOTÕES */
 .modal-content button,
 .modal-content input[type="submit"] {
   width: auto !important;
@@ -422,11 +414,8 @@
 </style>
 
 <script>
-// ================================
-// FUNÇÕES GLOBAIS DE MODAL - GARANTIR QUE EXISTEM
-// ================================
 
-// Função para abrir qualquer modal
+// Função para abrir  modal
 function abrirModal(modalId) {
   console.log('🎯 Abrindo modal:', modalId);
   const modal = document.getElementById(modalId);
@@ -481,9 +470,6 @@ console.log('✅ Funções globais de modal definidas!');
 </script>
 
 <script>
-// ================================
-// SISTEMA DE CLIENTES - MESMO PADRÃO DOS FUNCIONÁRIOS
-// ================================
 
 // Função para abrir modal de clientes
 async function abrirClienteModal(url) {
