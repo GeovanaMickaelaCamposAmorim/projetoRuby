@@ -67,7 +67,7 @@ class ProdutosController < ApplicationController
       :pro_nome, :pro_descricao, :pro_codigo, :pro_cor,
       :pro_valor_venda, :pro_valor_custo, :pro_quantidade,
       :pro_status, :pro_status_estoque, :pro_estoque_minimo,
-      :tipo_id, :marca_id, :tamanho_id
+      :tipo_id, :marca_id, :tamanho_id, :pro_valor_promo
     )
   end
 

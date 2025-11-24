@@ -1,0 +1,105 @@
+<% content_for :page_title, "Controle de Crediário" %>
+<% content_for :page_description, "Gerencie e monitore os crediários dos clientes" %>
+<% content_for :page_icon do %>
+  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+  </svg>
+<% end %>
+
+<div class="container mx-auto flex">
+  <div class="min-h-screen w-full">
+    <!-- Cards resumo -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <p class="text-gray-600 font-medium">Total de Fichas</p>
+        <p class="text-3xl font-bold text-gray-800"><%= @total_fichas %></p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <p class="text-gray-600 font-medium">Clientes Pendentes</p>
+        <p class="text-3xl font-bold text-orange-600"><%= @clientes_pendentes %></p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <p class="text-gray-600 font-medium">Valor Total a Pagar</p>
+        <p class="text-3xl font-bold text-red-600"><%= number_to_currency(@valor_total_pagar) %></p>
+      </div>
+    </div>
+
+    <!-- Card branco envolvendo busca e grade -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+      <!-- Formulário de Filtros -->
+      <%= form_with url: ficha_crediarios_path, method: :get, local: true, class: "mb-6" do %>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <!-- Filtro por Nome do Cliente -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Cliente</label>
+            <%= text_field_tag :search, params[:search], 
+                  placeholder: "Buscar por nome do cliente",
+                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+          </div>
+          
+          <!-- Filtro por Status -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <%= select_tag :status, 
+                  options_for_select([
+                    ['Todos os status', ''],
+                    ['Pendente', 'pendente'],
+                    ['Concluída', 'concluida']
+                  ], params[:status]), 
+                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+          </div>
+        
+        <!-- Botões de ação dos filtros -->
+        <div class="flex gap-2">
+          <%= submit_tag "Buscar", class:"bg-tags-branco border border-tags-cinza text-tags-cinza hover:bg-tags-cinza hover:text-tags-branco font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer" %>
+          <%= link_to "Limpar Filtros", ficha_crediarios_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" %>
+        </div>
+      <% end %>
+
+      <!-- Tabela -->
+      <div class="overflow-hidden">
+        <table class="w-full text-left">
+          <thead class="bg-gray-100 text-gray-700">
+            <tr>
+              <th class="px-6 py-3 font-medium">Cliente</th>
+              <th class="px-6 py-3 font-medium">Contratante</th>
+              <th class="px-6 py-3 font-medium">Valor Total</th>
+              <th class="px-6 py-3 font-medium">Status</th>
+              <th class="px-6 py-3 font-medium">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-black">
+            <% @ficha_crediarios.each do |ficha| %>
+              <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location='<%= ficha_crediario_path(ficha) %>'">
+                <td class="px-6 py-3 font-medium">
+                  <%= ficha.cliente.nome %>
+                </td>
+                <td class="px-6 py-3">
+                  <%= ficha.contratante.nome %>
+                </td>
+                <td class="px-6 py-3 font-semibold <%= ficha.fic_status == 'pendente' ? 'text-red-600' : 'text-green-600' %>">
+                  <%= number_to_currency(ficha.fic_valor_total) %>
+                </td>
+                <td class="px-6 py-3">
+                  <span class="px-3 py-1 rounded-full text-xs font-medium <%= ficha.fic_status == 'pendente' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800' %>">
+                    <%= ficha.fic_status.humanize %>
+                  </span>
+                </td>
+                <td class="px-6 py-3 flex gap-3" onclick="event.stopPropagation()">
+                  <%= link_to "Visualizar", ficha_crediario_path(ficha), 
+                      class: 'text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200' %>
+                  <%= link_to "Editar", edit_ficha_crediario_path(ficha), 
+                      class: 'text-green-600 hover:text-green-900 font-medium text-sm px-3 py-1 border border-green-600 rounded hover:bg-green-50 transition-colors duration-200' %>
+                  <%= link_to "Excluir", ficha_crediario_path(ficha), 
+                      method: :delete, 
+                      data: { confirm: 'Tem certeza que deseja excluir esta ficha?' },
+                      class: 'text-red-600 hover:text-red-900 font-medium text-sm px-3 py-1 border border-red-600 rounded hover:bg-red-50 transition-colors duration-200' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ficha_crediario: one
+  mov_tipo: MyString
+  mov_valor: 9.99
+  mov_observacao: MyText
+
+two:
+  ficha_crediario: two
+  mov_tipo: MyString
+  mov_valor: 9.99
+  mov_observacao: MyText

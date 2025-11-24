@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cliente: one
+  contratante: one
+  fic_valor_total: 9.99
+  fic_status: MyString
+
+two:
+  cliente: two
+  contratante: two
+  fic_valor_total: 9.99
+  fic_status: MyString

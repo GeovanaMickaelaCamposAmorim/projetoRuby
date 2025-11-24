@@ -1,0 +1,37 @@
+<%= form_with(model: movimentacao_crediario, class: "contents") do |form| %>
+  <% if movimentacao_crediario.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(movimentacao_crediario.errors.count, "error") %> prohibited this movimentacao_crediario from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% movimentacao_crediario.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :ficha_crediario_id %>
+    <%= form.text_field :ficha_crediario_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": movimentacao_crediario.errors[:ficha_crediario_id].none?, "border-red-400 focus:outline-red-600": movimentacao_crediario.errors[:ficha_crediario_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mov_tipo %>
+    <%= form.text_field :mov_tipo, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": movimentacao_crediario.errors[:mov_tipo].none?, "border-red-400 focus:outline-red-600": movimentacao_crediario.errors[:mov_tipo].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mov_valor %>
+    <%= form.text_field :mov_valor, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": movimentacao_crediario.errors[:mov_valor].none?, "border-red-400 focus:outline-red-600": movimentacao_crediario.errors[:mov_valor].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mov_observacao %>
+    <%= form.textarea :mov_observacao, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": movimentacao_crediario.errors[:mov_observacao].none?, "border-red-400 focus:outline-red-600": movimentacao_crediario.errors[:mov_observacao].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

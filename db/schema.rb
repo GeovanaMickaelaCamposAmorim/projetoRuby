@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_15_214025) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_23_141721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -110,6 +110,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_15_214025) do
     t.index ["user_id"], name: "index_estoque_movimentacoes_on_user_id"
   end
 
+  create_table "ficha_crediarios", force: :cascade do |t|
+    t.bigint "cliente_id", null: false
+    t.bigint "contratante_id", null: false
+    t.decimal "fic_valor_total", precision: 10, scale: 2, default: "0.0"
+    t.string "fic_status", default: "pendente"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cliente_id"], name: "index_ficha_crediarios_on_cliente_id"
+    t.index ["contratante_id"], name: "index_ficha_crediarios_on_contratante_id"
+  end
+
   create_table "gastos", force: :cascade do |t|
     t.datetime "gas_data", null: false
     t.string "gas_descricao", null: false
@@ -158,6 +169,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_15_214025) do
     t.index ["contratante_id"], name: "index_marcas_on_contratante_id"
   end
 
+  create_table "movimentacao_crediarios", force: :cascade do |t|
+    t.bigint "ficha_crediario_id", null: false
+    t.string "mov_tipo"
+    t.decimal "mov_valor", precision: 10, scale: 2, default: "0.0"
+    t.text "mov_observacao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ficha_crediario_id"], name: "index_movimentacao_crediarios_on_ficha_crediario_id"
+  end
+
   create_table "pixes", force: :cascade do |t|
     t.string "pix_nome", null: false
     t.string "pix_chave", null: false
@@ -184,6 +205,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_15_214025) do
     t.string "pro_nome"
     t.text "pro_descricao"
     t.string "pro_codigo"
+    t.decimal "pro_valor_promo", precision: 10, scale: 2
     t.index ["contratante_id"], name: "index_produtos_on_contratante_id"
     t.index ["marca_id"], name: "index_produtos_on_marca_id"
     t.index ["tamanho_id"], name: "index_produtos_on_tamanho_id"
@@ -295,9 +317,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_15_214025) do
   add_foreign_key "estoque_movimentacoes", "contratantes"
   add_foreign_key "estoque_movimentacoes", "produtos"
   add_foreign_key "estoque_movimentacoes", "users"
+  add_foreign_key "ficha_crediarios", "clientes"
+  add_foreign_key "ficha_crediarios", "contratantes"
   add_foreign_key "gastos", "contratantes"
   add_foreign_key "gastos", "users"
   add_foreign_key "lojas", "contratantes"
+  add_foreign_key "movimentacao_crediarios", "ficha_crediarios"
   add_foreign_key "pixes", "contratantes"
   add_foreign_key "produtos", "contratantes"
   add_foreign_key "produtos", "marcas"
