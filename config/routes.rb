@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   root "pdv#index"
 
   # Adicione no routes.rb
-get "etiquetas/teste", to: "tag_templates#teste", defaults: { format: :pdf }
+  get "etiquetas/teste", to: "tag_templates#teste", defaults: { format: :pdf }
 
   # Rotas para geração de etiquetas
   get "gerar_etiqueta", to: "tag_templates#new", as: :gerar_etiqueta
@@ -22,17 +22,27 @@ get "etiquetas/teste", to: "tag_templates#teste", defaults: { format: :pdf }
   # Rotas principais
   resources :gastos, :marcas, :tipos, :tamanhos, :taxa_cartoes, :pixes
 
+  resources :users
+  resources :clientes
+
+  resources :gastos do
+    collection do
+      get "new", defaults: { format: :html }
+      get "modal", to: "gastos#new"
+    end
+  end
+
   # Vendas SEM show, apenas com details
   resources :vendas, except: [ :show ] do
-    get "details", on: :member
+    get "detalhes", on: :member
   end
+
 
   # Produtos SEM show
   resources :produtos, except: [ :show ]
   get "/produtos/search", to: "produtos#search"
 
-  resources :clientes, except: [ :show ]
-  resources :users, except: [ :show ]
+  # Configurações
   resources :configuracoes, only: [ :index, :update ]
 
   # Health check

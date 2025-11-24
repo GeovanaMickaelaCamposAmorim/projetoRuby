@@ -1,34 +1,36 @@
 <% content_for :page_title, "Clientes" %>
 <% content_for :page_description, "Gerencie os clientes do sistema" %>
 <% content_for :page_icon do %>
-  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-  </svg>
+  <span class="material-symbols-outlined text-xs">person_add</span>
 <% end %>
 
-
-<div class="h-full flex flex-col ">
-  <div class="mb-8">
-
-    <div class="flex justify-end items-center mb-2">
-      <%= link_to 'Novo Cliente', new_cliente_path, class: 'bg-tags-rosa hover:bg-tags-rosa-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200' %>
+<div class="container mx-auto">
+  <div class="mb-2">
+    <div class="flex justify-end items-center">
+      <!-- Botão Novo Cliente COM MODAL -->
+      <button onclick="abrirClienteModal('<%= new_cliente_path %>')" 
+              class="px-6 py-3 bg-tags-rosa text-white rounded-lg font-medium hover:bg-tags-rosa-dark transition-colors duration-200 flex items-center gap-2 cursor-pointer">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Novo Cliente
+      </button>
     </div>
 
     <hr class="border-t border-gray-300 my-4">
 
     <div class="flex flex-col sm:flex-row justify-end items-start sm:items-center gap-4 mb-6">
-      
-      <div class="w-full sm:w-2/3 bg-tags-branco">
+      <div class="w-full sm:w-2/3">
         <%= form_with url: clientes_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-2" do %>
           <!-- Campo de busca por texto -->
           <div class="flex-1">
             <%= text_field_tag :search, params[:search], 
-                  class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+                  class: "w-full bg-tags-branco border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
                   placeholder: "Buscar por nome, email ou telefone..." %>
           </div>
           
           <!-- Filtro por status -->
-          <div class="w-full sm:w-48">
+          <div class="w-full sm:w-48 bg-tags-branco rounded-lg">
             <%= select_tag :status, 
                   options_for_select([
                     ['Todos os status', ''],
@@ -40,7 +42,7 @@
           
           <!-- Botões -->
           <div class="flex gap-2">
-            <%= submit_tag "Buscar", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" %>
+            <%= submit_tag "Buscar", class: "bg-tags-branco border border-tags-cinza text-tags-cinza hover:bg-tags-cinza hover:text-tags-branco font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer" %>
             <%= link_to "Limpar", clientes_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" %>
           </div>
         <% end %>
@@ -86,12 +88,25 @@
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-center">
                     <div class="flex justify-center space-x-2">
-                      <%= link_to 'Editar', edit_cliente_path(cliente), 
-                                  class: 'text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200' %>
-                      <%= link_to 'Excluir', cliente_path(cliente), 
+                      <!-- Botão Visualizar - NOVO -->
+                      <button onclick="abrirClienteModal('<%= cliente_path(cliente) %>')" 
+                              class="text-green-600 hover:text-green-900 font-medium text-sm px-3 py-1 border border-green-600 rounded hover:bg-green-50 transition-colors duration-200 cursor-pointer">
+                        Visualizar
+                      </button>
+                      
+                      <!-- Botão Editar COM MODAL -->
+                      <button onclick="abrirClienteModal('<%= edit_cliente_path(cliente) %>')" 
+                              class="text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
+                        Editar
+                      </button>
+                      
+                      <!-- Botão Excluir -->
+                      <%= link_to cliente_path(cliente), 
                                   method: :delete, 
                                   data: { confirm: 'Tem certeza que deseja excluir este cliente?' },
-                                  class: 'text-red-600 hover:text-red-900 font-medium text-sm px-3 py-1 border border-red-600 rounded hover:bg-red-50 transition-colors duration-200' %>
+                                  class: "text-red-600 hover:text-red-900 font-medium text-sm px-3 py-1 border border-red-600 rounded hover:bg-red-50 transition-colors duration-200" do %>
+                        Excluir
+                      <% end %>
                     </div>
                   </td>
                 </tr>
@@ -101,16 +116,487 @@
         </div>
       </div>
     <% else %>
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-        <h5 class="text-lg font-medium text-blue-800 mb-2">
-          <% if params[:search].present? || params[:status].present? %>
-            Nenhum cliente encontrado com os filtros aplicados
-          <% else %>
-            Nenhum cliente cadastrado
-          <% end %>
-        </h5>
-        <p class="text-blue-600">Clique em "Novo Cliente" para começar.</p>
+      <div class="bg-white rounded-lg shadow p-8 text-center">
+        <div class="max-w-md mx-auto">
+          <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">
+            <% if params[:search].present? || params[:status].present? %>
+              Nenhum cliente encontrado
+            <% else %>
+              Nenhum cliente cadastrado
+            <% end %>
+          </h3>
+          <p class="text-gray-500 mb-4">
+            <% if params[:search].present? || params[:status].present? %>
+              Tente ajustar os filtros de busca.
+            <% else %>
+              Comece cadastrando seus clientes.
+            <% end %>
+          </p>
+          <!-- Botão do estado vazio também com modal -->
+          <button onclick="abrirClienteModal('<%= new_cliente_path %>')" 
+                  class="px-6 py-2 bg-tags-rosa text-white rounded-lg font-medium hover:bg-tags-rosa-dark transition-colors duration-200 inline-flex items-center gap-2 cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Novo Cliente
+          </button>
+        </div>
       </div>
     <% end %>
   </div>
 </div>
+
+<!-- Modal para Clientes -->
+<dialog id="clienteModal" class="modal-base">
+  <div class="modal-container">
+    <!-- Header -->
+    <div class="modal-header no-print">
+      <h3 class="modal-title" id="clienteModalTitle">Carregando...</h3>
+      <button type="button" onclick="fecharModal('clienteModal')" class="modal-close-btn" title="Fechar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content-container">
+      <div id="clienteFormContent" class="modal-content">
+        <div class="flex justify-center items-center">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
+          <span class="ml-2 text-gray-600">Carregando...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer - VAZIO -->
+    <div class="modal-footer no-print">
+      <!-- Sem botões - já temos Cancelar nos formulários -->
+    </div>
+  </div>
+</dialog>
+
+<style>
+
+/* Modal Base Styles */
+.modal-base {
+  border: none;
+  padding: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  max-width: 800px; 
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  background: white;
+  z-index: 1000;
+}
+
+.modal-base[open] {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-base::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-container {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #181818;
+  margin: 0;
+}
+
+.modal-close-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+}
+
+.modal-close-btn:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.modal-content-container {
+  max-height: calc(90vh - 120px);
+  overflow-y: auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+.modal-content {
+  padding: 1.5rem 0;
+  width: 100%;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+  position: sticky;
+  bottom: 0;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+
+/* Ajustes para inputs e labels */
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  width: 100%;
+  background: white;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+}
+
+/* Melhorar a aparência dos radio buttons */
+.modal-content input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #ec4899;
+}
+
+/* Estilos para os campos de formulário */
+.modal-content .space-y-4 > div {
+  width: 100%;
+}
+
+.modal-content label {
+  display: block;
+  width: 100%;
+}
+
+
+.modal-content .grid {
+  width: 100%;
+}
+
+/* Ajustes de responsividade */
+@media (max-width: 768px) {
+  .modal-base {
+    width: 98%;
+    max-width: 98%;
+    margin: 1%;
+  }
+  
+  .modal-content-container {
+    padding: 0 1rem;
+  }
+  
+  .modal-content .grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+.modal-content > * {
+  width: 100%;
+}
+
+/* Estilos para os botões */
+.modal-content .bg-tags-rosa {
+  background-color: #ec4899;
+}
+
+.modal-content .bg-tags-rosa:hover {
+  background-color: #db2777;
+}
+
+
+.modal-content input::placeholder,
+.modal-content textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Estilo para seções */
+.modal-content .border-b {
+  border-color: #e5e7eb;
+}
+
+.modal-content .border-t {
+  border-color: #e5e7eb;
+}
+
+/* Ajustar espaçamento interno do modal */
+.modal-content .space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.modal-content .space-y-3 > * + * {
+  margin-top: 0.75rem;
+}
+
+.modal-content .space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+/* CORREÇÃO DOS BOTÕES */
+.modal-content button,
+.modal-content input[type="submit"] {
+  width: auto !important;
+  min-width: auto !important;
+  flex: none !important;
+}
+
+.modal-content .flex.justify-end > * {
+  flex: none !important;
+  width: auto !important;
+  min-width: auto !important;
+}
+
+/* CORREÇÃO DAS CORES TAGS */
+.modal-content .bg-tags-rosa {
+  background-color: #ED215E !important;
+}
+
+.modal-content .bg-tags-rosa:hover {
+  background-color: #C81A4E !important;
+}
+</style>
+
+<script>
+
+// Função para abrir  modal
+function abrirModal(modalId) {
+  console.log('🎯 Abrindo modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.showModal();
+    modal.classList.add('modal-open');
+    
+    // Adicionar evento para fechar com ESC
+    modal.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        fecharModal(modalId);
+      }
+    });
+    
+    // Adicionar backdrop click
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        fecharModal(modalId);
+      }
+    });
+  } else {
+    console.error('❌ Modal não encontrado:', modalId);
+  }
+}
+
+// Função para fechar qualquer modal
+function fecharModal(modalId) {
+  console.log('🎯 Fechando modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.close();
+    modal.classList.remove('modal-open');
+  }
+}
+
+// Fechar modal com Cancelar (função global)
+function cancelarModal() {
+  console.log('🎯 Cancelando modal...');
+  const modals = document.querySelectorAll('dialog[open]');
+  modals.forEach(modal => {
+    modal.close();
+    modal.classList.remove('modal-open');
+  });
+}
+
+// Tornar funções globais
+window.abrirModal = abrirModal;
+window.fecharModal = fecharModal;
+window.cancelarModal = cancelarModal;
+
+console.log('✅ Funções globais de modal definidas!');
+</script>
+
+<script>
+
+// Função para abrir modal de clientes
+async function abrirClienteModal(url) {
+  try {
+    console.log('🔍 Abrindo modal de cliente para:', url);
+    
+    // Mostrar loading
+    document.getElementById('clienteFormContent').innerHTML = `
+      <div class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
+        <span class="ml-2 text-gray-600">Carregando...</span>
+      </div>
+    `;
+
+    // Abrir modal
+    abrirModal('clienteModal');
+
+    // Buscar o conteúdo
+    const response = await fetch(url, {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
+    }
+    
+    const html = await response.text();
+    
+    // Inserir o conteúdo diretamente
+    document.getElementById('clienteFormContent').innerHTML = html;
+    
+    // Atualizar o título do modal
+    const modalTitle = document.getElementById('clienteModalTitle');
+    if (modalTitle) {
+      if (url.includes('new')) {
+        modalTitle.textContent = 'Novo Cliente';
+      } else if (url.includes('edit')) {
+        modalTitle.textContent = 'Editar Cliente';
+      } else {
+        modalTitle.textContent = 'Visualizar Cliente';
+      }
+    }
+    
+    console.log('✅ Modal de cliente carregado com sucesso!');
+    
+    // CONFIGURAR O SUBMIT DO FORMULÁRIO - AGORA FUNCIONANDO!
+    setupClienteFormSubmit();
+    
+  } catch (error) {
+    console.error('Erro ao abrir modal de cliente:', error);
+    document.getElementById('clienteFormContent').innerHTML = `
+      <div class="text-center py-8 text-red-600">
+        <p class="font-medium">Erro ao carregar</p>
+        <p class="text-sm text-gray-500 mt-2">${error.message}</p>
+      </div>
+    `;
+  }
+}
+
+// CONFIGURAR SUBMIT DO FORMULÁRIO - FUNÇÃO NOVA
+function setupClienteFormSubmit() {
+  const form = document.getElementById('cliente-form');
+  if (form) {
+    console.log('🎯 Configurando submit do formulário cliente...');
+    
+    // Remover event listeners antigos
+    form.removeEventListener('submit', handleClienteSubmit);
+    
+    // Adicionar novo event listener
+    form.addEventListener('submit', handleClienteSubmit);
+    
+    console.log('✅ Submit do formulário configurado!');
+  } else {
+    console.log('⏱️ Formulário não encontrado ainda, tentando novamente...');
+    setTimeout(setupClienteFormSubmit, 100);
+  }
+}
+
+// FUNÇÃO PRINCIPAL DE SUBMIT - CORRIGIDA
+async function handleClienteSubmit(event) {
+  console.log('🚀 SUBMIT INTERCEPTADO - Impedindo comportamento padrão!');
+  event.preventDefault();
+  
+  const form = event.target;
+  const formData = new FormData(form);
+  
+  console.log('📤 Enviando via fetch para:', form.action);
+  
+  try {
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'text/html'
+      }
+    });
+    
+    console.log('📥 Resposta recebida. Status:', response.status);
+    
+    if (response.ok) {
+      // SUCESSO
+      console.log('✅ Cliente salvo com sucesso!');
+      fecharModal('clienteModal');
+      window.location.reload();
+    } else {
+      // ERRO - MOSTRAR NO MODAL
+      console.log('⚠️ Erros de validação - mostrando no modal');
+      const html = await response.text();
+      document.getElementById('clienteFormContent').innerHTML = html;
+      
+      // RECONFIGURAR O SUBMIT PARA O NOVO FORMULÁRIO
+      setTimeout(setupClienteFormSubmit, 100);
+    }
+  } catch (error) {
+    console.error('❌ Erro na requisição:', error);
+    alert('Erro ao salvar cliente: ' + error.message);
+  }
+}
+
+// Inicializar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 Sistema de clientes carregado');
+  setupClienteFormSubmit();
+});
+
+</script>
+

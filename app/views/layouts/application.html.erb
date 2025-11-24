@@ -13,11 +13,48 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
+    
+    <%# Material Symbols %>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     
     <style>
+      
+      /* Material Symbols */
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+      }
+
+      /* Animações modal */
+      .backdrop-blur-sm {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      
+      /* Transições suaves */
+      .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+      }
+      
+      /* Efeito de elevação sutil */
+      .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      
+      /* Hover effects modernos */
+      .hover\:shadow-md:hover {
+        box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.3);
+      }
+
+      /* Scrollbar hide */
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       .submenu { transition: all 0.3s ease-in-out; }
@@ -25,6 +62,7 @@
     </style>
   </head>
 
+  
   <body class="h-screen"> 
     <% if authenticated? %>
       <div class="flex h-screen overflow-hidden"> 
@@ -68,16 +106,20 @@
           <main class="flex-1 min-h-0 overflow-hidden px-4 pb-4">
             <div class="h-full flex flex-col">
 
-              <!-- Header -->
+             <!-- Header -->
               <div class="px-4 mt-2">
                 <div class="flex items-center gap-2">
-                  <div class="bg-tags-rosa p-1.5 rounded-lg">
+                  <div class="bg-tags-rosa p-2 rounded-lg flex items-center justify-center">
                     <% if content_for?(:page_icon) %>
-                      <%= yield(:page_icon) %>
+                      <div class="text-tags-branco flex items-center justify-center">
+                        <%= yield(:page_icon) %>
+                      </div>
                     <% else %>
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <%# ... %>
-                      </svg>
+                      <div class="text-tags-branco flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px] leading-none">
+                          <%# ... %>
+                        </span>
+                      </div>
                     <% end %>
                   </div>
                   <div>
@@ -88,6 +130,8 @@
                       <%= content_for?(:page_description) ? yield(:page_description) : "Sistema de Gestão" %>
                     </p>
                   </div>
+                  
+
                 </div>
               </div>
 
@@ -137,28 +181,9 @@
               if (arrow) arrow.classList.remove('rotate-180');
             }
             
-            // Close other submenus
-            document.querySelectorAll('.submenu').forEach(otherSubmenu => {
-              if (otherSubmenu.id !== submenuId && !otherSubmenu.classList.contains('hidden')) {
-                otherSubmenu.classList.add('hidden');
-                const otherArrow = otherSubmenu.previousElementSibling?.querySelector('.submenu-arrow');
-                if (otherArrow) otherArrow.classList.remove('rotate-180');
-              }
-            });
           });
         });
-        
-        // Close submenus when clicking outside
-        document.addEventListener('click', function(e) {
-          if (!e.target.closest('[data-submenu]') && !e.target.closest('.submenu')) {
-            document.querySelectorAll('.submenu').forEach(submenu => {
-              submenu.classList.add('hidden');
-            });
-            document.querySelectorAll('.submenu-arrow').forEach(arrow => {
-              arrow.classList.remove('rotate-180');
-            });
-          }
-        });
+
       }
 
       // Inicializa quando a página carrega
@@ -169,5 +194,8 @@
       document.addEventListener('turbo:render', initializeSubmenus);
       document.addEventListener('turbo:frame-render', initializeSubmenus);
     </script>
+
+    <%= turbo_frame_tag "modal" %>
+
   </body>
 </html>

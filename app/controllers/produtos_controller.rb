@@ -1,6 +1,6 @@
 class ProdutosController < ApplicationController
-  before_action :set_produto, only: [:edit, :update, :destroy]
-  before_action :carregar_dependencias, only: [:index, :new, :edit, :create, :update]
+  before_action :set_produto, only: [ :edit, :update, :destroy ]
+  before_action :carregar_dependencias, only: [ :index, :new, :edit, :create, :update ]
 
   def index
     @produtos = Produto.where(contratante_id: current_user.contratante_id)
@@ -10,36 +10,39 @@ class ProdutosController < ApplicationController
 
   def new
     @produto = Produto.new
+    render layout: false  # SEMPRE sem layout para o modal
+  end
+
+  def edit
+    render layout: false  # SEMPRE sem layout para o modal
   end
 
   def create
     @produto = Produto.new(produto_params)
     @produto.contratante_id = current_user.contratante_id
     if @produto.save
-      redirect_to produtos_path, notice: 'Produto criado com sucesso!'
+      redirect_to produtos_path, notice: "Produto criado com sucesso!"
     else
-      render :new, status: :unprocessable_entity
+      render :new, layout: false, status: :unprocessable_entity
     end
   end
 
-  def edit; end
-
   def update
     if @produto.update(produto_params)
-      redirect_to produtos_path, notice: 'Produto atualizado com sucesso!'
+      redirect_to produtos_path, notice: "Produto atualizado com sucesso!"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, layout: false, status: :unprocessable_entity
     end
   end
 
   def destroy
     @produto.destroy
-    redirect_to produtos_path, notice: 'Produto excluído com sucesso!'
+    redirect_to produtos_path, notice: "Produto excluído com sucesso!"
   end
 
   def search
     query = params[:q]
-    
+
     if query.present?
       produtos = Produto.where("pro_nome ILIKE ? OR pro_codigo ILIKE ?", "%#{query}%", "%#{query}%")
                       .where("pro_quantidade > 0")
@@ -52,7 +55,7 @@ class ProdutosController < ApplicationController
                       .order(:pro_nome)
                       .limit(8)
     end
-    
+
     render json: produtos
   end
 

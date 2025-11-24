@@ -1,11 +1,11 @@
 class VendasController < ApplicationController
-  before_action :set_venda, only: [:edit, :update, :destroy] # :show removido
+  before_action :set_venda, only: [ :edit, :update, :destroy ]
 
   def index
     @vendas = Venda.where(contratante_id: current_user.contratante_id)
                    .includes(:user, :cliente)
                    .order(ven_data: :desc)
-    
+
     calcular_estatisticas
   end
 
@@ -20,26 +20,26 @@ class VendasController < ApplicationController
   end
 
   def create
-  @venda = Venda.new(venda_params)
-  @venda.user = current_user
-  @venda.contratante_id = current_user.contratante_id
+    @venda = Venda.new(venda_params)
+    @venda.user = current_user
+    @venda.contratante_id = current_user.contratante_id
 
-  if @venda.save
-    redirect_to vendas_path, notice: 'Venda registrada com sucesso!'  # Mudado para vendas_path
-  else
-    carregar_dependencias
-    render :new, status: :unprocessable_entity
+    if @venda.save
+      redirect_to vendas_path, notice: "Venda registrada com sucesso!"
+    else
+      carregar_dependencias
+      render :new, status: :unprocessable_entity
+    end
   end
-end
 
-def update
-  if @venda.update(venda_params)
-    redirect_to vendas_path, notice: 'Venda atualizada com sucesso!' 
-  else
-    carregar_dependencias
-    render :edit, status: :unprocessable_entity
+  def update
+    if @venda.update(venda_params)
+      redirect_to vendas_path, notice: "Venda atualizada com sucesso!"
+    else
+      carregar_dependencias
+      render :edit, status: :unprocessable_entity
+    end
   end
-end
 
   def edit
     carregar_dependencias
@@ -47,40 +47,42 @@ end
 
   def destroy
     @venda.destroy
-    redirect_to vendas_path, notice: 'Venda excluída com sucesso!'
+    redirect_to vendas_path, notice: "Venda excluída com sucesso!"
   end
 
-  def details
-    @venda = Venda.where(contratante_id: current_user.contratante_id)
-                  .includes(:user, :cliente, venda_items: :produto)
-                  .find(params[:id])
-    
-    valor_total = number_to_currency(@venda.ven_valor_total, unit: 'R$ ', delimiter: '.', separator: ',')
-    desconto = number_to_currency(@venda.ven_desconto || 0, unit: 'R$ ', delimiter: '.', separator: ',')
-    valor_final = number_to_currency(@venda.ven_valor_final, unit: 'R$ ', delimiter: '.', separator: ',')
-    
+  def detalhes
+    venda = Venda.where(contratante_id: current_user.contratante_id)
+                 .includes(:user, :cliente, venda_items: :produto)
+                 .find(params[:id])
+
     render json: {
-      id: @venda.id,
-      numero: @venda.id.to_s.rjust(5, '0'),
-      data: @venda.ven_data.strftime('%d/%m/%Y %H:%M'),
-      cliente: @venda.cliente&.nome || 'Cliente Avulso',
-      vendedor: @venda.user.usu_nome,
-      valor_total: valor_total,
-      desconto: desconto,
-      valor_final: valor_final,
-      forma_pagamento: @venda.ven_forma_pagamento&.capitalize || 'N/A',
-      itens: @venda.venda_items.map do |item|
-        preco_unitario = number_to_currency(item.vei_preco_unitario, unit: 'R$ ', delimiter: '.', separator: ',')
-        subtotal = number_to_currency(item.vei_subtotal, unit: 'R$ ', delimiter: '.', separator: ',')
-        
+      id: venda.id,
+      ven_data: venda.ven_data,
+      ven_valor_total: venda.ven_valor_total,
+      ven_desconto: venda.ven_desconto,
+      ven_valor_final: venda.ven_valor_final,
+      ven_forma_pagamento: venda.ven_forma_pagamento,
+      cliente: {
+        cli_nome: venda.cliente&.cli_nome
+      },
+      user: {
+        usu_nome: venda.user&.usu_nome
+      },
+      itens: venda.venda_items.map do |item|
         {
-          produto: item.produto.nome,
+          produto: {
+            pro_nome: item.produto&.pro_nome
+          },
           quantidade: item.vei_quantidade,
-          preco_unitario: preco_unitario,
-          subtotal: subtotal
+          preco_unitario: item.vei_preco_unitario,
+          subtotal: item.vei_subtotal
         }
       end
     }
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Venda não encontrada" }, status: :not_found
+  rescue => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
@@ -90,7 +92,7 @@ end
   end
 
   def venda_params
-    params.require(:venda).permit(:ven_data, :cliente_id, :ven_valor_total, 
+    params.require(:venda).permit(:ven_data, :cliente_id, :ven_valor_total,
                                  :ven_valor_final, :ven_valor_real, :ven_desconto,
                                  :ven_forma_pagamento)
   end
@@ -103,7 +105,7 @@ end
   def calcular_estatisticas
     hoje = Date.current
     vendas_scope = Venda.where(contratante_id: current_user.contratante_id)
-    
+
     @vendas_hoje = vendas_scope.where(ven_data: hoje.beginning_of_day..hoje.end_of_day)
                               .sum(:ven_valor_final)
     @vendas_mes = vendas_scope.where(ven_data: hoje.beginning_of_month..hoje.end_of_month)

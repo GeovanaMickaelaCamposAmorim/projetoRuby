@@ -1,5 +1,5 @@
 class MarcasController < ApplicationController
-  before_action :set_marca, only: [:show, :edit, :update, :destroy]
+  before_action :set_marca, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @marcas = Marca.where(contratante_id: current_user.contratante_id).order(:nome)
@@ -7,6 +7,7 @@ class MarcasController < ApplicationController
 
   def new
     @marca = Marca.new
+    render layout: false  # ← MESMO dos produtos
   end
 
   def create
@@ -14,34 +15,34 @@ class MarcasController < ApplicationController
     @marca.contratante_id = current_user.contratante_id
 
     if @marca.save
-      redirect_to marcas_path, notice: 'Marca criada com sucesso!'
+      redirect_to marcas_path, notice: "Marca criada com sucesso!"
     else
-      render :new, status: :unprocessable_entity
+      render :new, layout: false, status: :unprocessable_entity  # ← MESMO dos produtos
     end
   end
 
- def show
-  # Carrega produtos relacionados se quiser mostrar na view
-  @produtos = @marca.produtos if @marca.produtos.any?
-end
+  def show
+    @produtos = @marca.produtos if @marca.produtos.any?
+  end
 
   def edit
+    render layout: false  # ← MESMO dos produtos
   end
 
   def update
     if @marca.update(marca_params)
-      redirect_to marcas_path, notice: 'Marca atualizada com sucesso!'
+      redirect_to marcas_path, notice: "Marca atualizada com sucesso!"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, layout: false, status: :unprocessable_entity  # ← MESMO dos produtos
     end
   end
 
   def destroy
     if @marca.produtos.any?
-      redirect_to marcas_path, alert: 'Não é possível excluir a marca pois existem produtos vinculados.'
+      redirect_to marcas_path, alert: "Não é possível excluir a marca pois existem produtos vinculados."
     else
       @marca.destroy
-      redirect_to marcas_path, notice: 'Marca excluída com sucesso!'
+      redirect_to marcas_path, notice: "Marca excluída com sucesso!"
     end
   end
 

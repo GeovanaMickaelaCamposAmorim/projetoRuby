@@ -1,53 +1,62 @@
 class ClientesController < ApplicationController
-  before_action :set_cliente, only: [:edit, :update, :destroy]
+  before_action :set_cliente, only: [ :show, :edit, :update, :destroy ]
 
-def index
-  @clientes = Cliente.where(contratante_id: current_user.contratante_id)
-  
-  if params[:search].present?
-    search_term = "%#{params[:search]}%"
-    @clientes = @clientes.where(
-      "cli_nome ILIKE :search OR cli_email ILIKE :search OR cli_telefone1 ILIKE :search", 
-      search: search_term
-    )
+  def index
+    @clientes = Cliente.where(contratante_id: current_user.contratante_id)
+
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @clientes = @clientes.where(
+        "cli_nome ILIKE :search OR cli_email ILIKE :search OR cli_telefone1 ILIKE :search",
+        search: search_term
+      )
+    end
+
+    if params[:status].present?
+      @clientes = @clientes.where(status: params[:status])
+    end
+
+    @clientes = @clientes.order("cli_nome ASC")
   end
-    
- if params[:status].present?
-    @clientes = @clientes.where(status: params[:status])
+
+  def show
+    render layout: false
   end
-  
-  @clientes = @clientes.order('cli_nome ASC')
-end
 
   def new
-  @cliente = Cliente.new(status: 'ativo') 
+    @cliente = Cliente.new(status: "ativo")
+    render layout: false
   end
 
-  def create
+ def create
     @cliente = Cliente.new(cliente_params)
     @cliente.contratante_id = current_user.contratante_id
 
     if @cliente.save
-      redirect_to clientes_path, notice: 'Cliente criado com sucesso!'
+      redirect_to clientes_path, notice: "Cliente criado com sucesso!"
     else
-      render :new, status: :unprocessable_entity
-    end
-  end
 
-  def edit
+      render :new, layout: false, status: :unprocessable_entity
+    end
   end
 
   def update
     if @cliente.update(cliente_params)
-      redirect_to clientes_path, notice: 'Cliente atualizado com sucesso!'
+      redirect_to clientes_path, notice: "Cliente atualizado com sucesso!"
     else
-      render :edit, status: :unprocessable_entity
+
+      render :edit, layout: false, status: :unprocessable_entity
     end
   end
 
+  def edit
+    render layout: false
+  end
+
+
   def destroy
     @cliente.destroy
-    redirect_to clientes_path, notice: 'Cliente excluído com sucesso!'
+    redirect_to clientes_path, notice: "Cliente excluído com sucesso!"
   end
 
   private
@@ -58,7 +67,7 @@ end
 
   def cliente_params
     params.require(:cliente).permit(
-      :cli_nome, :cli_cpf, :cli_data_nasc, :cli_estado_civil, 
+      :cli_nome, :cli_cpf, :cli_data_nasc, :cli_estado_civil,
       :cli_endereco, :cli_telefone1, :cli_telefone2, :cli_email, :cli_observacao, :status
     )
   end

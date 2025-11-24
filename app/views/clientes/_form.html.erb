@@ -1,11 +1,11 @@
-<%= form_with model: @cliente, class: "max-w-4xl mx-auto p-6 " do |form| %>
-  <% if @cliente.errors.any? %>
+<%= form_with model: cliente, data: { remote: false }, id: "cliente-form", class: "w-full" do |form| %>
+  <% if cliente.errors.any? %>
     <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
       <h4 class="text-red-800 font-medium mb-2">
-        <%= pluralize(@cliente.errors.count, "erro") %> impediram este cliente de ser salvo:
+        <%= pluralize(cliente.errors.count, "erro") %> impediram este cliente de ser salvo:
       </h4>
       <ul class="text-red-700 list-disc list-inside">
-        <% @cliente.errors.full_messages.each do |message| %>
+        <% cliente.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>
@@ -17,23 +17,30 @@
       <h5 class="text-lg font-medium text-gray-900 border-b pb-2">Dados Pessoais</h5>
       
       <div>
-        <%= form.label :cli_nome, "Nome completo", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_field :cli_nome, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true %>
+        <%= form.label :cli_nome, "Nome Completo", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :cli_nome, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+              required: true %>
       </div>
 
       <div>
         <%= form.label :cli_email, "Email", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.email_field :cli_email, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        <%= form.email_field :cli_email, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
       </div>
 
       <div>
         <%= form.label :cli_cpf, "CPF", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_field :cli_cpf, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true %>
+        <%= form.text_field :cli_cpf, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+              required: true %>
       </div>
 
       <div>
         <%= form.label :cli_data_nasc, "Data de Nascimento", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.date_field :cli_data_nasc, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true %>
+        <%= form.date_field :cli_data_nasc, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+              required: true %>
       </div>
     </div>
 
@@ -42,36 +49,55 @@
       
       <div>
         <%= form.label :cli_telefone1, "Telefone Principal", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_field :cli_telefone1, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true %>
+        <%= form.text_field :cli_telefone1, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+              required: true %>
       </div>
 
       <div>
         <%= form.label :cli_telefone2, "Telefone Alternativo", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_field :cli_telefone2, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        <%= form.text_field :cli_telefone2, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
       </div>
 
       <div>
         <%= form.label :cli_endereco, "Endereço", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_area :cli_endereco, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", rows: 3, required: true %>
+        <%= form.text_area :cli_endereco, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+              rows: 1, 
+              required: true %>
       </div>
 
       <div>
         <%= form.label :cli_observacao, "Observações", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.text_area :cli_observacao, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", rows: 3 %>
+        <%= form.text_area :cli_observacao, 
+              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", 
+              rows: 1 %>
       </div>
     </div>
   </div>
 
-  <div>
-      <%= form.label :status, "Status", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.select :status, 
-          [['Ativo', 'ativo'], ['Inativo', 'inativo']], 
-          {}, 
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+  <div class="mt-6">
+    <h5 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Status</h5>
+    <div class="flex gap-6">
+      <label class="flex items-center gap-2 cursor-pointer">
+        <%= form.radio_button :status, 'ativo', class: "w-4 h-4 text-blue-500 focus:ring-2 focus:ring-blue-500 border-gray-300" %>
+        <span class="text-sm text-gray-700">Ativo</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <%= form.radio_button :status, 'inativo', class: "w-4 h-4 text-blue-500 focus:ring-2 focus:ring-blue-500 border-gray-300" %>
+        <span class="text-sm text-gray-700">Inativo</span>
+      </label>
     </div>
+  </div>
 
   <div class="mt-8 flex gap-3 justify-end">
-    <%= form.submit "Salvar Cliente", class: "bg-tags-rosa hover:bg-tags-rosa-dark text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer" %>
-    <%= link_to "Cancelar", clientes_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200" %>
+    <%= form.submit cliente.persisted? ? "Atualizar Cliente" : "Salvar Cliente", 
+          class: "bg-tags-rosa hover:bg-tags-rosa-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap" %>
+    
+    <button type="button" onclick="fecharModal('clienteModal')" 
+            class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap">
+      Cancelar
+    </button>
   </div>
 <% end %>

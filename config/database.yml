@@ -10,22 +10,21 @@ development:
   <<: *default
   database: tags_development 
   
-  # Suas configurações corretas:
+   # Suas configurações corretas:
   host: localhost
   port: 5000
   username: postgres
-  password: 12345678
+  password: postgres
 
 
 test:
   <<: *default
   database: tags_test
 
-  # ADICIONE AS MESMAS CONFIGURAÇÕES AQUI
   host: localhost
   port: 5000
   username: postgres
-  password: "12345678"
+  password: postgres
 
 
 
