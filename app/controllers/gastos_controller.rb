@@ -31,6 +31,7 @@ class GastosController < ApplicationController
     @usuarios = User.where(contratante_id: current_user.contratante_id).order(:usu_nome)
 
     @total_mes = Gasto.total_no_periodo(Date.today.beginning_of_month, Date.today.end_of_month, current_user.contratante_id)
+    @media_mensal = calcular_media_mensal
   end
 
   def new_modal
@@ -87,6 +88,17 @@ class GastosController < ApplicationController
   end
 
   private
+
+  def calcular_media_mensal
+    meses_com_gastos = Gasto.where(contratante_id: current_user.contratante_id)
+                           .select("DISTINCT DATE_TRUNC('month', gas_data) as mes")
+                           .map(&:mes)
+                           .compact
+    
+    return 0 if meses_com_gastos.empty?
+    total_gastos = Gasto.where(contratante_id: current_user.contratante_id).sum(:gas_valor)
+    total_gastos / meses_com_gastos.count
+  end
 
   def set_gasto
     @gasto = Gasto.where(contratante_id: current_user.contratante_id).find(params[:id])

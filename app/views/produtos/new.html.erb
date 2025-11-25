@@ -141,18 +141,29 @@
       </div>
 
       <div>
-        <%= form.label :pro_status_estoque, "Status do Estoque", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= form.select :pro_status_estoque, 
-              options_for_select([
-                ['Disponível', 'disponivel'],
-                ['Esgotado', 'esgotado'],
-                ['Sob Encomenda', 'sob_encomenda']
-              ], @produto.pro_status_estoque || 'disponivel'),
-              {},
-              class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Status do Estoque</label>
+      <div class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+        <% if produto.persisted? %>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= produto.classe_status_estoque %>">
+            <%= produto.texto_status_estoque %>
+          </span>
+          <p class="text-xs text-gray-500 mt-1">
+            Automático: 
+            <% if produto.disponivel? %>
+              Estoque acima do mínimo
+            <% elsif produto.baixo_estoque? %>
+              Estoque abaixo do mínimo
+            <% else %>
+              Produto esgotado
+            <% end %>
+          </p>
+        <% else %>
+          <span class="text-gray-500">Será calculado automaticamente após salvar</span>
+        <% end %>
       </div>
     </div>
   </div>
+</div>
 
   <!-- Botões -->
   <div class="mt-8 flex gap-3 justify-end">

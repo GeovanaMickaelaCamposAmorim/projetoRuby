@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_23_141721) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_035254) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -195,10 +195,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_23_141721) do
     t.string "pro_cor"
     t.decimal "pro_valor_venda", precision: 10, scale: 2, null: false
     t.decimal "pro_valor_custo", precision: 10, scale: 2
-    t.decimal "pro_quantidade", precision: 10, scale: 2, default: "0.0", null: false
+    t.integer "pro_quantidade", default: 0, null: false
     t.string "pro_status", default: "Ativo"
     t.string "pro_status_estoque", default: "em estoque"
-    t.decimal "pro_estoque_minimo", precision: 10, scale: 2, default: "0.0"
+    t.integer "pro_estoque_minimo", default: 0
     t.bigint "contratante_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

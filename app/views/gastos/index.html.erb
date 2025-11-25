@@ -26,18 +26,15 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <p class="text-gray-600 font-medium">Total de Gastos</p>
-        <p class="text-3xl font-bold text-red-600"><%= number_to_currency(@gastos.sum(&:gas_valor)) %></p>
+        <p class="text-3xl font-bold text-red-600"><%= number_to_currency(@gastos.sum(&:gas_valor), unit: "R$ ", separator: ",", delimiter: ".") %></p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <p class="text-gray-600 font-medium">Gastos Este Mês</p>
-        <p class="text-3xl font-bold text-gray-800"><%= number_to_currency(@total_mes) %></p>
+        <p class="text-3xl font-bold text-gray-800"><%= number_to_currency(@total_mes, unit: "R$ ", separator: ",", delimiter: ".") %></p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <p class="text-gray-600 font-medium">Média Mensal</p>
-        <%
-          media_mensal = @gastos.where('gas_data >= ?', 6.months.ago).sum(:gas_valor) / 6.0
-        %>
-        <p class="text-3xl font-bold text-gray-800"><%= number_to_currency(media_mensal) %></p>
+        <p class="text-3xl font-bold text-gray-800"><%= number_to_currency(@media_mensal, unit: "R$ ", separator: ",", delimiter: ".") %></p>
       </div>
     </div>
 
@@ -125,7 +122,7 @@
               <tr>
                 <td class="px-6 py-3"><%= gasto.gas_data.strftime('%d/%m/%Y') %></td>
                 <td class="px-6 py-3"><%= gasto.gas_descricao %></td>
-                <td class="px-6 py-3 text-red-600 font-semibold"><%= number_to_currency(gasto.gas_valor) %></td>
+                <td class="px-6 py-3 text-red-600 font-semibold"><%= number_to_currency(gasto.gas_valor, unit: "R$ ", separator: ",", delimiter: ".") %></td>
                 <td class="px-6 py-3"><%= gasto.user.usu_nome %></td>
                 <td class="px-6 py-3 flex gap-3">
                   <!-- Botão Editar -->
@@ -226,6 +223,12 @@ async function abrirGastoModal(url) {
         const isNew = url.includes('new');
         modalTitle.textContent = isNew ? 'Novo Gasto' : 'Editar Gasto';
       }
+
+      // Adicionar máscara para o campo de valor se existir
+      const valorField = document.getElementById('gasto_gas_valor');
+      if (valorField) {
+        aplicarMascaraValor(valorField);
+      }
     } else {
       document.getElementById('gastoFormContent').innerHTML = `
         <div class="text-center py-8 text-red-600">
@@ -244,12 +247,32 @@ async function abrirGastoModal(url) {
   }
 }
 
+// Função para aplicar máscara de valor monetário
+function aplicarMascaraValor(input) {
+  input.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    value = (value / 100).toFixed(2) + '';
+    value = value.replace(".", ",");
+    value = value.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+    value = value.replace(/(\d)(\d{3}),/g, "$1.$2,");
+    e.target.value = 'R$ ' + value;
+  });
+}
+
 // Função para lidar com submit do formulário
 function handleGastoSubmit(event) {
   event.preventDefault();
   
   const form = event.target;
   const formData = new FormData(form);
+  
+  // Processar o campo de valor antes do envio
+  const valorField = form.querySelector('#gasto_gas_valor');
+  if (valorField) {
+    // Converter formato brasileiro para float
+    let valor = valorField.value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+    formData.set('gasto[gas_valor]', valor);
+  }
   
   fetch(form.action, {
     method: form.method,
@@ -272,6 +295,11 @@ function handleGastoSubmit(event) {
         const errorForm = doc.querySelector('form');
         if (errorForm) {
           document.getElementById('gastoFormContent').innerHTML = errorForm.outerHTML;
+          // Reaplicar máscara após recarregar o formulário
+          const novoValorField = document.getElementById('gasto_gas_valor');
+          if (novoValorField) {
+            aplicarMascaraValor(novoValorField);
+          }
         }
       });
     }

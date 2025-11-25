@@ -16,7 +16,6 @@ class Gasto < ApplicationRecord
   validates :user_id, presence: true
   validates :contratante_id, presence: true
 
-
   # Scopes para consultas comuns
   scope :por_data, ->(data) { where(gas_data: data.beginning_of_day..data.end_of_day) }
   scope :por_periodo, ->(inicio, fim) { where(gas_data: inicio.beginning_of_day..fim.end_of_day) }
@@ -60,7 +59,8 @@ class Gasto < ApplicationRecord
   end
 
   def valor_formatado
-    "R$ #{'%.2f' % gas_valor}".gsub('.', ',')
+    # Usa number_to_currency do Rails para formatação correta
+    ApplicationController.helpers.number_to_currency(gas_valor, unit: "R$ ", separator: ",", delimiter: ".")
   end
 
   def descricao_resumida
@@ -75,17 +75,44 @@ class Gasto < ApplicationRecord
     contratante&.cnt_nome_loja || 'N/A'
   end
 
+  # Getter personalizado para o valor - converte para float
+  def gas_valor
+    valor = self[:gas_valor]
+    valor.is_a?(String) ? valor.to_f : valor
+  end
+
+  # Setter personalizado para o valor - converte string brasileira para float
+  def gas_valor=(value)
+    if value.is_a?(String)
+      # Remove R$, espaços e converte formato brasileiro para float
+      cleaned_value = value.to_s
+                          .gsub('R$', '')          # Remove R$
+                          .gsub(' ', '')           # Remove espaços
+                          .gsub(/\.(\d{3})/, '\1') # Remove pontos como separador de milhar
+                          .gsub(',', '.')          # Substitui vírgula por ponto
+      
+      value = cleaned_value.to_f
+    end
+    super(value)
+  end
+
+  # Método para obter o valor como string no formato brasileiro
+  def valor_para_formulario
+    return "" if gas_valor.nil?
+    "R$ #{'%.2f' % gas_valor}".gsub('.', ',')
+  end
+
   # Validações customizadas
   validate :data_nao_pode_ser_futura
   validate :valor_deve_ser_positivo
 
   private
 
- def data_nao_pode_ser_futura
-  if gas_data.present? && gas_data > Date.current
-    errors.add(:gas_data, "não pode ser uma data futura")
+  def data_nao_pode_ser_futura
+    if gas_data.present? && gas_data > Date.current
+      errors.add(:gas_data, "não pode ser uma data futura")
+    end
   end
- end
 
   def valor_deve_ser_positivo
     if gas_valor.present? && gas_valor <= 0
