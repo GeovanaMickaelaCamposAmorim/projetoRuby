@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :user_sessions, dependent: :destroy
   has_many :sessions, dependent: :destroy
   belongs_to :contratante, optional: true
-  has_many :gastos, foreign_key: 'user_id'
+  has_many :gastos, foreign_key: "user_id"
 
   enum :usu_tipo, { master: "master", admin: "admin", vendedor: "vendedor", cliente: "cliente" }
   enum :usu_status, { ativo: "Ativo", inativo: "Inativo" }, suffix: true
@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   alias_attribute :email_address, :usu_email
 
-  # MÉTODOS ADICIONAIS
+
   def self.existe_master?
     master.exists?
   end
@@ -23,8 +23,8 @@ class User < ApplicationRecord
     master.ativo.exists?
   end
 
-  # Escopo para usuários ativos
-  scope :ativos, -> { where(usu_status: 'Ativo') }
+
+  scope :ativos, -> { where(usu_status: "Ativo") }
 end
 
 
