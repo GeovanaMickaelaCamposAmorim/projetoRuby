@@ -25,13 +25,11 @@
           <!-- Logo centralizada entre as partes -->
           <div class="absolute top-15 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-white rounded-full border-4 border-[#4E4E4E] z-10 flex items-center justify-center" data-logo-border>
             <!-- Logo será carregada do perfil da loja -->
-            <span class="text-xs text-gray-500">Logo</span>
+            <%= image_tag current_contratante.logo, class: "object-cover rounded-full" %>
           </div>
           
           <!-- Parte de baixo da etiqueta -->
-         <div class="h-75 bg-[#faf7f4] relative">
-          <!-- Padrão sutil de textura -->
-          <div class="absolute inset-0 bg-linear-to-br from-white/80 to-gray-50/30"></div>
+         <div class="h-75 bg-white relative">
           
           <!-- Conteúdo da etiqueta -->
           <div class="relative z-10 p-3 h-full flex flex-col">
@@ -241,11 +239,11 @@
           
           <!-- Logo centralizada -->
           <div class="absolute top-15 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-white rounded-full border-4 z-10 flex items-center justify-center shadow-lg" id="modal-logo-border">
-            <span class="text-xs text-gray-500">Logo</span>
+            <%= image_tag current_contratante.logo, class: "object-cover rounded-full" %>
           </div>
           
           <!-- Parte de baixo da etiqueta -->
-          <div class="h-70 bg-[#faf7f4] relative">
+          <div class="h-70 bg-white relative">
             <div class="absolute inset-0 bg-linear-to-br from-white/80 to-gray-50/30"></div>
             
             <!-- Conteúdo da etiqueta -->

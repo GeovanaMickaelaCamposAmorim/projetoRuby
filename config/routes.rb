@@ -43,7 +43,8 @@ Rails.application.routes.draw do
   get "/produtos/search", to: "produtos#search"
 
   # Configurações
-  resources :configuracoes, only: [ :index, :update ]
+  get "configuracoes", to: "configuracoes#index", as: "configuracoes"
+  patch "configuracoes", to: "configuracoes#update"
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
