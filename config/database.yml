@@ -12,9 +12,9 @@ development:
   
    # Suas configurações corretas:
   host: localhost
-  port: 5432
+  port: 5000
   username: postgres
-  password: "root"
+  password: "12345678"
 
 
 test:
@@ -22,7 +22,7 @@ test:
   database: tags_test
 
   host: localhost
-  port: 5432
+  port: 5000
   username: postgres
   password: "root"
 
