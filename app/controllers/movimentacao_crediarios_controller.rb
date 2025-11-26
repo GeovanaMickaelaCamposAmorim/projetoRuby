@@ -22,28 +22,38 @@ class MovimentacaoCrediariosController < ApplicationController
 
   def create
     @mov = @ficha.movimentacao_crediarios.new(mov_params)
-    @mov.user = current_user  # Preferível ao user_id=
-
-    # Calcular valor líquido (taxa de cartão)
-    if @mov.mov_tipo == "pagamento"
-      taxa = current_contratante.taxa_cartoes.to_f
-      @mov.mov_valor_real = @mov.mov_valor - (@mov.mov_valor * taxa / 100.0)
-    else
-      @mov.mov_valor_real = @mov.mov_valor
-
-    end
-
+    @mov.user = current_user
 
     if @mov.save
-      atualizar_ficha(@mov)
-      redirect_to movimentacao_crediarios_path(ficha_crediario_id: @ficha.id),
-                  notice: "Movimentação registrada!"
+      @ficha.atualizar_status!
+      respond_to do |format|
+        format.html { redirect_to movimentacao_crediarios_path(ficha_crediario_id: @ficha.id), notice: "Movimentação registrada!" }
+        format.js { head :ok }
+      end
     else
-      render :new, status: :unprocessable_entity
+      render :new, layout: false, status: :unprocessable_entity
+    end
+  end
 
+  def update
+    if @mov.update(mov_params)
+      @ficha.atualizar_status!
+      respond_to do |format|
+        format.html { redirect_to movimentacao_crediarios_path(ficha_crediario_id: @ficha.id), notice: "Movimentação atualizada." }
+        format.js { head :ok }
+      end
+    else
+      render :edit, layout: false, status: :unprocessable_entity
+    end
+  end
 
-
-
+  def destroy
+    @mov.destroy
+    @ficha.atualizar_status!
+    respond_to do |format|
+      format.html { redirect_to movimentacao_crediarios_path(ficha_crediario_id: @ficha.id), notice: "Movimentação excluída." }
+      format.js { head :ok }
+      format.json { head :no_content }
     end
   end
 
