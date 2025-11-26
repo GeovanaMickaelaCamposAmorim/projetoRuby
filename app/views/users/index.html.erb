@@ -356,80 +356,52 @@ console.log('✅ Funções globais de modal definidas!');
 </script>
 
 <script>
-
-// Função para abrir modal de funcionários
-async function abrirUserModal(url) {
-  try {
-    console.log('🔍 Abrindo modal de funcionário para:', url);
-    
-    // Mostrar loading
-    document.getElementById('userFormContent').innerHTML = `
-      <div class="flex justify-center items-center py-8">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
-        <span class="ml-2 text-gray-600">Carregando...</span>
-      </div>
-    `;
-
-    // Abrir modal
-    abrirModal('userModal');
-
-    // Buscar o conteúdo
-    const response = await fetch(url, {
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
-    }
-    
-    const html = await response.text();
-    
-    // Inserir o conteúdo diretamente
-    document.getElementById('userFormContent').innerHTML = html;
-    
-    // Atualizar o título do modal
-    const modalTitle = document.getElementById('userModalTitle');
-    if (modalTitle) {
-      if (url.includes('new')) {
-        modalTitle.textContent = 'Novo Funcionário';
-      } else if (url.includes('edit')) {
-        modalTitle.textContent = 'Editar Funcionário';
-      } else {
-        modalTitle.textContent = 'Visualizar Funcionário';
-      }
-    }
-    
-    console.log('✅ Modal carregado com sucesso!');
-    
-  } catch (error) {
-    console.error('Erro ao abrir modal:', error);
-    document.getElementById('userFormContent').innerHTML = `
-      <div class="text-center py-8 text-red-600">
-        <p class="font-medium">Erro ao carregar</p>
-        <p class="text-sm text-gray-500 mt-2">${error.message}</p>
-      </div>
-    `;
+// ✅ VERSÃO SIMPLES E GARANTIDA
+function abrirUserModal(url) {
+  console.log('🔍 Abrindo modal para:', url);
+  
+  // Abrir modal primeiro
+  const modal = document.getElementById('userModal');
+  if (modal) {
+    modal.showModal();
   }
-}
+  
+  // Mostrar loading
+  document.getElementById('userFormContent').innerHTML = `
+    <div class="flex justify-center items-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
+      <span class="ml-2 text-gray-600">Carregando...</span>
+    </div>
+  `;
 
-// Função para lidar com submit 
-function handleUserSubmit(event) {
-  console.log('📤 Iniciando submit do formulário...');
-  
-  const form = event.target;
-  const formData = new FormData(form);
-  
-  // O redirect vai fechar o modal e recarregar a página
-  console.log('✅ Formulário sendo submetido normalmente...');
-  
-  return true;
-}
-
-// Função fallback para garantir
-function handleUserSubmitManual(event) {
-  console.log('🔧 handleUserSubmitManual chamado');
-  return handleUserSubmit(event);
+  // Fazer a requisição de forma simples
+  fetch(url)
+    .then(response => {
+      if (!response.ok) throw new Error('Erro: ' + response.status);
+      return response.text();
+    })
+    .then(html => {
+      document.getElementById('userFormContent').innerHTML = html;
+      
+      // Atualizar título
+      const modalTitle = document.getElementById('userModalTitle');
+      if (modalTitle) {
+        if (url.includes('new')) modalTitle.textContent = 'Novo Funcionário';
+        else if (url.includes('edit')) modalTitle.textContent = 'Editar Funcionário';
+        else modalTitle.textContent = 'Visualizar Funcionário';
+      }
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      document.getElementById('userFormContent').innerHTML = `
+        <div class="text-center py-8 text-red-600">
+          <p class="font-medium">Erro ao carregar</p>
+          <p class="text-sm">${error.message}</p>
+          <button onclick="fecharModal('userModal')" class="mt-4 px-4 py-2 bg-gray-500 text-white rounded">
+            Fechar
+          </button>
+        </div>
+      `;
+    });
 }
 </script>

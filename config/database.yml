@@ -16,7 +16,6 @@ development:
   username: postgres
   password: "12345678"
 
-
 test:
   <<: *default
   database: tags_test
