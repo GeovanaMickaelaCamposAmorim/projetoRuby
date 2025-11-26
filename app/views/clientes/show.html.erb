@@ -50,7 +50,7 @@
         <div>
           <label class="block text-sm font-medium text-gray-600 mb-1">Data de Nascimento</label>
           <div class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900">
-            <%= @cliente.cli_data_nasc.present? ? l(@cliente.cli_data_nasc, format: :long) : '<span class="text-gray-400">Não informada</span>'.html_safe %>
+            <%= @cliente.cli_data_nasc.present? ? @cliente.cli_data_nasc.strftime("%d/%m/%Y") : '<span class="text-gray-400">Não informada</span>'.html_safe %>
           </div>
         </div>
       </div>
