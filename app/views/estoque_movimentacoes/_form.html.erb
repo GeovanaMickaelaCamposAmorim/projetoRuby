@@ -1,0 +1,49 @@
+<%= form_with model: @movimentacao, local: false, html: { id: "movForm" } do |f| %>
+  <div class="grid grid-cols-1 gap-4">
+    <!-- Tipo de Movimentação -->
+    <div>
+      <%= f.select :emv_tipo, EstoqueMovimentacao::TIPOS.map { |t| [t.titleize, t] }, 
+             { prompt: "Selecione" }, 
+             class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none",
+             onchange: "atualizarCamposPorTipo(this.value)" %>
+
+    </div>
+
+    <!-- Produto -->
+    <div>
+      <%= f.label :produto_id, "Produto", class: "block text-sm font-medium" %>
+      <%= f.collection_select :produto_id, @produtos, :id, :nome, { prompt: "Selecione" }, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+    </div>
+
+    <!-- Quantidade -->
+    <div>
+      <%= f.label :quantidade, "Quantidade", class: "block text-sm font-medium" %>
+      <%= f.number_field :quantidade, min: 1, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+    </div>
+
+    <!-- Valor Unitário -->
+    <div id="campo_valor_unitario" class="hidden">
+      <%= f.label :valor_unitario, "Valor Unitário", class: "block text-sm font-medium" %>
+      <%= f.number_field :valor_unitario, step: 0.01, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+    </div>
+
+    <!-- Valor Total -->
+    <div id="campo_valor_total" class="hidden">
+      <%= f.label :valor_total, "Valor Total", class: "block text-sm font-medium" %>
+      <%= f.number_field :valor_total, step: 0.01, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none", readonly: true %>
+    </div>
+
+    <!-- Cliente (somente para crediário) -->
+    <div id="campo_cliente" class="hidden">
+      <%= f.label :cliente_id, "Cliente", class: "block text-sm font-medium" %>
+      <%= f.collection_select :cliente_id, @clientes, :id, :cli_nome, { prompt: "Selecione" }, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+    </div>
+  </div>
+
+  <div class="flex justify-end mt-4 gap-2">
+    <%= f.submit "Salvar", class: "btn-primary" %>
+    <button type="button" onclick="fecharModal('movimentacaoModal')" class="btn-secondary">Fechar</button>
+  </div>
+<% end %>
+
+

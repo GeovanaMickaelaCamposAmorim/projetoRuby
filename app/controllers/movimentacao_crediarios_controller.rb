@@ -35,7 +35,7 @@ class MovimentacaoCrediariosController < ApplicationController
       @ficha.atualizar_status!
       respond_to do |format|
         format.html { redirect_to movimentacao_crediarios_path(ficha_crediario_id: @ficha.id), notice: "Movimentação atualizada." }
-        format.js { head :ok }  # <-- garante que JS Ajax funcione
+        format.js { head :ok }
       end
     else
       render :edit, layout: false, status: :unprocessable_entity

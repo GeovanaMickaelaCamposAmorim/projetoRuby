@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :estoque_movimentacaos
   resources :movimentacao_crediarios
   resources :ficha_crediarios
   # Rota root vai para o PDV
@@ -23,7 +22,7 @@ Rails.application.routes.draw do
   # Rotas principais
   resources :gastos, :marcas, :tipos, :tamanhos, :taxa_cartoes, :pixes
 
-  resources :estoque_movimentacaos
+  resources :estoque_movimentacoes
 
 
   resources :users
