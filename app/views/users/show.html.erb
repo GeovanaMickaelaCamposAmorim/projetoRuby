@@ -61,7 +61,7 @@
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Data de Cadastro</label>
         <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2 text-gray-900">
-          <%= l(@user.created_at, format: :long) %>
+          <%= @user.created_at.strftime("%d/%m/%Y %H:%M") %>
         </div>
       </div>
     </div>

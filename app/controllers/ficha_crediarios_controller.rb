@@ -34,7 +34,8 @@ class FichaCrediariosController < ApplicationController
   end
 
   def new
-    @ficha_crediario = FichaCrediario.new
+  @ficha_crediario = FichaCrediario.new
+  render partial: "form", locals: { ficha_crediario: @ficha_crediario }
   end
 
   def create
@@ -48,6 +49,7 @@ class FichaCrediariosController < ApplicationController
   end
 
   def edit
+  render partial: "form", locals: { ficha_crediario: @ficha_crediario }
   end
 
   def update

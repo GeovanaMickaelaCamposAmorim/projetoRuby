@@ -16,7 +16,7 @@
         </div>
         <div class="space-y-0.5">
           <% if current_user.admin? %>
-            <%= link_to '#', class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if controller_name == 'dashboard' || request.path.include?('dashboard')}" do %>
+            <%= link_to dashboard_path, class: "flex items-center px-3 py-1.5 text-xl hover:bg-tags-rosa hover:text-white transition-colors rounded text-tags-branco/90 #{'bg-tags-rosa text-white' if controller_name == 'dashboard' || request.path.include?('dashboard')}" do %>
               <span class="material-symbols-outlined text-xl mr-3">stacked_bar_chart</span>
               <span>Dashboard</span>
             <% end %>
