@@ -6,6 +6,8 @@ class VendasController < ApplicationController
                    .includes(:user, :cliente)
                    .order(ven_data: :desc)
 
+    # CORREÇÃO: usar @vendas
+    @vendas = filtrar_vendas(@vendas)
     calcular_estatisticas
   end
 
@@ -102,15 +104,42 @@ class VendasController < ApplicationController
     @produtos = Produto.where(contratante_id: current_user.contratante_id).ativos
   end
 
+  private
+
+  def filtrar_vendas(vendas)
+    # Filtro de busca por ID, nome do cliente ou nome do vendedor
+    if params[:search].present?
+      vendas = vendas.joins(:cliente, :user)
+                     .where("vendas.id::text LIKE ? 
+                            OR clientes.cli_nome ILIKE ? 
+                            OR users.usu_nome ILIKE ?", 
+                           "%#{params[:search]}%", 
+                           "%#{params[:search]}%", 
+                           "%#{params[:search]}%")
+    end
+
+    # Filtro por data
+    if params[:data].present?
+      data = Date.parse(params[:data])
+      vendas = vendas.where(ven_data: data.beginning_of_day..data.end_of_day)
+    end
+
+
+    if params[:forma_pagamento].present? && params[:forma_pagamento] != "Todas as formas"
+      vendas = vendas.where(ven_forma_pagamento: params[:forma_pagamento])
+    end
+
+    vendas
+  end
+
   def calcular_estatisticas
     hoje = Date.current
-    vendas_scope = Venda.where(contratante_id: current_user.contratante_id)
 
-    @vendas_hoje = vendas_scope.where(ven_data: hoje.beginning_of_day..hoje.end_of_day)
-                              .sum(:ven_valor_final)
-    @vendas_mes = vendas_scope.where(ven_data: hoje.beginning_of_month..hoje.end_of_month)
-                             .sum(:ven_valor_final)
-    @total_vendas = vendas_scope.count
+    @vendas_hoje = @vendas.where(ven_data: hoje.beginning_of_day..hoje.end_of_day)
+                         .sum(:ven_valor_final)
+    @vendas_mes = @vendas.where(ven_data: hoje.beginning_of_month..hoje.end_of_month)
+                        .sum(:ven_valor_final)
+    @total_vendas = @vendas.count
     @ticket_medio = @total_vendas > 0 ? @vendas_mes / @total_vendas : 0
   end
 end

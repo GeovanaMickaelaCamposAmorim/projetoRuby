@@ -66,25 +66,41 @@
   </div>
 
   <!-- Filters -->
-  <div class="bg-white rounded-lg p-4 flex items-center gap-4">
-    <div class="flex-1 relative">
-      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-      </svg>
-      <input type="text" placeholder="Buscar venda..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink">
-    </div>
-
-    <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink">
-
-    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink">
-      <option>Todas as formas</option>
-      <option>PIX</option>
-      <option>Cartão Crédito</option>
-      <option>Crediário</option>
-      <option>Dinheiro</option>
-    </select>
+<%= form_with url: vendas_path, method: :get, class: "bg-white rounded-lg p-4 flex items-center gap-4" do |form| %>
+  <div class="flex-1 relative">
+    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    </svg>
+    <%= form.text_field :search, 
+          value: params[:search],
+          placeholder: "Buscar venda por ID ou cliente...", 
+          class: "w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink" %>
   </div>
 
+  <%= form.date_field :data, 
+        value: params[:data],
+        class: "px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink" %>
+
+  <%= form.select :forma_pagamento, 
+        options_for_select([
+          ['Todas as formas', ''],
+          ['PIX', 'PIX'],
+          ['Cartão Crédito', 'Cartão Crédito'],
+          ['Crediário', 'Crediário'],
+          ['Dinheiro', 'Dinheiro']
+        ], params[:forma_pagamento]),
+        {},
+        class: "px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tags-pink" %>
+
+  <!-- Botões de ação -->
+  <div class="flex gap-2">
+    <%= form.submit "Buscar", 
+          class: "bg-tags-branco border border-tags-cinza text-tags-cinza hover:bg-tags-cinza hover:text-tags-branco font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer" %>
+    
+    <%= link_to "Limpar", vendas_path, 
+          class: "px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors" %>
+  </div>
+<% end %>
   <!-- Table Corrigida -->
   <div class="bg-white rounded-lg overflow-hidden">
     <table class="w-full">

@@ -22,18 +22,16 @@
 
   <!-- Campo Valor -->
   <div class="space-y-2">
-    <%= form.label :gas_valor, "Valor", class: "block text-sm font-medium text-gray-700 text-left" %>
-    <div class="relative">
-      <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">R$</span>
-      <%= form.number_field :gas_valor, 
-            step: 0.01,
-            class: "w-full rounded-lg border border-gray-300 pl-10 pr-4 py-3 text-sm
-                   focus:border-tags-rosa focus:ring-2 focus:ring-tags-rosa/20
-                   transition-all duration-200",
-            placeholder: "0,00",
-            required: true %>
-    </div>
-  </div>
+  <%= form.label :gas_valor, "Value", class: "block text-sm font-medium text-gray-700 text-left" %>
+  <%= form.text_field :gas_valor, 
+        class: "w-full rounded-lg border border-gray-300 px-4 py-3 text-sm
+               focus:border-tags-rosa focus:ring-2 focus:ring-tags-rosa/20
+               transition-all duration-200",
+        placeholder: "0.00",
+        inputmode: "decimal",
+        required: true %>
+  <p class="text-xs text-gray-500">Use dot or comma for decimals</p>
+</div>
 
   <!-- Botões -->
   <div class="flex justify-end space-x-3 pt-4">
