@@ -49,7 +49,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Produto</label>
-            <%= select_tag :produto_id, options_from_collection_for_select(Produto.all, :id, :nome, params[:produto_id]), prompt: "Todos os produtos", class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+            <%= select_tag :produto_id, options_from_collection_for_select(Produto.all, :id, :pro_descricao, params[:produto_id]), prompt: "Todos os produtos", class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
@@ -95,7 +95,7 @@
             <% @estoque_movimentacoes.each do |mov| %>
               <tr>
                 <td class="px-6 py-3"><%= l(mov.emv_data, format: :short) %></td>
-                <td class="px-6 py-3"><%= mov.produto.nome %></td>
+                <td class="px-6 py-3"><%= mov.produto.pro_descricao %></td>
                 <td class="px-6 py-3"><%= mov.emv_quantidade %></td>
                 <td class="px-6 py-3"><%= mov.emv_tipo.titleize %></td>
                 <td class="px-6 py-3"><%= mov.user.usu_nome %></td>
