@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   # Rota root vai para o PDV
   root "pdv#index"
 
-  # Adicione no routes.rb
   get "etiquetas/teste", to: "tag_templates#teste", defaults: { format: :pdf }
+  post "etiquetas/imprimir_layout", to: "tag_templates#imprimir_layout"
 
   # Rotas para geração de etiquetas
   get "gerar_etiqueta", to: "tag_templates#new", as: :gerar_etiqueta

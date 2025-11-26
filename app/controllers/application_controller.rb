@@ -44,8 +44,7 @@ class ApplicationController < ActionController::Base
 
   def require_authentication
     unless authenticated?
-      redirect_to login_path, alert: "Faça login para continuar"
-      false
+      redirect_to new_session_path, alert: "Você precisa estar logado para fazer isso."
     end
   end
 

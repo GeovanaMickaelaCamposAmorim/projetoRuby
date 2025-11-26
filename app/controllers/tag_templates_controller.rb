@@ -1,6 +1,4 @@
 class TagTemplatesController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :baixar_pdf, :imprimir ]
-
   def new
     @tag_template = TagTemplate.new
     @produtos = Produto.all.order(:pro_nome)
@@ -23,8 +21,7 @@ class TagTemplatesController < ApplicationController
       puts "   price: #{@label_data[:price]}"
       puts "   quantity: #{@quantity}"
 
-      # Renderização SIMPLES - sem format block
-      render 'etiqueta', layout: 'pdf'
+      render "etiqueta", layout: "pdf"
 
     rescue => e
       logger.error "❌ ERRO HTML: #{e.message}"
@@ -34,27 +31,35 @@ class TagTemplatesController < ApplicationController
     end
   end
 
-  def imprimir
-    logger.info "🎯 IMPRIMIR HTML - INICIANDO"
-    puts "✅ HTML - REQUISIÇÃO CHEGOU NO CONTROLLER!"
+  def imprimir_layout
+    if request.post?
+      data = JSON.parse(params[:layout_data])
+      @layout_items = data["items"]
+      @auto_print = true  # Isso faz auto-print
 
-    begin
-      @label_data = prepare_label_data
-      @quantity = params[:quantity].to_i || 1
-      @auto_print = true
+      # Preparar dados para o template
+      @all_etiquetas = []
 
-      puts "🔴 [HTML IMPRIMIR] DADOS:"
-      puts @label_data.inspect
-      puts "Quantidade: #{@quantity}"
+      @layout_items.each do |item|
+        item["quantity"].to_i.times do
+          @all_etiquetas << {
+            label_color: item["label_color"],
+            product_name: item["product_name"],
+            brand: item["brand"],
+            size: item["size"],
+            color: item["color"],
+            code: item["code"],
+            price: item["price"],
+            phone: item["phone"],
+            instagram: item["instagram"]
+          }
+        end
+      end
 
-      # Renderização SIMPLES
-      render 'etiqueta', layout: 'pdf'
-
-    rescue => e
-      logger.error "❌ ERRO HTML IMPRIMIR: #{e.message}"
-      puts "🔴 [HTML IMPRIMIR] ERRO: #{e.message}"
-      puts e.backtrace.join("\n")
-      render plain: "Erro: #{e.message}", status: 500
+      # Renderiza com auto-print
+      render "imprimir_layout", layout: "pdf"
+    else
+      redirect_to gerar_etiqueta_path, alert: "Método não permitido"
     end
   end
 

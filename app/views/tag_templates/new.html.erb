@@ -24,7 +24,6 @@
           
           <!-- Logo centralizada entre as partes -->
           <div class="absolute top-15 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-white rounded-full border-4 border-[#4E4E4E] z-10 flex items-center justify-center" data-logo-border>
-            <!-- Logo será carregada do perfil da loja -->
             <%= image_tag current_contratante.logo, class: "object-cover rounded-full" %>
           </div>
           
@@ -81,7 +80,6 @@
                 <div class="">
                   <div class="flex justify-center space-x-3">
                     <span class="text-gray-700 text-sm font-bold leading-tight" id="preview-instagram">@instagram</span>
-
                   </div>
                 </div>
               </div>
@@ -160,7 +158,6 @@
                       class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ed215e] focus:border-transparent text-sm",
                       id: "contact-instagram" %>
               </div>
-
             </div>
           </div>
 
@@ -194,13 +191,13 @@
           <div class="pt-6 border-t border-gray-200">
             <div class="flex flex-col sm:flex-row gap-3">
               <button type="button" id="cancel-button" 
-                      class="sm:flex-1 px-6 py-3 border border-gray-300 text-gray-700 bg-white rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-sm text-center">
+                      class="sm:flex-1 px-6 py-3 border border-gray-300 text-gray-700 bg-white rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-sm text-center cursor-pointer">
                 Cancelar
               </button>
               
               <button type="button" id="preview-button" 
-                      class="sm:flex-1 px-6 py-3 bg-tags-rosa text-white rounded-lg font-bold hover:bg-tags-rosa-dark focus:outline-none focus:ring-2 focus:ring-rosa-tags transition-colors text-sm">
-                Visualizar Informações
+                      class="sm:flex-1 px-6 py-3 bg-tags-rosa text-white rounded-lg font-bold hover:bg-tags-rosa-dark focus:outline-none focus:ring-2 focus:ring-rosa-tags transition-colors text-sm cursor-pointer">
+                Visualizar
               </button>
             </div>
           </div>
@@ -208,11 +205,63 @@
       </div>
     </div>
   </div>
+
+  <!-- Layout de Impressão -->
+  <div class="mt-8 bg-white rounded-lg shadow border border-gray-200">
+    <div class="p-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-gray-900">Layout de Impressão</h3>
+        <div class="flex gap-2">
+          <button id="clear-layout" 
+                  class="px-4 py-2 border border-tags-cinza text-tags-cinza bg-tags-branco rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-sm cursor-pointer">
+            Limpar Layout
+          </button>
+          <button id="go-to-print" 
+                  class="px-4 py-2 border border-tags-rosa bg-tags-branco text-tags-rosa rounded-lg font-bold hover:bg-tags-rosa/80 hover:text-tags-branco focus:outline-none focus:ring-2 focus:tags-rosa transition-colors text-sm cursor-pointer">
+            Ir para Impressão
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-4">
+      <div id="layout-content" class="min-h-32 border-2 border-dashed border-gray-300 rounded-lg p-4">
+        <div id="empty-layout-message" class="text-center text-gray-500 py-8">
+          <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <p class="mt-2">Nenhuma etiqueta adicionada ao layout</p>
+          <p class="text-sm">Use o botão "Visualizar e Adicionar ao Layout" para adicionar etiquetas</p>
+        </div>
+        
+        <div id="layout-items" class="hidden space-y-4">
+          <!-- Itens serão adicionados dinamicamente aqui -->
+        </div>
+      </div>
+      
+      <div id="layout-summary" class="hidden mt-4 bg-gray-50 rounded-lg p-4">
+        <h4 class="font-semibold text-gray-900 mb-2">Resumo do Layout</h4>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <span class="text-gray-600">Total de Etiquetas:</span>
+            <span id="total-tags" class="font-bold ml-1">0</span>
+          </div>
+          <div>
+            <span class="text-gray-600">Páginas Estimadas:</span>
+            <span id="total-pages" class="font-bold ml-1">0</span>
+          </div>
+          <div>
+            <span class="text-gray-600">Tipos Diferentes:</span>
+            <span id="different-types" class="font-bold ml-1">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal de Preview -->
 <div id="preview-modal" class="fixed inset-0 overflow-y-auto h-full w-full z-50 hidden">
-  <
   <div class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
   
   <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 shadow-2xl rounded-2xl bg-white max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95">
@@ -228,7 +277,6 @@
 
     <!-- Preview etiqueta -->
     <div class="mb-6">
-  
       <div class="flex justify-center">
         <div class="w-72 h-96 relative border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg bg-white">
           <!-- Parte de cima da etiqueta -->
@@ -288,23 +336,23 @@
 
     <!-- Informações da Geração -->
     <div class="mb-2 bg-linear-to-r from-gray-50 to-gray-100 p-2 rounded-xl border border-gray-200">
-      <h4 class="text-lg font-semibold text-gray-700 mb-2">Informações da Geração</h4>
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Informações da Etiqueta</h4>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
         <div class="text-center">
-          <span class="font-medium text-gray-600 block mb-1">Quantidade total</span>
+          <span class="font-medium text-gray-600 block mb-1">Quantidade</span>
           <p class="text-gray-900 font-bold text-m" id="modal-quantity">1 etiqueta(s)</p>
-        </div>
-        <div class="text-center">
-          <span class="font-medium text-gray-600 block mb-1">Páginas</span>
-          <p class="text-gray-900 font-bold text-m" id="modal-pages">1 página(s)</p>
         </div>
         <div class="text-center">
           <span class="font-medium text-gray-600 block mb-1">Cor</span>
           <p class="text-gray-900 font-bold text-m" id="modal-color-text">#4E4E4E</p>
         </div>
         <div class="text-center">
-          <span class="font-medium text-gray-600 block mb-1">Layout</span>
-          <p class="text-gray-900 font-bold text-m">3x3 (9/página)</p>
+          <span class="font-medium text-gray-600 block mb-1">Produto</span>
+          <p class="text-gray-900 font-bold text-m" id="modal-product-info">Calcinha de Renda</p>
+        </div>
+        <div class="text-center">
+          <span class="font-medium text-gray-600 block mb-1">Preço</span>
+          <p class="text-gray-900 font-bold text-m" id="modal-price-info">R$ 35,00</p>
         </div>
       </div>
     </div>
@@ -315,47 +363,223 @@
         Cancelar
       </button>
       
-      <button id="save-pdf-btn" 
-              data-turbo="false"
+      <button id="add-to-layout-btn" 
               class="px-8 py-3 bg-tags-rosa text-white rounded-xl font-medium hover:bg-tags-rosa-dark transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
-        Imprimir
+        Adicionar ao Layout
       </button>
     </div>
-
   </div>
 </div>
 
 <script>
+// Sistema de Layout de Impressão
+const LayoutManager = {
+  items: [],
 
-
-// Controle global de estado
-const TagGenerator = {
-  initialized: false,
-  clickInProgress: false,
-  
   init() {
-    if (this.initialized) {
-      console.log('🔄 TagGenerator já inicializado');
+    this.loadFromStorage();
+    this.setupEventListeners();
+    this.updateLayoutDisplay();
+  },
+  
+  setupEventListeners() {
+    document.getElementById('add-to-layout-btn')?.addEventListener('click', () => this.addCurrentToLayout());
+    document.getElementById('clear-layout')?.addEventListener('click', () => this.clearLayout());
+    document.getElementById('go-to-print')?.addEventListener('click', () => this.goToPrint());
+  },
+  
+  addCurrentToLayout() {
+    const formData = this.collectFormData();
+    const quantity = parseInt(document.getElementById('quantity-field')?.value) || 1;
+    
+    const layoutItem = {
+      id: Date.now() + Math.random(),
+      ...formData,
+      quantity: quantity,
+      addedAt: new Date().toLocaleString('pt-BR')
+    };
+    
+    this.items.push(layoutItem);
+    this.saveToStorage();
+    this.updateLayoutDisplay();
+    this.closeModal();
+    
+    // Feedback
+    this.showNotification(`${quantity} etiqueta(s) adicionada(s) ao layout!`);
+  },
+  
+  collectFormData() {
+    return {
+      product_name: document.getElementById('modal-product-name')?.textContent?.trim() || 'Produto',
+      brand: document.getElementById('modal-brand')?.textContent?.trim() || 'Marca',
+      size: document.getElementById('modal-size')?.textContent?.trim() || 'Tamanho',
+      color: document.getElementById('modal-color')?.textContent?.trim() || 'Cor',
+      code: document.getElementById('modal-product-code')?.textContent?.trim() || 'COD-001',
+      price: document.getElementById('modal-product-price')?.textContent?.trim() || 'R$ 0,00',
+      phone: document.getElementById('modal-phone')?.textContent?.trim() || '(75) 91234-5678',
+      instagram: document.getElementById('modal-instagram')?.textContent?.trim() || '@instagram',
+      label_color: document.getElementById('label-color')?.value || '#4E4E4E'
+    };
+  },
+  
+  removeItem(id) {
+    this.items = this.items.filter(item => item.id !== id);
+    this.saveToStorage();
+    this.updateLayoutDisplay();
+  },
+  
+  clearLayout() {
+    if (this.items.length === 0) return;
+    
+    if (confirm('Tem certeza que deseja limpar todo o layout? Todas as etiquetas serão removidas.')) {
+      this.items = [];
+      this.saveToStorage();
+      this.updateLayoutDisplay();
+      this.showNotification('Layout limpo com sucesso!');
+    }
+  },
+  
+  updateLayoutDisplay() {
+    const layoutItems = document.getElementById('layout-items');
+    const emptyMessage = document.getElementById('empty-layout-message');
+    const summary = document.getElementById('layout-summary');
+    
+    if (this.items.length === 0) {
+      layoutItems.classList.add('hidden');
+      emptyMessage.classList.remove('hidden');
+      summary.classList.add('hidden');
       return;
     }
     
-    console.log('🚀 INICIANDO GERADOR DE ETIQUETAS');
+    layoutItems.classList.remove('hidden');
+    emptyMessage.classList.add('hidden');
+    summary.classList.remove('hidden');
+    
+    // Atualizar itens
+    layoutItems.innerHTML = this.items.map(item => `
+      <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+        <div class="flex items-center space-x-4 flex-1">
+          <div class="w-12 h-12 rounded border" style="background-color: ${item.label_color}"></div>
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-900 text-sm">${item.product_name}</h4>
+            <p class="text-gray-600 text-xs">${item.brand} - ${item.size} / ${item.color}</p>
+            <p class="text-gray-500 text-xs">Código: ${item.code} | Preço: ${item.price}</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+            ${item.quantity} un.
+          </span>
+          <button onclick="LayoutManager.removeItem(${item.id})" 
+                  class="text-red-600 hover:text-red-800 p-1 rounded transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `).join('');
+    
+    // Atualizar resumo
+    this.updateSummary();
+  },
+  
+  updateSummary() {
+    const totalTags = this.items.reduce((sum, item) => sum + item.quantity, 0);
+    const totalPages = Math.ceil(totalTags / 9); // 9 etiquetas por página
+    const differentTypes = new Set(this.items.map(item => item.code)).size;
+    
+    document.getElementById('total-tags').textContent = totalTags;
+    document.getElementById('total-pages').textContent = totalPages;
+    document.getElementById('different-types').textContent = differentTypes;
+  },
+  
+
+  goToPrint() {
+    if (this.items.length === 0) {
+      alert('Adicione etiquetas ao layout antes de imprimir!');
+      return;
+    }
+    
+    const printData = {
+      items: this.items,
+      totalTags: this.items.reduce((sum, item) => sum + item.quantity, 0),
+      generatedAt: new Date().toISOString()
+    };
+    
+    
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/etiquetas/imprimir_layout';
+    form.target = '_blank'; 
+    
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'layout_data';
+    input.value = JSON.stringify(printData);
+    form.appendChild(input);
+    
+    // Adicionar CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    if (csrfToken) {
+      const csrfInput = document.createElement('input');
+      csrfInput.type = 'hidden';
+      csrfInput.name = 'authenticity_token';
+      csrfInput.value = csrfToken;
+      form.appendChild(csrfInput);
+    }
+    
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  },
+  
+  showNotification(message) {
+    // Criar notificação temporária
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  },
+  
+  saveToStorage() {
+    localStorage.setItem('tags_layout_items', JSON.stringify(this.items));
+  },
+  
+  loadFromStorage() {
+    const saved = localStorage.getItem('tags_layout_items');
+    if (saved) {
+      this.items = JSON.parse(saved);
+    }
+  },
+  
+  closeModal() {
+    document.getElementById('preview-modal').classList.add('hidden');
+  }
+};
+
+// Integrar com o TagGenerator existente
+const TagGenerator = {
+  initialized: false,
+  
+  init() {
+    if (this.initialized) return;
     this.initialized = true;
     
     this.setupGlobalListeners();
     this.setupFormListeners();
+    LayoutManager.init(); // Inicializar o gerenciador de layout
   },
   
   setupGlobalListeners() {
-    console.log('🔧 Configurando listeners globais...');
-    
-    // Usar arrow functions para manter o contexto do 'this'
     document.addEventListener('click', (e) => this.handleGlobalClick(e));
-    
-    // Fechar modal com ESC
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') this.closeModal();
     });
@@ -387,7 +611,7 @@ const TagGenerator = {
     }
     
     // Contatos em tempo real
-    ['contact-phone', 'contact-instagram', 'contact-facebook'].forEach(id => {
+    ['contact-phone', 'contact-instagram'].forEach(id => {
       const element = document.getElementById(id);
       if (element) {
         element.addEventListener('input', (e) => {
@@ -404,7 +628,7 @@ const TagGenerator = {
       cancelButton.addEventListener('click', () => this.clearForm());
     }
     
-    // Botão gerar etiquetas
+    // Botão preview
     const previewButton = document.getElementById('preview-button');
     if (previewButton) {
       previewButton.addEventListener('click', () => this.showPreviewModal());
@@ -412,27 +636,6 @@ const TagGenerator = {
   },
   
   handleGlobalClick(e) {
-    // Prevenir múltiplos clicks
-    if (this.clickInProgress) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    
-    // Salvar PDF
-    if (e.target.closest('#save-pdf-btn')) {
-      e.preventDefault();
-      e.stopPropagation();
-      this.handleSavePdf();
-    }
-    
-    // Imprimir
-    if (e.target.closest('#print-btn')) {
-      e.preventDefault();
-      e.stopPropagation();
-      this.handlePrint();
-    }
-    
     // Fechar modal
     if (e.target.closest('#close-modal') || e.target.closest('#modal-cancel')) {
       e.preventDefault();
@@ -445,72 +648,11 @@ const TagGenerator = {
     }
   },
   
-  handleSavePdf() {
-    this.clickInProgress = true;
-    console.log('💾 SALVANDO HTML...');
-    
-    const formData = this.collectFormData();
-    
-    // Vai para HTML
-    const downloadUrl = `/etiquetas/baixar_pdf?${new URLSearchParams(formData)}`;
-    
-    console.log('📤 Enviando para HTML:', downloadUrl);
-    
-    // Abre em nova aba para visualização/impressão
-    window.open(downloadUrl, '_blank', 'width=1200,height=800');
-    
-    setTimeout(() => { this.clickInProgress = false; }, 2000);
-  },
-
-  handlePrint() {
-    this.clickInProgress = true;
-    console.log('🖨️ IMPRIMINDIREto...');
-    
-    const formData = this.collectFormData();
-    
-    // URL para impressão direta
-    const printUrl = `/etiquetas/imprimir?${new URLSearchParams(formData)}`;
-    
-    console.log('📤 Enviando para impressão direta:', printUrl);
-    
-    // Abre em nova aba com auto-print
-    window.open(printUrl, '_blank', 'width=800,height=600');
-    
-    setTimeout(() => { this.clickInProgress = false; }, 2000);
-  },
-  
-  collectFormData() {
-  
-  const data = {
-    product_name: document.getElementById('modal-product-name')?.textContent?.trim() || 'Produto',
-    brand: document.getElementById('modal-brand')?.textContent?.trim() || 'Marca',
-    size: document.getElementById('modal-size')?.textContent?.trim() || 'Tamanho',
-    color: document.getElementById('modal-color')?.textContent?.trim() || 'Cor',
-    code: document.getElementById('modal-product-code')?.textContent?.trim() || 'COD-001',
-    price: document.getElementById('modal-product-price')?.textContent?.trim() || 'R$ 0,00',
-    phone: document.getElementById('modal-phone')?.textContent?.trim() || '(75) 91234-5678',
-    instagram: document.getElementById('modal-instagram')?.textContent?.trim() || '@instagram',
-    facebook: document.getElementById('modal-facebook')?.textContent?.trim() || '@facebook',
-    label_color: document.getElementById('label-color')?.value || '#4E4E4E',
-    quantity: document.getElementById('quantity-field')?.value || 1
-  };
-  
-  console.log('📊 Dados coletados PARA PDF:', data);
-  
-  
-  Object.entries(data).forEach(([key, value]) => {
-    console.log(`  ${key}: ${value}`);
-  });
-  
-  return data;
-},
-  
   updateLabelColor(color) {
     const elements = {
       top: document.querySelector('[data-label-top]'),
       hole: document.querySelector('[data-label-hole]'),
-      logo: document.querySelector('[data-logo-border]'),
-      container: document.querySelector('[data-label-container]')
+      logo: document.querySelector('[data-logo-border]')
     };
     
     Object.values(elements).forEach(el => {
@@ -537,8 +679,6 @@ const TagGenerator = {
       price: selectedOption.getAttribute('data-price')
     };
     
-    console.log('🛒 Produto selecionado:', data);
-    
     // Atualizar preview
     if (data.name) document.getElementById('preview-product-name').textContent = data.name;
     if (data.brand) document.getElementById('preview-brand').textContent = data.brand;
@@ -553,11 +693,8 @@ const TagGenerator = {
   },
   
   showPreviewModal() {
-    console.log('👁️ Mostrando modal de preview...');
-    
     const currentColor = document.getElementById('label-color')?.value || '#4E4E4E';
     const quantity = parseInt(document.getElementById('quantity-field')?.value) || 1;
-    const pages = Math.ceil(quantity / 8);
     
     // Atualizar dados no modal
     const updates = {
@@ -568,8 +705,7 @@ const TagGenerator = {
       'modal-product-code': 'preview-product-code',
       'modal-product-price': 'preview-product-price',
       'modal-phone': 'preview-phone',
-      'modal-instagram': 'preview-instagram',
-      'modal-facebook': 'preview-facebook'
+      'modal-instagram': 'preview-instagram'
     };
     
     Object.entries(updates).forEach(([modalId, previewId]) => {
@@ -582,8 +718,11 @@ const TagGenerator = {
     
     // Atualizar informações
     document.getElementById('modal-quantity').textContent = `${quantity} etiqueta(s)`;
-    document.getElementById('modal-pages').textContent = `${pages} página(s)`;
     document.getElementById('modal-color-text').textContent = currentColor;
+    document.getElementById('modal-product-info').textContent = 
+      document.getElementById('preview-product-name')?.textContent || 'Produto';
+    document.getElementById('modal-price-info').textContent = 
+      document.getElementById('preview-product-price')?.textContent || 'R$ 0,00';
     
     // Atualizar cores
     document.getElementById('modal-label-top').style.backgroundColor = currentColor;
@@ -599,15 +738,13 @@ const TagGenerator = {
   },
   
   clearForm() {
-    console.log('🧹 Limpando formulário...');
-    
     // Resetar seleção de produto
     const productSelect = document.getElementById('product-select');
     if (productSelect) productSelect.selectedIndex = 0;
     
     // Resetar valores padrão
     const defaults = {
-      'preview-product-name': 'Calcinha de Renda',
+      'preview-product-name': 'Nome do Produto',
       'preview-brand': 'Marca',
       'preview-size': 'P',
       'preview-color': 'Vermelha', 
@@ -615,10 +752,8 @@ const TagGenerator = {
       'preview-product-price': 'R$ 35,00',
       'preview-phone': '(75) 91234-5678',
       'preview-instagram': '@instagram',
-      'preview-facebook': '@facebook',
       'contact-phone': '(75) 91234-5678',
       'contact-instagram': '@instagram',
-      'contact-facebook': '@facebook',
       'label-color': '#4E4E4E',
       'label-color-picker': '#4E4E4E',
       'quantity-field': '1'
@@ -636,33 +771,18 @@ const TagGenerator = {
     });
     
     this.updateLabelColor('#4E4E4E');
-    alert('✅ Campos limpos!');
   }
 };
 
-// =============================================
-// INICIALIZAÇÃO
-// =============================================
-
-// Inicializar quando a página carregar
+// Inicialização
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => TagGenerator.init());
 } else {
   TagGenerator.init();
 }
 
-// Reinicializar com Turbo (se estiver usando)
 document.addEventListener('turbo:load', () => {
-  console.log('🔄 Turbo detectado, reinicializando...');
   TagGenerator.initialized = false;
   setTimeout(() => TagGenerator.init(), 100);
 });
-
-// Forçar inicialização após um tempo (fallback)
-setTimeout(() => {
-  if (!TagGenerator.initialized) {
-    console.log('⏰ Fallback: inicializando...');
-    TagGenerator.init();
-  }
-}, 500);
 </script>

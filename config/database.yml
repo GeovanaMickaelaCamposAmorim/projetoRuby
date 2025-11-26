@@ -14,7 +14,7 @@ development:
   host: localhost
   port: 5000
   username: postgres
-  password: "12345678"
+  password: postgres
 
 
 test:
@@ -24,7 +24,7 @@ test:
   host: localhost
   port: 5000
   username: postgres
-  password: "12345678"
+  password: postgres
 
 
 
