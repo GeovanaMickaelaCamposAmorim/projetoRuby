@@ -2,6 +2,7 @@ class Contratante < ApplicationRecord
   # Relações
   has_one :loja, dependent: :destroy
   has_many :gastos, dependent: :destroy
+  has_many :taxa_cartoes, dependent: :destroy
   has_one_attached :logo
 
   # Validações obrigatórias

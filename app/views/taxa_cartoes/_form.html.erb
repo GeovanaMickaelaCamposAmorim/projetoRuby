@@ -1,0 +1,62 @@
+<%= form_with(model: taxa_cartao, local: false, html: { id: "taxa-cartao-form", class: "space-y-6" }) do |form| %>
+  <% if taxa_cartao.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <h3 class="text-red-800 font-medium mb-2">
+        <%= pluralize(taxa_cartao.errors.count, "erro") %> impediram esta taxa de ser salva:
+      </h3>
+      <ul class="text-red-600 text-sm list-disc list-inside space-y-1">
+        <% taxa_cartao.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 gap-6">
+    <!-- Campo Tipo -->
+    <div>
+      <%= form.label :txc_tipo, "Tipo de Pagamento", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.select :txc_tipo, 
+          options_for_select([
+            ['PIX', 'pix'],
+            ['Cartão de Débito', 'debito'],
+            ['Cartão de Crédito', 'credito'],
+            ['Crediário', 'crediario']
+          ], taxa_cartao.txc_tipo),
+          { include_blank: "Selecione o tipo..." },
+          { 
+            class: "w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-tags-rosa focus:border-tags-rosa",
+            required: true
+          } %>
+    </div>
+
+    <!-- Campo Descrição -->
+    <div>
+      <%= form.label :txc_descricao, "Descrição (Opcional)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.text_field :txc_descricao, 
+          class: "w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-tags-rosa focus:border-tags-rosa",
+          placeholder: "Ex: Taxa cartão crédito parcelado" %>
+    </div>
+
+    <!-- Campo Porcentagem -->
+    <div>
+      <%= form.label :txc_porcentagem, "Porcentagem (%)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.number_field :txc_porcentagem, 
+          step: "0.01",
+          min: "0",
+          class: "w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-tags-rosa focus:border-tags-rosa",
+          placeholder: "Ex: 2.5",
+          required: true %>
+    </div>
+  </div>
+
+  <!-- Botões -->
+  <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+    <button type="button" onclick="cancelarModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tags-rosa transition-colors duration-200">
+      Cancelar
+    </button>
+    
+    <%= form.submit taxa_cartao.persisted? ? "Atualizar Taxa" : "Criar Taxa", 
+          class: "px-4 py-2 text-sm font-medium text-white bg-tags-rosa border border-transparent rounded-lg hover:bg-tags-rosa-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tags-rosa transition-colors duration-200 cursor-pointer" %>
+  </div>
+<% end %>

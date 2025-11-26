@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :movimentacao_crediarios
   resources :ficha_crediarios
+  resources :taxa_cartoes
   # Rota root vai para o PDV
   root "pdv#index"
 
