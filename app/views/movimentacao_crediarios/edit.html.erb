@@ -1,10 +1,42 @@
-<% content_for :title, "Editing movimentacao crediario" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing movimentacao crediario</h1>
+<%= form_with model: [@ficha, @mov], local: false, method: :patch, html: { id: "movForm" } do |f| %>
+  <div class="space-y-4">
+    
+    
+    <div class="space-y-2">
+      <%= f.label :mov_tipo, "Tipo de Movimentação", class: "block text-sm font-medium text-gray-700 text-left" %>
+      <%= f.select :mov_tipo, options_for_select([["Pagamento", "pagamento"], ["Compra", "compra"], ["Juros", "juros"], ["Devolução", "devolucao"]], f.object.mov_tipo), {}, class: "w-full rounded-lg border border-gray-300 px-4 py-3 text-sm 
+                 focus:border-tags-rosa focus:ring-2 focus:ring-tags-rosa/20 transition-all duration-200 cursor-pointer" %>
+    </div>
 
-  <%= render "form", movimentacao_crediario: @movimentacao_crediario %>
+    
+    <div class="space-y-2">
+      <%= f.label :mov_valor, "Valor", class: "block text-sm font-medium text-gray-700 text-left" %>
+      <div class="relative">
+        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">R$</span>
+        <%= f.number_field :mov_valor, step: 0.01, class: "w-full rounded-lg border border-gray-300 pl-10 pr-4 py-3 text-sm
+                 focus:border-tags-rosa focus:ring-2 focus:ring-tags-rosa/20 transition-all duration-200", placeholder: "0,00" %>
+      </div>
+    </div>
 
-  <%= link_to "Show this movimentacao crediario", @movimentacao_crediario, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to movimentacao crediarios", movimentacao_crediarios_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-</div>
+  
+    <div class="space-y-2">
+      <%= f.label :mov_observacao, "Observação", class: "block text-sm font-medium text-gray-700 text-left" %>
+      <%= f.text_area :mov_observacao, rows: 3, class: "w-full rounded-lg border border-gray-300 px-4 py-3 text-sm
+             focus:border-tags-rosa focus:ring-2 focus:ring-tags-rosa/20 transition-all duration-200", placeholder: "Observações adicionais" %>
+    </div>
+
+  
+    <div class="flex justify-end space-x-3 pt-4">
+      <button type="button" onclick="fecharModal('movModal')" 
+              class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 
+                     rounded-lg hover:bg-gray-50 transition-all duration-200 cursor-pointer">
+        Cancelar
+      </button>
+      <%= f.submit @mov.persisted? ? "Atualizar" : "Salvar", 
+            class: "px-5 py-2.5 text-sm font-medium text-white bg-tags-rosa border border-transparent 
+                   rounded-lg hover:bg-pink-700 transition-all duration-200 cursor-pointer" %>
+    </div>
+
+  </div>
+<% end %>

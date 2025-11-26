@@ -25,11 +25,12 @@
     </h2>
 
     <p class="text-gray-600 mb-4">
-      Valor atual da ficha:
-      <span class="font-bold">
-        <%= number_to_currency(@ficha.fic_valor_total) %>
+        Valor atual da ficha:
+      <span class="font-bold" id="valor-total-ficha">
+        <%= number_to_currency(@ficha.saldo_real) %>
       </span>
     </p>
+
   </div>
 
   
