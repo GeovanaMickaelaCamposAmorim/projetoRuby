@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_25_225355) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_26_075646) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -88,6 +88,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_225355) do
     t.datetime "updated_at", null: false
     t.decimal "taxa_cartoes", default: "0.0"
     t.index ["cnt_cnpj"], name: "index_contratantes_on_cnt_cnpj", unique: true
+  end
+
+  create_table "estoque_movimentacaos", force: :cascade do |t|
+    t.date "emv_data"
+    t.string "emv_tipo"
+    t.integer "emv_quantidade"
+    t.decimal "emv_valor_total"
+    t.bigint "produto_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["produto_id"], name: "index_estoque_movimentacaos_on_produto_id"
   end
 
   create_table "estoque_movimentacoes", force: :cascade do |t|
@@ -318,6 +329,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_225355) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "clientes", "contratantes"
+  add_foreign_key "estoque_movimentacaos", "produtos"
   add_foreign_key "estoque_movimentacoes", "contratantes"
   add_foreign_key "estoque_movimentacoes", "produtos"
   add_foreign_key "estoque_movimentacoes", "users"

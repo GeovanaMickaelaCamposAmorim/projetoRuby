@@ -1,0 +1,42 @@
+<%= form_with(model: estoque_movimentacao, class: "contents") do |form| %>
+  <% if estoque_movimentacao.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(estoque_movimentacao.errors.count, "error") %> prohibited this estoque_movimentacao from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% estoque_movimentacao.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :emv_data %>
+    <%= form.date_field :emv_data, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": estoque_movimentacao.errors[:emv_data].none?, "border-red-400 focus:outline-red-600": estoque_movimentacao.errors[:emv_data].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :emv_tipo %>
+    <%= form.text_field :emv_tipo, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": estoque_movimentacao.errors[:emv_tipo].none?, "border-red-400 focus:outline-red-600": estoque_movimentacao.errors[:emv_tipo].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :emv_quantidade %>
+    <%= form.number_field :emv_quantidade, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": estoque_movimentacao.errors[:emv_quantidade].none?, "border-red-400 focus:outline-red-600": estoque_movimentacao.errors[:emv_quantidade].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :emv_valor_total %>
+    <%= form.text_field :emv_valor_total, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": estoque_movimentacao.errors[:emv_valor_total].none?, "border-red-400 focus:outline-red-600": estoque_movimentacao.errors[:emv_valor_total].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :produto_id %>
+    <%= form.text_field :produto_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": estoque_movimentacao.errors[:produto_id].none?, "border-red-400 focus:outline-red-600": estoque_movimentacao.errors[:produto_id].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

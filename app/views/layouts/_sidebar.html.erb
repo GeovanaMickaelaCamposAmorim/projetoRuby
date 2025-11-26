@@ -60,7 +60,6 @@
         <!-- SUBMENU ESTOQUE -->
         <div class="cursor-pointer">
           <%
-            # SOLUÇÃO ROBUSTA: Verifica múltiplas possibilidades
             produtos_controllers = ['products', 'produtos', 'product', 'estoque']
             produtos_paths = ['produtos', 'products', 'estoque']
             
@@ -80,7 +79,7 @@
 
           <div class="submenu ml-3 mt-0.5 <%= 'hidden' unless estoque_submenu_ativo %>" id="estoque-submenu">
             <div class="space-y-0.5 border-l border-tags-cinza/30 ml-2 pl-2">
-              <%= link_to '#', class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'atualizar_estoque' || request.path.include?('atualizar-estoque')}" do %>
+              <%= link_to estoque_movimentacaos_path, class: "flex items-center px-2 py-1 text-xl text-tags-branco/80 hover:bg-tags-rosa hover:text-white rounded #{'bg-tags-rosa text-white' if controller_name == 'atualizar_estoque' || request.path.include?('atualizar-estoque')}" do %>
                 <span class="material-symbols-outlined text-xl mr-3">inventory</span>
                 <span>Atualizar Estoque</span>
               <% end %>

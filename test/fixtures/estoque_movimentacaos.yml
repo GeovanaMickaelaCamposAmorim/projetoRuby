@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  emv_data: 2025-11-26
+  emv_tipo: MyString
+  emv_quantidade: 1
+  emv_valor_total: 9.99
+  produto: one
+
+two:
+  emv_data: 2025-11-26
+  emv_tipo: MyString
+  emv_quantidade: 1
+  emv_valor_total: 9.99
+  produto: two
