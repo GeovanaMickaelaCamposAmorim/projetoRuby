@@ -4,8 +4,12 @@
   <span class="material-symbols-outlined text-xl">content_paste_search</span>
 <% end %>
 
-<div class="container mx-auto flex">
+<div class="container mx-auto">
   <div class="min-h-screen w-full">
+ 
+
+    <hr class="border-t border-gray-300 my-4">
+
     <!-- Cards resumo -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
@@ -22,35 +26,28 @@
       </div>
     </div>
 
-    <!-- Card branco envolvendo busca e grade -->
+    
     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
       <!-- Formulário de Filtros -->
       <%= form_with url: ficha_crediarios_path, method: :get, local: true, class: "mb-6" do %>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <!-- Filtro por Nome do Cliente -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Cliente</label>
-            <%= text_field_tag :search, params[:search], 
-                  placeholder: "Buscar por nome do cliente",
-                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+            <%= text_field_tag :search, params[:search], placeholder: "Buscar por nome do cliente", class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
           </div>
-          
-          <!-- Filtro por Status -->
+
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <%= select_tag :status, 
-                  options_for_select([
-                    ['Todos os status', ''],
-                    ['Pendente', 'pendente'],
-                    ['Concluída', 'concluida']
-                  ], params[:status]), 
-                  class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+            <%= select_tag :status, options_for_select([['Todos os status', ''], ['Pendente', 'pendente'], ['Concluída', 'concluida']], params[:status]), class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
           </div>
-        
-        <!-- Botões de ação dos filtros -->
-        <div class="flex gap-2">
-          <%= submit_tag "Buscar", class:"bg-tags-branco border border-tags-cinza text-tags-cinza hover:bg-tags-cinza hover:text-tags-branco font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer" %>
-          <%= link_to "Limpar Filtros", ficha_crediarios_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" %>
+        </div>
+
+        <div class="flex gap-2 justify-end">
+            <%= submit_tag "Buscar",
+                class: "bg-tags-branco border border-tags-cinza text-tags-cinza hover:bg-tags-cinza hover:text-tags-branco font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer" %>
+
+            <%= link_to "Limpar Filtros", ficha_crediarios_path,
+                class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" %>
         </div>
       <% end %>
 
@@ -60,7 +57,6 @@
           <thead class="bg-gray-100 text-gray-700">
             <tr>
               <th class="px-6 py-3 font-medium">Cliente</th>
-              <th class="px-6 py-3 font-medium">Contratante</th>
               <th class="px-6 py-3 font-medium">Valor Total</th>
               <th class="px-6 py-3 font-medium">Status</th>
               <th class="px-6 py-3 font-medium">Ações</th>
@@ -68,30 +64,24 @@
           </thead>
           <tbody class="divide-y divide-gray-200 text-black">
             <% @ficha_crediarios.each do |ficha| %>
-              <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location='<%= ficha_crediario_path(ficha) %>'">
-                <td class="px-6 py-3 font-medium">
-                  <%= ficha.cliente.nome %>
-                </td>
-                <td class="px-6 py-3">
-                  <%= ficha.contratante.nome %>
-                </td>
-                <td class="px-6 py-3 font-semibold <%= ficha.fic_status == 'pendente' ? 'text-red-600' : 'text-green-600' %>">
-                  <%= number_to_currency(ficha.fic_valor_total) %>
-                </td>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-3 font-medium"><%= ficha.cliente.cli_nome %></td>
+
+                <td class="px-6 py-3 font-semibold <%= ficha.fic_status == 'pendente' ? 'text-red-600' : 'text-green-600' %>"><%= number_to_currency(ficha.fic_valor_total) %></td>
                 <td class="px-6 py-3">
                   <span class="px-3 py-1 rounded-full text-xs font-medium <%= ficha.fic_status == 'pendente' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800' %>">
                     <%= ficha.fic_status.humanize %>
                   </span>
                 </td>
-                <td class="px-6 py-3 flex gap-3" onclick="event.stopPropagation()">
-                  <%= link_to "Visualizar", ficha_crediario_path(ficha), 
-                      class: 'text-blue-600 hover:text-blue-900 font-medium text-sm px-3 py-1 border border-blue-600 rounded hover:bg-blue-50 transition-colors duration-200' %>
-                  <%= link_to "Editar", edit_ficha_crediario_path(ficha), 
-                      class: 'text-green-600 hover:text-green-900 font-medium text-sm px-3 py-1 border border-green-600 rounded hover:bg-green-50 transition-colors duration-200' %>
-                  <%= link_to "Excluir", ficha_crediario_path(ficha), 
-                      method: :delete, 
-                      data: { confirm: 'Tem certeza que deseja excluir esta ficha?' },
-                      class: 'text-red-600 hover:text-red-900 font-medium text-sm px-3 py-1 border border-red-600 rounded hover:bg-red-50 transition-colors duration-200' %>
+                <td class="px-6 py-3 flex gap-3">
+                  <%# <%= link_to "Visualizar", ficha_crediario_path(ficha), class: 'text-green-600 hover:text-green-900 font-medium text-sm px-3 py-1 border border-green-600 rounded hover:bg-green-50 transition-colors duration-200 cursor-pointer' %> 
+
+                  <button onclick="abrirFichaModal('<%= ficha_crediario_path(ficha) %>/edit')" class="inline-flex items-center px-3 py-1 border border-indigo-600 rounded text-indigo-600 hover:bg-indigo-50 transition-colors duration-200 cursor-pointer">Editar</button>
+
+                  <%= link_to "Movimentações",
+      movimentacao_crediarios_path(ficha_crediario_id: ficha.id),
+      class: "text-rose-600 hover:text-rose-900 font-medium text-sm px-3 py-1 border border-rose-600 rounded hover:bg-indigo-50 transition-colors duration-200 cursor-pointer" %>
+
                 </td>
               </tr>
             <% end %>
@@ -101,3 +91,239 @@
     </div>
   </div>
 </div>
+
+<!-- Modal para Fichas -->
+<dialog id="fichaModal" class="modal-base">
+  <div class="modal-container">
+    <div class="modal-header no-print">
+      <h3 class="modal-title" id="fichaModalTitle">Carregando...</h3>
+      <button onclick="fecharModal('fichaModal')" class="modal-close-btn">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-content-container">
+      <div id="fichaFormContent" class="modal-content">
+        <div class="flex justify-center items-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
+          <span class="ml-2 text-gray-600">Carregando...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer no-print">
+      
+    </div>
+  </div>
+</dialog>
+
+
+<script>
+function abrirModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.showModal();
+}
+function fecharModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.close();
+}
+
+async function abrirFichaModal(url) {
+  try {
+    document.getElementById('fichaFormContent').innerHTML = `
+      <div class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tags-rosa"></div>
+        <span class="ml-2 text-gray-600">Carregando...</span>
+      </div>
+    `;
+    abrirModal('fichaModal');
+
+    const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Procura por um <form> no HTML retornado
+    const formContent = doc.querySelector('form');
+    if (formContent) {
+      document.getElementById('fichaFormContent').innerHTML = formContent.outerHTML;
+
+      // Atualiza título do modal
+      const modalTitle = document.getElementById('fichaModalTitle');
+      if (modalTitle) modalTitle.textContent = url.includes('new') ? 'Nova Ficha' : 'Editar Ficha';
+
+      // Aplica máscara no campo de valor, se existir
+      const valorField = document.getElementById('ficha_fic_valor_total');
+      if (valorField) aplicarMascaraValor(valorField);
+    } else {
+      document.getElementById('fichaFormContent').innerHTML = `<div class="text-center py-8 text-red-600">Erro ao carregar formulário</div>`;
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    document.getElementById('fichaFormContent').innerHTML = `<div class="text-center py-8 text-red-600">Erro: ${error.message}</div>`;
+  }
+}
+
+function aplicarMascaraValor(input) {
+  input.addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '');
+    while (v.length < 3) v = '0' + v;
+    const inteiro = v.slice(0, -2);
+    const dec = v.slice(-2);
+    const intFormat = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    e.target.value = intFormat + ',' + dec;
+  });
+}
+
+
+function handleFichaSubmit(event) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+
+  const valorField = form.querySelector('#ficha_fic_valor_total');
+  if (valorField) {
+    let valor = valorField.value.replace(/\./g, '').replace(',', '.').replace(/\s/g, '').replace('R$', '');
+    formData.set('ficha_crediario[fic_valor_total]', valor);
+  }
+
+  fetch(form.action, {
+    method: form.method.toUpperCase(),
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'text/html'
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      fecharModal('fichaModal');
+      window.location.reload();
+    } else {
+      return response.text().then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const errorForm = doc.querySelector('form');
+        if (errorForm) {
+          document.getElementById('fichaFormContent').innerHTML = errorForm.outerHTML;
+          const novoValorField = document.getElementById('ficha_fic_valor_total');
+          if (novoValorField) aplicarMascaraValor(novoValorField);
+        }
+      });
+    }
+  })
+  .catch(err => { console.error(err); alert('Erro ao salvar ficha'); });
+}
+
+// Delegation: intercepta submits dinâmicos no modal
+document.addEventListener('submit', function(event) {
+  if (event.target.closest('#fichaFormContent')) handleFichaSubmit(event);
+});
+
+// ESC/backdrop behavior
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('fichaModal');
+  if (modal) {
+    modal.addEventListener('cancel', function(){ this.close(); });
+    modal.addEventListener('click', function(e){ if (e.target === this) this.close(); });
+  }
+});
+</script>
+
+<style>
+/* Modal Base Styles */
+.modal-base {
+  border: none;
+  padding: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  max-width: 700px;
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.modal-base[open] {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-container {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 1rem 1.5rem; 
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #181818;
+  margin: 0; 
+}
+
+.modal-close-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.modal-content-container {
+  max-height: calc(80vh - 120px);
+  overflow-y: auto;
+  padding: 0 1.5rem;
+}
+
+.modal-content {
+  padding: 1.5rem 0; 
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+  position: sticky;
+  bottom: 0;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+</style>

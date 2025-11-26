@@ -4,8 +4,9 @@ class FichaCrediario < ApplicationRecord
 
   has_many :movimentacao_crediarios, dependent: :destroy
 
-  # Sintaxe mais simples
   enum :fic_status, { pendente: "pendente", concluida: "concluida" }
+
+  validates :fic_status, inclusion: { in: fic_statuses.keys }
 
   def saldo
     movimentacao_crediarios.sum(:mov_valor)
