@@ -1,9 +1,23 @@
-<% content_for :title, "New movimentacao crediario" %>
+<h2 class="text-xl font-semibold mb-4">Nova Movimentação</h2>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New movimentacao crediario</h1>
+<%= form_with model: [@ficha, @mov], local: true, class: "space-y-4" do |f| %>
 
-  <%= render "form", movimentacao_crediario: @movimentacao_crediario %>
+  <div>
+    <%= f.label :mov_tipo, "Tipo" %>
+    <%= f.select :mov_tipo, MovimentacaoCrediario.mov_tipos.keys.map { |t| [t.humanize, t] },
+                 class: "border p-2 rounded w-full" %>
+  </div>
 
-  <%= link_to "Back to movimentacao crediarios", movimentacao_crediarios_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-</div>
+  <div>
+    <%= f.label :mov_valor, "Valor" %>
+    <%= f.number_field :mov_valor, step: 0.01, class: "border p-2 rounded w-full" %>
+  </div>
+
+  <div>
+    <%= f.label :mov_observacao, "Observação" %>
+    <%= f.text_area :mov_observacao, class: "border p-2 rounded w-full" %>
+  </div>
+
+  <%= f.submit "Salvar", class: "bg-tags-rosa text-white px-4 py-2 rounded" %>
+
+<% end %>

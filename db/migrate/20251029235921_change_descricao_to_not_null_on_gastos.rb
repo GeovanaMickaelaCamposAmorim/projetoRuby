@@ -1,9 +1,13 @@
 class ChangeDescricaoToNotNullOnGastos < ActiveRecord::Migration[8.0]
   def change
-    # Primeiro, atualize quaisquer registros com descricao nula para uma string vazia
-    Gasto.where(descricao: nil).update_all(descricao: "")
-    
-    # Depois altere a coluna para NOT NULL
+    # Atualiza valores NULL para string vazia
+    execute <<~SQL
+      UPDATE gastos
+      SET descricao = ''
+      WHERE descricao IS NULL;
+    SQL
+
+    # Impõe NOT NULL na coluna
     change_column_null :gastos, :descricao, false
   end
 end

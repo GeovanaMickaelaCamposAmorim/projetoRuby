@@ -1,18 +1,51 @@
-<div id="<%= dom_id ficha_crediario %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Cliente:</strong>
-    <%= ficha_crediario.cliente_id %>
+<%= form_with(model: ficha_crediario, local: true, class: "mx-auto bg-white p-6 rounded-lg shadow") do |form| %>
+  <% if ficha_crediario.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <h4 class="text-red-800 font-medium mb-2">
+        <%= pluralize(ficha_crediario.errors.count, "erro") %> impediram esta ficha de ser salva:
+      </h4>
+      <ul class="text-red-700 list-disc list-inside">
+        <% ficha_crediario.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <%= form.label :cliente_id, "Cliente", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.number_field :cliente_id, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500", required: true %>
+      </div>
+
+      <div>
+        <%= form.label :contratante_id, "Contratante", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.number_field :contratante_id, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500", required: true %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <%= form.label :fic_valor_total, "Valor Total", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">R$</span>
+          <%= form.text_field :fic_valor_total, value: (ficha_crediario.fic_valor_total.present? ? number_with_precision(ficha_crediario.fic_valor_total, precision: 2, separator: ",", delimiter: ".") : nil), class: "w-full rounded-lg border border-gray-300 pl-10 pr-4 py-2 text-sm focus:border-tags-rosa focus:ring-2 focus:ring-tags-rosa/20", placeholder: "0,00", required: true, id: "ficha_fic_valor_total" %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :fic_status, "Status", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :fic_status, options_for_select([['Pendente', 'pendente'], ['Concluída', 'concluida']], ficha_crediario.fic_status), {}, class: "w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-tags-rosa focus:ring-2 focus:ring-tags-rosa/20" %>
+      </div>
+    </div>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Contratante:</strong>
-    <%= ficha_crediario.contratante_id %>
+
+  <div class="mt-8 flex gap-3 justify-end">
+    <button type="button" onclick="fecharModal('fichaModal')" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-200">
+      Cancelar
+    </button>
+
+    <%= form.submit (ficha_crediario.persisted? ? "Atualizar Ficha" : "Salvar Ficha"), class: "px-5 py-2.5 text-sm font-medium text-white bg-tags-rosa border border-transparent rounded-lg hover:bg-pink-700 transition-all duration-200 cursor-pointer" %>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Fic valor total:</strong>
-    <%= ficha_crediario.fic_valor_total %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Fic status:</strong>
-    <%= ficha_crediario.fic_status %>
-  </div>
-</div>
+<% end %>

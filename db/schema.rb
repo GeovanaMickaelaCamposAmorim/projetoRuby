@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_25_035254) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_225355) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_035254) do
     t.string "cnt_status", default: "Ativo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "taxa_cartoes", default: "0.0"
     t.index ["cnt_cnpj"], name: "index_contratantes_on_cnt_cnpj", unique: true
   end
 
@@ -176,7 +177,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_035254) do
     t.text "mov_observacao"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.decimal "mov_valor_real"
     t.index ["ficha_crediario_id"], name: "index_movimentacao_crediarios_on_ficha_crediario_id"
+    t.index ["user_id"], name: "index_movimentacao_crediarios_on_user_id"
   end
 
   create_table "pixes", force: :cascade do |t|
@@ -323,11 +327,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_035254) do
   add_foreign_key "gastos", "users"
   add_foreign_key "lojas", "contratantes"
   add_foreign_key "movimentacao_crediarios", "ficha_crediarios"
+  add_foreign_key "movimentacao_crediarios", "users"
   add_foreign_key "pixes", "contratantes"
   add_foreign_key "produtos", "contratantes"
   add_foreign_key "produtos", "marcas"
   add_foreign_key "produtos", "tamanhos"
   add_foreign_key "produtos", "tipos"
+  add_foreign_key "sessions", "users"
   add_foreign_key "tag_templates", "label_configs"
   add_foreign_key "tamanhos", "contratantes"
   add_foreign_key "taxa_cartoes", "contratantes"

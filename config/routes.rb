@@ -33,6 +33,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :ficha_crediarios do
+  resources :movimentacao_crediarios, except: [ :show ]
+  end
+
+
+
   # Vendas SEM show, apenas com details
   resources :vendas, except: [ :show ] do
     get "detalhes", on: :member
