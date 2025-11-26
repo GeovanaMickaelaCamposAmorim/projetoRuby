@@ -21,7 +21,8 @@ Rails.application.routes.draw do
   get "pdv/buscar_produto", to: "pdv#buscar_produto"
   post "pdv/finalizar_venda", to: "pdv#finalizar_venda"
 
-  get 'dashboard', to: 'dashboard#index'
+get '/dashboard', to: 'dashboard#vendas', as: 'dashboard'
+
   # Rotas principais
 
   resources :gastos, :marcas, :tipos, :tamanhos, :taxa_cartoes, :pixes
