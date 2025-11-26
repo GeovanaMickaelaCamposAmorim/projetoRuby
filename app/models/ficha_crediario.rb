@@ -4,27 +4,18 @@ class FichaCrediario < ApplicationRecord
 
   has_many :movimentacao_crediarios, dependent: :destroy
 
+  # Sintaxe mais simples
   enum :fic_status, { pendente: "pendente", concluida: "concluida" }
-  validates :fic_status, inclusion: { in: fic_statuses.keys }
 
-  # Saldo base + movimentações
-  def saldo_real
-    movimentacao_crediarios.inject(fic_valor_total) do |total, mov|
-      case mov.mov_tipo
-      when "pagamento"
-        total - mov.mov_valor_real
-      when "juros", "compra"
-        total + mov.mov_valor
-      when "devolucao"
-        total - mov.mov_valor
-      else
-        total
-      end
-    end
+  def saldo
+    movimentacao_crediarios.sum(:mov_valor)
   end
 
-  # Atualiza status com base no saldo real
   def atualizar_status!
-    update!(fic_status: saldo_real > 0 ? :pendente : :concluida)
+    novo_saldo = saldo
+    update!(
+      fic_valor_total: novo_saldo,
+      fic_status: novo_saldo > 0.00 ? :pendente : :concluida
+    )
   end
 end

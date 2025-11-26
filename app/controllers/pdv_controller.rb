@@ -9,19 +9,28 @@ class PdvController < ApplicationController
   end
 
   def buscar_produto
-    termo = params[:termo].to_s.strip
+    termo = params[:q].to_s.strip
+    puts "🔍 Buscando produtos com termo: '#{termo}'"
 
     produtos = Produto.where(contratante_id: current_user.contratante_id)
-                     .where("pro_nome ILIKE :termo OR pro_codigo ILIKE :termo", termo: "%#{termo}%")
-                     .limit(10)
+                    .where("pro_quantidade > 0")
+
+    if termo.present?
+      produtos = produtos.where("pro_nome ILIKE :termo OR pro_codigo ILIKE :termo", termo: "%#{termo}%")
+    end
+
+    produtos = produtos.order(:pro_nome).limit(20)
+
+    puts "📦 Produtos encontrados: #{produtos.count}"
 
     if produtos.any?
       render json: produtos.map { |p|
         {
           id: p.id,
-          nome: p.pro_nome,
-          codigo: p.pro_codigo,
-          valor_venda: p.pro_valor_venda.to_f
+          pro_nome: p.pro_nome,
+          pro_codigo: p.pro_codigo,
+          pro_valor_venda: p.pro_valor_venda.to_f,
+          pro_quantidade: p.pro_quantidade.to_i
         }
       }
     else
@@ -79,7 +88,9 @@ class PdvController < ApplicationController
   private
 
   def carregar_dados
-    @produtos = Produto.where(contratante_id: current_user.contratante_id).order(:pro_nome)
+    @produtos = Produto.where(contratante_id: current_user.contratante_id)
+                      .where("pro_quantidade > 0")
+                      .order(:pro_nome)
     @clientes = Cliente.where(contratante_id: current_user.contratante_id, status: "ativo").order(:cli_nome)
   end
 end
