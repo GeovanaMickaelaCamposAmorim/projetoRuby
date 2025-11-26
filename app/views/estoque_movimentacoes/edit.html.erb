@@ -14,12 +14,12 @@
    
     <div>
       <%= f.label :produto_id, "Produto", class: "block text-sm font-medium" %>
-      <%= f.collection_select :produto_id, @produtos, :id, :nome, { prompt: "Selecione" }, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+      <%= f.collection_select :produto_id, @produtos, :id, :pro_descricao, { prompt: "Selecione" }, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
     </div>
 
     <div>
-      <%= f.label :quantidade, "Quantidade", class: "block text-sm font-medium" %>
-      <%= f.number_field :quantidade, min: 1, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
+      <%= f.label :emv_quantidade , "Quantidade", class: "block text-sm font-medium" %>
+      <%= f.number_field :emv_quantidade , min: 1, class: "w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ed215e] outline-none" %>
     </div>
 
  
