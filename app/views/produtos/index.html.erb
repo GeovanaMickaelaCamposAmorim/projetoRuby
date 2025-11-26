@@ -114,10 +114,9 @@
                   <span class="text-xs"><%= produto.tamanho&.tam_nome %></span>
                 </td>
                 <td class="px-3 py-3 whitespace-nowrap text-gray-900 hidden 2xl:table-cell">
-                  <div class="flex items-center gap-1" title="<%= produto.pro_cor %>">
-                    <div class="w-2 h-2 rounded-full border border-gray-300" style="background-color: <%= produto.pro_cor.present? ? produto.pro_cor : '#ccc' %>"></div>
-                    <span class="text-xs truncate max-w-[60px]"><%= produto.pro_cor %></span>
-                  </div>
+                  <div class="flex items-center gap-1" title="<%= produto.pro_cor %>">            
+                     <span class="text-xs truncate max-w-[60px]"><%= produto.pro_cor %></span>
+                 </div>
                 </td>
                 <td class="px-3 py-3 whitespace-nowrap font-medium">
                   <span class="text-xs <%= produto.pro_quantidade > 0 ? 'text-green-600' : 'text-red-600' %>">
